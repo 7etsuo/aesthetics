@@ -107,13 +107,21 @@ def vector_records() -> list[dict]:
            "Raising black level lifts the floor without necessarily opening mid-shadows the same way.",
            "true black floor", "lifted or milky blacks",
            aliases=["lifted blacks", "crushed blacks", "black crush"],
-           nearby=["shadow_density", "dynamic_range_compression", "global_contrast"],
-           not_same={"shadow_density": "Shadow density is how heavy the shadow masses feel, not only the black floor."},
-           effects=["blacks lift or crush", "shadow floor fog or ink"],
-           phrases={"low": "true dense black floor, no lift", "medium": "natural black floor",
-                    "high": "lifted milky blacks, raised floor"},
-           scoring="0 = true black floor, 1 = strongly lifted blacks.",
-           questions=["Can black lift be isolated from haze and veiling glare?"]),
+           nearby=["shadow_density", "dynamic_range_compression", "global_contrast", "key_to_fill_ratio"],
+           not_same={
+               "shadow_density": "Shadow density is how heavy the shadow masses feel, not only the black floor.",
+               "key_to_fill_ratio": "Ratio changes the lights. Black level lifts or sets the floor on the same lighting.",
+               "veiling_glare": "Glare is a lens haze. Black lift is a tone-floor change without a required veil.",
+           },
+           effects=["blacks lift or sit dense", "shadow floor fog or ink"],
+           phrases={
+               "low": "true dense black floor, no milk, no fog, no raised floor",
+               "medium": "natural black floor",
+               "high": "lifted milky black floor, raised darkest values, no new fill light, no atmospheric haze",
+           },
+           scoring="0.00 true black floor, 0.50 natural, 1.00 strongly lifted milky floor. High is lift, not crush.",
+           questions=["Can black lift be isolated from haze, veiling glare, and added fill?"],
+           confidence=0.28),
         _v("shadow_density", "shadow density", "tonal_response",
            "How heavy, inky, or open the shadow masses are, independent of highlight behavior.",
            "Increasing shadow density darkens and fills shadow masses while subject, key direction, and highlight structure stay fixed.",
@@ -128,9 +136,9 @@ def vector_records() -> list[dict]:
            effects=["shadow masses fill or open", "dark clothing and recesses gain or lose interior detail",
                     "midtones may stay closer to constant than in a contrast sweep"],
            phrases={
-               "low": "open, readable shadows with visible interior detail",
-               "medium": "naturalistic shadow density",
-               "high": "heavy inky shadow density, murky recesses, compressed shadow detail",
+               "low": "open readable shadow interiors, same key, same highlight cores",
+               "medium": "naturalistic shadow mass, same lighting as the source",
+               "high": "heavy inky shadow mass in recesses and dark cloth only, keep highlight cores, no new lights",
            },
            scoring="0.00 open, 0.50 natural, 1.00 crushed murky shadow mass.",
            questions=["How cleanly can this separate from key-to-fill ratio when Imagine restages light?"],
@@ -491,8 +499,21 @@ def vector_records() -> list[dict]:
            "Raising the ratio deepens lighting shadows without a required tone-curve change.",
            "flat fill", "hard unfilled key",
            aliases=["lighting ratio", "contrasty lighting"],
-           nearby=["shadow_density", "source_hardness"],
-           not_same={"shadow_density": "Ratio is how the scene is lit. Density can be a grade on the same lighting."}),
+           nearby=["shadow_density", "source_hardness", "black_level"],
+           not_same={
+               "shadow_density": "Ratio is how the scene is lit. Density can be a grade on the same lighting.",
+               "source_hardness": "Hardness is the shadow-edge transfer. Ratio is fill strength versus key.",
+               "black_level": "Black level is the floor. Ratio is lighting contrast.",
+           },
+           effects=["fill rises or dies", "lighting-shadow shape deepens", "key side stays the same"],
+           phrases={
+               "low": "strong fill, flat lighting ratio, key still from the same side",
+               "medium": "naturalistic key-to-fill, same key direction",
+               "high": "weak fill, high key-to-fill ratio, key still from the same side, no new lamps",
+           },
+           scoring="0.00 flat fill, 0.50 natural ratio, 1.00 unfilled key.",
+           questions=["Can ratio rise without hardening the key into a new window?"],
+           confidence=0.28),
         _v("source_hardness", "source hardness", "lighting_response",
            "How hard or soft the key source is, visible in shadow-edge transfer.",
            "Harder sources make sharper shadow edges and tighter speculars.",
@@ -960,8 +981,20 @@ def extra_hold_for(vector_id: str) -> str:
             "and do not add colored highlight bleed."
         ),
         "vec_shadow_density": (
-            "Do not move the key light, do not change hue, do not add haze, "
-            "and do not change optical sharpness."
+            "Change only the mass of the darks as a grade. Do not move the key. "
+            "Do not add or remove fill as a lamp. Do not harden the key into a new window. "
+            "Do not invent a new cast-shadow edge. Do not lift or crush the black floor as fog. "
+            "Do not add haze, grain, softness, hue, time of day, or a genre."
+        ),
+        "vec_black_level": (
+            "Change only the black floor. High means lifted milky blacks, not crushed blacks. "
+            "Do not add fill light. Do not change key direction. Do not add haze or diffusion. "
+            "Do not ink mid-shadows as a density sweep. Do not change sharpness, grain, hue, or time of day."
+        ),
+        "vec_key_to_fill_ratio": (
+            "Change only fill strength versus key. Keep the key on the same side. "
+            "Do not rotate the key. Do not harden it into a new sun or window. "
+            "Do not add lamps, rims, or glowing eyes. Do not add grain, softness, hue, time of day, or a genre."
         ),
         "vec_halation": (
             "Do not globally soften the image, do not add grain, do not crush the whole tone scale, "

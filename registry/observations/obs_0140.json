@@ -1,0 +1,94 @@
+{
+  "anchor_id": "anchor_landscape",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0140",
+  "image_path": "artifacts/studies/study_key_to_fill_ratio_001/anchor_landscape_low.jpg",
+  "intended_level": "low",
+  "intended_vector_id": "vec_key_to_fill_ratio",
+  "model": "grok-imagine",
+  "notes": "Intended key-to-fill low. Fill up. Key side held.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only key-to-fill ratio. Set key-to-fill ratio to: strong fill, flat lighting ratio, key still from the same side. Change only fill strength versus key. Keep the key on the same side. Do not rotate the key. Do not harden it into a new sun or window. Do not add lamps, rims, or glowing eyes. Do not add grain, softness, hue, time of day, or a genre.",
+  "scores": [
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.31,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.22,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.76,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.4,
+      "vector_id": "vec_global_contrast"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.5,
+      "vector_id": "vec_exposure_bias"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_veiling_glare"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.35,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only fill strength versus key. Keep the key on the same side. Do not rotate the key. Do not harden it into a new sun or window. Do not add lamps, rims, or glowing eyes. Do not add grain, softness, hue, time of day, or a genre."
+    ],
+    "job_id": "job_study_key_to_fill_ratio_001_landscape_low",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_landscape.jpg",
+  "source_type": "generated",
+  "study_id": "study_key_to_fill_ratio_001",
+  "unintended_changes": []
+}

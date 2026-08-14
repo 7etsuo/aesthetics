@@ -1,7 +1,7 @@
 # Unresolved research questions
 
 ## black level (`vec_black_level`)
-- Can black lift be isolated from haze and veiling glare?
+- Is the still-life high too weak to keep this as a working axis?
 
 ## bokeh softness (`vec_bokeh_softness`)
 - Should architecture be excluded from bokeh tests, or is failure itself evidence?
@@ -16,6 +16,9 @@
 - Does Imagine ever produce red-edge film bleed without inventing a new light?
 - Should the working definition split into local bleed vs silhouette aura?
 
+## key-to-fill ratio (`vec_key_to_fill_ratio`)
+- Can ratio rise on the teapot without a new hard window?
+
 ## optical softness (`vec_optical_softness`)
 - Can high softness be produced without bloom orbs or glowing eyes?
 - Is the landscape high pole DOF or optical softness?
@@ -25,11 +28,14 @@
 - Parent or composite? Split into roughness, paint, latex, fabric?
 
 ## shadow density (`vec_shadow_density`)
-- Can density move with lighting ratio held?
-- Where does black level end and shadow density begin on these anchors?
+- Can object density rise without recoloring props?
+- How much fill drop is allowed before this is key-to-fill?
 
 ## telecine softness (`vec_telecine_softness`)
 - Needs a controlled study against optical softness and VHS bandwidth loss.
+
+## From study_black_level_001
+- Black level vs veiling glare on the gallery only.
 
 ## From study_bokeh_softness_001
 - Bokeh study only on frames that already have a clear subject/field split.
@@ -44,6 +50,9 @@
 - Rerun halation on a night interior that already contains lamps.
 - Discrimination: halation vs highlight bloom vs final bloom vs veiling glare.
 
+## From study_key_to_fill_ratio_001
+- Key-to-fill vs source hardness on the teapot only, with an explicit hold against new window edges.
+
 ## From study_optical_softness_001
 - Treat optical softness as a parent cluster: edge melt plus some bloom. Do not merge it with diffusion or bokeh.
 - Add a mid-high step (0.65) because medium is too close to the anchor.
@@ -53,5 +62,7 @@
 - Fit weights by comparing reconstruction scores to isolated high poles.
 
 ## From study_shadow_density_001
-- Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.
-- Paired study of shadow density vs key-to-fill vs black level on the same anchors.
+- See study_shadow_density_002 for the clean density sweep.
+
+## From study_shadow_density_002
+- Retry object high with an explicit hold: keep the napkin the same linen color.

@@ -1,172 +1,930 @@
+"use strict";
 
-async function bootSearch() {
-  const form = document.querySelector(".search");
-  if (!form) return;
-  const prefix = form.dataset.prefix || "";
-  const box = document.getElementById("q");
-  const hits = document.getElementById("hits");
-  let data = [];
-  try { data = await (await fetch(prefix + "assets/index.json")).json(); } catch (e) { return; }
-  const run = () => {
-    const q = (box.value || "").trim().toLowerCase();
-    if (!q) { hits.style.display = "none"; hits.innerHTML = ""; return; }
-    const found = data.filter((row) => (row.name + " " + row.id + " " + row.text).toLowerCase().includes(q)).slice(0, 16);
-    hits.innerHTML = found.map((row) =>
-      `<a href="${prefix}${row.href}"><span class="k">${row.kind}</span>${row.name}</a>`
-    ).join("") || `<a>No match</a>`;
-    hits.style.display = "block";
-  };
-  box.addEventListener("input", run);
-  form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
-}
-
-function bootField() {
-  const canvas = document.getElementById("field");
-  if (!canvas) return;
-  let nodes = [];
-  try { nodes = JSON.parse(canvas.dataset.field || "{}").nodes || []; } catch (e) { return; }
-  if (!nodes.length) return;
-  const ctx = canvas.getContext("2d");
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  let w = 0, h = 0, t = 0;
-  const points = nodes.map((n, i) => {
-    const u = (i / nodes.length) * Math.PI * 2;
-    const v = 0.45 + (i % 3) * 0.18;
-    return { ...n, u, v, r: 0.28 + Math.abs(n.w) * 0.55 };
+(() => {
+  const MOTION = Object.freeze({
+    quick: 100,
+    standard: 420,
+    slow: 560,
+    easing: "cubic-bezier(.4,0,.2,1)",
   });
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    w = rect.width; h = rect.height;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const jsonRequests = new Map();
+  let generatedId = 0;
+
+  const all = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+  function setMotionPreference() {
+    document.documentElement.dataset.motion = motionQuery.matches ? "reduced" : "full";
   }
-  function project(p, rot) {
-    const x = Math.cos(p.u + rot) * Math.sin(p.v) * p.r;
-    const y = Math.cos(p.v) * p.r;
-    const z = Math.sin(p.u + rot) * Math.sin(p.v) * p.r;
-    const f = 2.1 / (2.4 + z);
-    return { x: w/2 + x * Math.min(w,h) * 0.42 * f, y: h/2 + y * Math.min(w,h) * 0.42 * f, z, f };
+
+  setMotionPreference();
+  motionQuery.addEventListener?.("change", setMotionPreference);
+
+  function finishState(root, className, duration = MOTION.standard) {
+    if (motionQuery.matches) {
+      root.classList.remove(className);
+      return;
+    }
+    window.setTimeout(() => root.classList.remove(className), duration);
   }
-  function frame() {
-    t += 0.004;
-    ctx.clearRect(0, 0, w, h);
-    const g = ctx.createRadialGradient(w/2, h/2, 10, w/2, h/2, Math.min(w,h)*0.55);
-    g.addColorStop(0, "rgba(255,106,61,0.08)");
-    g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-    const proj = points.map((p) => ({ p, s: project(p, t) })).sort((a,b) => a.s.z - b.s.z);
-    ctx.strokeStyle = "rgba(159,212,255,0.16)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    proj.forEach((item, i) => {
-      if (item.p.w <= 0) return;
-      if (i === 0) ctx.moveTo(item.s.x, item.s.y);
-      else ctx.lineTo(item.s.x, item.s.y);
-    });
-    ctx.closePath(); ctx.stroke();
-    proj.forEach((item) => {
-      const glow = 4 + item.p.w * 16;
-      ctx.beginPath();
-      ctx.fillStyle = item.p.w > 0 ? "rgba(255,106,61,0.95)" : "rgba(159,212,255,0.55)";
-      ctx.shadowColor = item.p.w > 0 ? "rgba(255,106,61,0.7)" : "rgba(159,212,255,0.35)";
-      ctx.shadowBlur = glow;
-      ctx.arc(item.s.x, item.s.y, 3 + item.p.w * 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = "rgba(244,241,236,0.78)";
-      ctx.font = "11px Outfit, sans-serif";
-      ctx.fillText(item.p.name, item.s.x + 8, item.s.y + 4);
-    });
-    requestAnimationFrame(frame);
+
+  function normalisePrefix(value) {
+    const prefix = String(value || "").trim();
+    if (!prefix || /^[a-z][a-z\d+.-]*:/i.test(prefix) || prefix.startsWith("//")) return "";
+    return prefix.endsWith("/") ? prefix : `${prefix}/`;
   }
-  resize();
-  window.addEventListener("resize", resize);
-  if (window.visualViewport) visualViewport.addEventListener("resize", resize);
-  frame();
-}
 
-function bootLight() {
-  const hero = document.querySelector("[data-hero]");
-  const light = document.getElementById("heroLight");
-  if (!hero || !light) return;
-  hero.addEventListener("pointermove", (e) => {
-    const r = hero.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width) * 100;
-    const y = ((e.clientY - r.top) / r.height) * 100;
-    light.style.setProperty("--mx", x + "%");
-    light.style.setProperty("--my", y + "%");
-  });
-}
+  function assetPrefix(root) {
+    const form = root?.matches?.("form[data-prefix]")
+      ? root
+      : root?.closest?.("form[data-prefix]");
+    return normalisePrefix(form?.dataset.prefix ?? document.body?.dataset.prefix ?? "");
+  }
 
-function bootHeroSwap() {
-  const photo = document.getElementById("heroPhoto");
-  if (!photo) return;
-  const fallback = photo.dataset.default || photo.src;
-  document.querySelectorAll(".fader[data-src]").forEach((el) => {
-    const src = el.getAttribute("data-src");
-    if (!src) return;
-    const show = () => { photo.src = src; };
-    const reset = () => { photo.src = fallback; };
-    el.addEventListener("pointerenter", show);
-    el.addEventListener("focus", show);
-    el.addEventListener("pointerleave", reset);
-    el.addEventListener("blur", reset);
-  });
-}
+  function loadJson(root, filename) {
+    const url = `${assetPrefix(root)}assets/${filename}`;
+    if (!jsonRequests.has(url)) {
+      const request = fetch(url, {
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error(`Could not load ${filename} (${response.status})`);
+          return response.json();
+        })
+        .catch((error) => {
+          jsonRequests.delete(url);
+          throw error;
+        });
+      jsonRequests.set(url, request);
+    }
+    return jsonRequests.get(url);
+  }
 
-function bootCompare() {
-  document.querySelectorAll("[data-compare]").forEach((stage) => {
-    const pane = stage.querySelector(".compare-b");
-    const range = stage.querySelector(".compare-range");
-    if (!pane || !range) return;
-    const set = (pct) => {
-      const v = Math.max(4, Math.min(96, Number(pct)));
-      pane.style.width = v + "%";
-      range.value = String(v);
-    };
-    range.addEventListener("input", () => set(range.value));
-    const fromEvent = (e) => {
-      const r = stage.getBoundingClientRect();
-      const x = ("touches" in e ? e.touches[0].clientX : e.clientX) - r.left;
-      set((x / r.width) * 100);
-    };
-    stage.addEventListener("pointerdown", (e) => {
-      if (e.target === range) return;
-      stage.setPointerCapture(e.pointerId);
-      fromEvent(e);
+  function loadExplorer(root) {
+    return loadJson(root, "atlas-explorer.json").then((data) => {
+      if (!data || typeof data !== "object") throw new Error("Explorer data is invalid");
+      return data;
     });
-    stage.addEventListener("pointermove", (e) => {
-      if (!stage.hasPointerCapture(e.pointerId)) return;
-      fromEvent(e);
+  }
+
+  function hookValue(node, hook) {
+    const direct = node.getAttribute(hook);
+    if (direct) return direct;
+    return node.dataset.state || node.dataset.mode || node.value || "";
+  }
+
+  function comparable(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/^vec_/, "")
+      .replace(/[^a-z\d]+/g, "_")
+      .replace(/^_+|_+$/g, "");
+  }
+
+  function sameKey(a, b) {
+    return comparable(a) === comparable(b);
+  }
+
+  function selectedControl(controls, hook) {
+    return controls.find((control) => (
+      control.checked
+      || control.getAttribute("aria-pressed") === "true"
+      || control.getAttribute("aria-selected") === "true"
+      || control.classList.contains("is-active")
+    )) || controls.find((control) => hookValue(control, hook)) || null;
+  }
+
+  function updateControls(controls, activeValue, hook) {
+    controls.forEach((control) => {
+      const active = sameKey(hookValue(control, hook), activeValue);
+      control.classList.toggle("is-active", active);
+      if (control.matches("input[type='radio'], input[type='checkbox']")) {
+        control.checked = active;
+        control.closest("label")?.classList.toggle("is-active", active);
+      } else {
+        control.setAttribute("aria-pressed", String(active));
+      }
+      if (control.getAttribute("role") === "tab") {
+        control.setAttribute("aria-selected", String(active));
+        control.tabIndex = active ? 0 : -1;
+      }
     });
-  });
-}
+  }
 
-function bootRail() {
-  const rail = document.querySelector("[data-rail]");
-  if (!rail) return;
-  rail.addEventListener("wheel", (e) => {
-    if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
-    rail.scrollLeft += e.deltaY;
-    e.preventDefault();
-  }, { passive: false });
-}
+  function bindChoice(control, callback) {
+    if (control.matches("input, select")) {
+      control.addEventListener("change", () => {
+        if (!control.matches("input[type='radio'], input[type='checkbox']") || control.checked) {
+          callback(control);
+        }
+      });
+    } else {
+      control.addEventListener("click", () => callback(control));
+    }
+  }
 
-function bootReveal() {
-  const nodes = document.querySelectorAll(".reveal");
-  if (!nodes.length) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add("on");
+  function imageIn(node) {
+    if (node.matches?.("img")) return node;
+    return node.querySelector?.("img") || null;
+  }
+
+  function decodeImage(node) {
+    const image = imageIn(node);
+    if (!image) return Promise.resolve();
+    image.loading = "eager";
+    if (image.complete) {
+      return image.naturalWidth
+        ? Promise.resolve()
+        : Promise.reject(new Error("Image could not be decoded"));
+    }
+    if (typeof image.decode === "function") return image.decode();
+    return new Promise((resolve, reject) => {
+      image.addEventListener("load", resolve, { once: true });
+      image.addEventListener("error", () => reject(new Error("Image could not be loaded")), { once: true });
     });
-  }, { threshold: 0.12 });
-  nodes.forEach((n) => io.observe(n));
-}
+  }
 
-bootSearch();
-bootField();
-bootLight();
-bootHeroSwap();
-bootCompare();
-bootRail();
-bootReveal();
+  function formatDecimal(value, digits = 2) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return "—";
+    return number.toFixed(digits).replace(/^(-?)0\./, "$1.");
+  }
+
+  function formatSigned(value, digits = 3) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return "—";
+    if (Math.abs(number) < 0.5 * (10 ** -digits)) return formatDecimal(0, digits);
+    const magnitude = Math.abs(number).toFixed(digits).replace(/^0\./, ".");
+    return `${number > 0 ? "+" : "−"}${magnitude}`;
+  }
+
+  function instrumentStatus(root, message) {
+    const status = root.querySelector("[data-instrument-status]");
+    if (status) status.textContent = message;
+  }
+
+  function bootHeroInstruments() {
+    all("[data-hero-instrument]").forEach((root) => {
+      const controls = all("[data-hero-state]", root);
+      const layers = all("[data-hero-layer]", root);
+      if (!controls.length || !layers.length) return;
+
+      let revision = 0;
+      let active = root.dataset.activeState
+        || hookValue(selectedControl(controls, "data-hero-state"), "data-hero-state")
+        || hookValue(layers.find((layer) => layer.classList.contains("is-active")) || layers[0], "data-hero-layer");
+
+      const applyLayerState = (state) => {
+        layers.forEach((layer) => {
+          const on = sameKey(hookValue(layer, "data-hero-layer"), state);
+          layer.classList.toggle("is-active", on);
+          layer.setAttribute("aria-hidden", String(!on));
+        });
+        updateControls(controls, state, "data-hero-state");
+        root.dataset.activeState = state;
+      };
+
+      const updateScores = (level) => {
+        const scoreRoot = root.querySelector("[data-hero-score]");
+        if (!scoreRoot || !level) return;
+        all("[data-score], [data-vector-id], [data-hero-score-value]", scoreRoot).forEach((node) => {
+          const key = node.dataset.score || node.dataset.vectorId || node.dataset.heroScoreValue;
+          const score = (level.scores || []).find((item) => (
+            sameKey(item.vector_id, key) || sameKey(item.name, key)
+          ));
+          node.textContent = score ? formatDecimal(score.value, 2) : "—";
+        });
+        all("[data-hero-observation]", root).forEach((node) => {
+          node.textContent = level.observation_id || level.id || "—";
+        });
+        all("[data-hero-label]", root).forEach((node) => {
+          node.textContent = level.label || level.requested_level || level.level || "";
+        });
+        const notes = Array.isArray(level.notes) ? level.notes : (level.notes ? [level.notes] : []);
+        const changes = Array.isArray(level.unintended_changes) ? level.unintended_changes : [];
+        const haze = (level.scores || []).find((item) => sameKey(item.vector_id, "vec_atmospheric_haze_response"));
+        const highOnly = haze
+          ? [`atmospheric haze ${formatDecimal(haze.value, 2)}`, ...changes.map((change) => `“${change}”`)]
+          : [];
+        const noteText = (highOnly.length ? highOnly : [...notes, ...changes]).filter(Boolean).join(" · ");
+        all("[data-hero-note]", root).forEach((node) => {
+          const label = node.querySelector("span");
+          const message = noteText || "No additional field note recorded.";
+          if (!label) {
+            node.textContent = message;
+            return;
+          }
+          label.textContent = highOnly.length ? "High-only annotation" : "Protocol note";
+          Array.from(node.childNodes).forEach((child) => {
+            if (child !== label) child.remove();
+          });
+          node.append(document.createTextNode(` ${message}`));
+        });
+      };
+
+      applyLayerState(active);
+      root.classList.add("is-enhanced", "is-ready");
+
+      controls.forEach((control) => bindChoice(control, async () => {
+        const requested = hookValue(control, "data-hero-state");
+        if (!requested || sameKey(requested, active)) return;
+        const destination = layers.find((layer) => sameKey(hookValue(layer, "data-hero-layer"), requested));
+        if (!destination) return;
+
+        const previous = active;
+        const ticket = ++revision;
+        root.classList.remove("has-error");
+        root.classList.add("is-loading", "is-changing");
+        root.setAttribute("aria-busy", "true");
+        instrumentStatus(root, `Loading ${requested} state.`);
+
+        const dataRequest = loadExplorer(root).catch(() => null);
+        try {
+          await decodeImage(destination);
+          if (ticket !== revision) return;
+          active = requested;
+          applyLayerState(active);
+          instrumentStatus(root, `${requested} state selected.`);
+          finishState(root, "is-changing", MOTION.standard);
+        } catch {
+          if (ticket !== revision) return;
+          updateControls(controls, previous, "data-hero-state");
+          root.classList.remove("is-changing");
+          root.classList.add("has-error");
+          instrumentStatus(root, "That image could not be loaded. The previous state is still shown.");
+          return;
+        } finally {
+          if (ticket === revision) {
+            root.classList.remove("is-loading");
+            root.removeAttribute("aria-busy");
+          }
+        }
+
+        const data = await dataRequest;
+        if (ticket !== revision) return;
+        if (!data) {
+          const scoreRoot = root.querySelector("[data-hero-score]");
+          if (scoreRoot) {
+            all("[data-score], [data-vector-id], [data-hero-score-value]", scoreRoot)
+              .forEach((node) => { node.textContent = "—"; });
+          }
+          root.classList.add("has-error");
+          instrumentStatus(root, `${requested} state selected. Its score data is temporarily unavailable.`);
+          return;
+        }
+        const level = (data.hero?.levels || []).find((item) => (
+          sameKey(item.requested_level || item.level, requested)
+        ));
+        updateScores(level);
+      }));
+    });
+  }
+
+  function responseRow(item) {
+    const value = Number(item.value);
+    const sign = value > 0 ? "positive" : value < 0 ? "negative" : "neutral";
+    const row = document.createElement("li");
+    row.className = "response-row";
+    row.dataset.sign = sign;
+    row.style.setProperty("--magnitude", `${Math.min(100, Math.abs(value) * 100)}%`);
+
+    const name = document.createElement("span");
+    name.className = "response-name";
+    name.textContent = item.name || item.vector_id || "Unnamed dimension";
+
+    const track = document.createElement("span");
+    track.className = "response-track";
+    track.setAttribute("aria-hidden", "true");
+    const fill = document.createElement("span");
+    fill.className = "response-fill";
+    track.append(fill);
+
+    const displayed = document.createElement("span");
+    displayed.className = "response-value";
+    displayed.textContent = formatSigned(value, 3);
+
+    const support = Number(item.n_pairs);
+    row.setAttribute(
+      "aria-label",
+      `${name.textContent}: ${displayed.textContent}${Number.isFinite(support) ? `, ${support} paired scenes` : ""}`,
+    );
+    row.append(name, track, displayed);
+    return row;
+  }
+
+  function renderResponse(chart, response) {
+    const list = document.createElement("ol");
+    list.className = "response-chart-list";
+    list.setAttribute("role", "list");
+    (response.mean_response_delta || response.deltas || [])
+      .filter((item) => Math.abs(Number(item.value)) >= 0.0005)
+      .slice(0, 7)
+      .forEach((item) => {
+        const row = responseRow(item);
+        row.setAttribute("role", "listitem");
+        list.append(row);
+      });
+    chart.replaceChildren(list);
+    chart.dataset.axis = response.vector_id || "";
+    chart.setAttribute("aria-label", `${response.name || "Selected axis"} mean high-minus-low response`);
+  }
+
+  function bootResponseInstruments() {
+    all("[data-response-instrument]").forEach((root) => {
+      const controls = all("[data-response-axis]", root);
+      const chart = root.querySelector("[data-response-chart]");
+      if (!controls.length || !chart) return;
+      let revision = 0;
+      let active = root.dataset.activeAxis
+        || hookValue(selectedControl(controls, "data-response-axis"), "data-response-axis");
+      if (active) updateControls(controls, active, "data-response-axis");
+      root.classList.add("is-enhanced", "is-ready");
+
+      controls.forEach((control) => bindChoice(control, async () => {
+        const requested = hookValue(control, "data-response-axis");
+        if (!requested || sameKey(requested, active)) return;
+        const previous = active;
+        const ticket = ++revision;
+        updateControls(controls, requested, "data-response-axis");
+        root.classList.remove("has-error");
+        root.classList.add("is-loading", "is-changing");
+        root.setAttribute("aria-busy", "true");
+
+        try {
+          const data = await loadExplorer(root);
+          if (ticket !== revision) return;
+          const response = (data.responses || []).find((item) => sameKey(item.vector_id, requested));
+          if (!response) throw new Error("No response data for this axis");
+          renderResponse(chart, response);
+          active = requested;
+          root.dataset.activeAxis = active;
+          all("[data-response-meta]", root).forEach((node) => {
+            node.textContent = `n=${response.n_pairs || 0} paired scenes · high − low`;
+          });
+          instrumentStatus(root, `${response.name || requested} response shown. ${response.n_pairs || 0} paired scenes.`);
+          finishState(root, "is-changing", MOTION.standard);
+        } catch {
+          if (ticket !== revision) return;
+          updateControls(controls, previous, "data-response-axis");
+          root.classList.remove("is-changing");
+          root.classList.add("has-error");
+          instrumentStatus(root, "Response data could not be loaded. The previous view is still shown.");
+        } finally {
+          if (ticket === revision) {
+            root.classList.remove("is-loading");
+            root.removeAttribute("aria-busy");
+          }
+        }
+      }));
+    });
+  }
+
+  function bootContextInstruments() {
+    all("[data-context-instrument]").forEach((root) => {
+      const controls = all("[data-context-mode]", root);
+      const panels = all("[data-context-panel]", root);
+      if (!controls.length || !panels.length) return;
+      let revision = 0;
+      let active = root.dataset.activeMode
+        || hookValue(selectedControl(controls, "data-context-mode"), "data-context-mode")
+        || hookValue(panels[0], "data-context-panel");
+
+      const apply = (mode) => {
+        panels.forEach((panel) => {
+          const on = sameKey(hookValue(panel, "data-context-panel"), mode);
+          panel.classList.toggle("is-active", on);
+          panel.hidden = !on;
+          panel.setAttribute("aria-hidden", String(!on));
+        });
+        updateControls(controls, mode, "data-context-mode");
+        root.dataset.activeMode = mode;
+      };
+
+      apply(active);
+      root.classList.add("is-enhanced", "is-ready");
+      controls.forEach((control) => bindChoice(control, async () => {
+        const requested = hookValue(control, "data-context-mode");
+        if (!requested || sameKey(requested, active)) return;
+        const destination = panels.find((panel) => sameKey(hookValue(panel, "data-context-panel"), requested));
+        if (!destination) return;
+
+        const previous = active;
+        const ticket = ++revision;
+        updateControls(controls, requested, "data-context-mode");
+        root.classList.remove("has-error");
+        root.classList.add("is-loading", "is-changing");
+        root.setAttribute("aria-busy", "true");
+        try {
+          await Promise.all(all("img", destination).map((image) => decodeImage(image)));
+          if (ticket !== revision) return;
+          active = requested;
+          apply(active);
+          instrumentStatus(root, `${requested} comparison shown.`);
+          finishState(root, "is-changing", MOTION.standard);
+        } catch {
+          if (ticket !== revision) return;
+          updateControls(controls, previous, "data-context-mode");
+          root.classList.remove("is-changing");
+          root.classList.add("has-error");
+          instrumentStatus(root, "That comparison could not be loaded. The previous view is still shown.");
+        } finally {
+          if (ticket === revision) {
+            root.classList.remove("is-loading");
+            root.removeAttribute("aria-busy");
+          }
+        }
+      }));
+    });
+  }
+
+  function correlationsForAxis(data, axis) {
+    return (data.correlations || [])
+      .filter((item) => sameKey(item.a, axis) || sameKey(item.b, axis))
+      .map((item) => ({
+        ...item,
+        other: sameKey(item.a, axis) ? item.b : item.a,
+        other_name: sameKey(item.a, axis) ? item.b_name : item.a_name,
+      }))
+      .sort((left, right) => Math.abs(Number(right.r)) - Math.abs(Number(left.r)));
+  }
+
+  function renderCorrelationRuler(ruler, correlations, axisName) {
+    const list = document.createElement("ol");
+    list.className = "correlation-list";
+    list.setAttribute("role", "list");
+
+    correlations.slice(0, 6).forEach((item) => {
+      const value = Number(item.r);
+      const mark = document.createElement("li");
+      mark.className = "correlation-mark";
+      mark.dataset.sign = value > 0 ? "positive" : value < 0 ? "negative" : "neutral";
+      mark.style.setProperty("--position", `${Math.max(0, Math.min(100, ((value + 1) / 2) * 100))}%`);
+      mark.setAttribute("role", "listitem");
+
+      const name = document.createElement("span");
+      name.className = "correlation-name";
+      name.textContent = item.other_name || item.other || "Unnamed dimension";
+
+      const line = document.createElement("span");
+      line.className = "correlation-line";
+      line.setAttribute("aria-hidden", "true");
+      const dot = document.createElement("span");
+      dot.className = "correlation-dot";
+      line.append(dot);
+
+      const displayed = document.createElement("span");
+      displayed.className = "correlation-value";
+      displayed.textContent = formatSigned(value, 4);
+      mark.setAttribute("aria-label", `${name.textContent}: Pearson r ${displayed.textContent}`);
+      mark.append(name, line, displayed);
+      list.append(mark);
+    });
+
+    const previousList = ruler.querySelector(".correlation-list");
+    if (previousList) previousList.replaceWith(list);
+    else ruler.append(list);
+    ruler.dataset.axis = axisName || "";
+    ruler.setAttribute("aria-label", `Strongest correlations with ${axisName || "the selected axis"}`);
+  }
+
+  function renderCorrelationTable(target, correlations, axisName) {
+    const body = target.matches("tbody") ? target : target.querySelector("tbody");
+    if (!body) return;
+    const fragment = document.createDocumentFragment();
+    correlations.forEach((item) => {
+      const row = document.createElement("tr");
+      const dimension = document.createElement("th");
+      dimension.scope = "row";
+      dimension.textContent = item.other_name || item.other || "Unnamed dimension";
+      const coefficient = document.createElement("td");
+      coefficient.textContent = formatSigned(item.r, 4);
+      const support = document.createElement("td");
+      support.textContent = Number.isFinite(Number(item.n)) ? String(item.n) : "—";
+      row.append(dimension, coefficient, support);
+      fragment.append(row);
+    });
+    body.replaceChildren(fragment);
+    const table = target.matches("table") ? target : target.querySelector("table") || target.closest("table");
+    const caption = table?.querySelector("caption");
+    if (caption && axisName) caption.textContent = `Pearson correlations with ${axisName}`;
+  }
+
+  function bootCorrelationInstruments() {
+    all("[data-correlation-instrument]").forEach((root) => {
+      const controls = all("[data-correlation-axis]", root);
+      const ruler = root.querySelector("[data-correlation-ruler]");
+      const table = root.querySelector("[data-correlation-table]");
+      if (!controls.length || !ruler) return;
+      let revision = 0;
+      let active = root.dataset.activeAxis
+        || hookValue(selectedControl(controls, "data-correlation-axis"), "data-correlation-axis");
+      if (active) updateControls(controls, active, "data-correlation-axis");
+      root.classList.add("is-enhanced", "is-ready");
+
+      controls.forEach((control) => bindChoice(control, async () => {
+        const requested = hookValue(control, "data-correlation-axis");
+        if (!requested || sameKey(requested, active)) return;
+        const previous = active;
+        const ticket = ++revision;
+        updateControls(controls, requested, "data-correlation-axis");
+        root.classList.remove("has-error");
+        root.classList.add("is-loading", "is-changing");
+        root.setAttribute("aria-busy", "true");
+
+        try {
+          const data = await loadExplorer(root);
+          if (ticket !== revision) return;
+          const correlations = correlationsForAxis(data, requested);
+          if (!correlations.length) throw new Error("No complete correlations for this axis");
+          const label = control.dataset.label || control.textContent.trim() || requested;
+          renderCorrelationRuler(ruler, correlations, label);
+          if (table) renderCorrelationTable(table, correlations, label);
+          active = requested;
+          root.dataset.activeAxis = active;
+          instrumentStatus(root, `${label} correlations shown. ${correlations.length} complete relationships.`);
+          finishState(root, "is-changing", MOTION.standard);
+        } catch {
+          if (ticket !== revision) return;
+          updateControls(controls, previous, "data-correlation-axis");
+          root.classList.remove("is-changing");
+          root.classList.add("has-error");
+          instrumentStatus(root, "Correlation data could not be loaded. The previous view is still shown.");
+        } finally {
+          if (ticket === revision) {
+            root.classList.remove("is-loading");
+            root.removeAttribute("aria-busy");
+          }
+        }
+      }));
+    });
+  }
+
+  function bootResidualPanels() {
+    all("[data-residual-toggle]").forEach((button) => {
+      const controlledId = button.getAttribute("aria-controls");
+      const scope = button.closest("[data-reconstruction], section, article") || document;
+      const panel = (controlledId ? document.getElementById(controlledId) : null)
+        || scope.querySelector("[data-residual-panel]");
+      if (!panel) return;
+      if (!panel.id) panel.id = `residual-panel-${++generatedId}`;
+      button.setAttribute("aria-controls", panel.id);
+      const expanded = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(expanded));
+      panel.hidden = !expanded;
+      panel.classList.toggle("is-open", expanded);
+
+      button.addEventListener("click", () => {
+        const open = button.getAttribute("aria-expanded") !== "true";
+        button.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+        panel.classList.toggle("is-open", open);
+        panel.closest("[data-reconstruction], section, article")?.classList.add("is-changing");
+        const container = panel.closest("[data-reconstruction], section, article");
+        if (container) finishState(container, "is-changing", MOTION.slow);
+      });
+    });
+  }
+
+  function normaliseFilter(value) {
+    const filter = comparable(value);
+    if (filter === "hypothesized" || filter === "hypothesised") return "hypothesis";
+    return filter || "all";
+  }
+
+  function searchScore(row, query) {
+    const name = String(row.name || "").toLowerCase();
+    const id = String(row.id || "").toLowerCase();
+    const text = `${name} ${id} ${row.kind || ""} ${row.text || ""}`.toLowerCase();
+    const tokens = query.split(/\s+/).filter(Boolean);
+    if (!tokens.every((token) => text.includes(token))) return -1;
+    let score = tokens.length;
+    if (name === query || id === query) score += 12;
+    if (name.startsWith(query)) score += 6;
+    if (id.startsWith(query)) score += 4;
+    if (name.includes(query)) score += 2;
+    return score;
+  }
+
+  function internalHref(prefix, href) {
+    const value = String(href || "");
+    if (/^[a-z][a-z\d+.-]*:/i.test(value) || value.startsWith("/") || value.startsWith("#")) return value;
+    return `${prefix}${value}`;
+  }
+
+  function resultNode(row, prefix, listContainer) {
+    const link = document.createElement("a");
+    link.className = "search-hit";
+    link.href = internalHref(prefix, row.href);
+
+    const kind = document.createElement("span");
+    kind.className = "search-kind k";
+    kind.textContent = row.kind || "Record";
+    const name = document.createElement("span");
+    name.className = "search-name";
+    name.textContent = row.name || row.id || "Untitled record";
+    link.append(kind, name);
+
+    if (!listContainer) return link;
+    const item = document.createElement("li");
+    item.append(link);
+    return item;
+  }
+
+  function searchForms() {
+    const forms = [
+      ...all("form[data-atlas-search]"),
+      ...all("[data-atlas-search] form"),
+      ...all("form.search"),
+    ];
+    return forms.filter((form, index) => forms.indexOf(form) === index);
+  }
+
+  function bootSearch() {
+    const controllers = [];
+
+    searchForms().forEach((form, formIndex) => {
+      const searchRoot = form.matches("[data-atlas-search]")
+        ? form
+        : form.closest("[data-atlas-search]") || form;
+      const scope = form.closest("[data-search-scope]") || searchRoot.parentElement || searchRoot;
+      const input = form.querySelector("input[type='search']");
+      const results = searchRoot.querySelector("[data-search-results], .hits")
+        || scope.querySelector("[data-search-results], .hits");
+      if (!input || !results) return;
+
+      if (!results.id) results.id = `atlas-search-results-${formIndex + 1}-${++generatedId}`;
+      input.setAttribute("aria-controls", results.id);
+      input.setAttribute("aria-expanded", "false");
+      input.setAttribute("autocomplete", "off");
+      results.setAttribute("role", "region");
+      results.setAttribute("aria-label", "Search results");
+      results.setAttribute("aria-live", "polite");
+      results.hidden = true;
+      let rows = null;
+      let runVersion = 0;
+      let activeFilter = "all";
+      const filterButtons = all("[data-search-filter]", scope);
+      const limit = Number(searchRoot.dataset.searchLimit || (form.closest("dialog") ? 10 : 16));
+
+      const close = () => {
+        results.replaceChildren();
+        results.hidden = true;
+        results.classList.remove("is-open");
+        results.style.removeProperty("display");
+        input.setAttribute("aria-expanded", "false");
+      };
+
+      const show = (fragment) => {
+        results.replaceChildren(fragment);
+        results.hidden = false;
+        results.classList.add("is-open");
+        results.style.display = "block";
+        input.setAttribute("aria-expanded", "true");
+      };
+
+      const ensureRows = async () => {
+        if (rows) return rows;
+        searchRoot.classList.add("is-loading");
+        try {
+          const data = await loadJson(form, "index.json");
+          rows = Array.isArray(data) ? data : [];
+          return rows;
+        } finally {
+          searchRoot.classList.remove("is-loading");
+        }
+      };
+
+      const run = async ({ allowEmpty = false } = {}) => {
+        const version = ++runVersion;
+        const query = input.value.trim().toLowerCase();
+        if (!query && !allowEmpty && activeFilter === "all") {
+          close();
+          return;
+        }
+
+        let index;
+        try {
+          index = await ensureRows();
+        } catch {
+          if (version !== runVersion) return;
+          const error = document.createElement("div");
+          error.className = "search-empty empty";
+          error.textContent = "Search is temporarily unavailable.";
+          show(error);
+          return;
+        }
+        if (version !== runVersion) return;
+
+        const found = index
+          .map((row) => ({ row, score: query ? searchScore(row, query) : 0 }))
+          .filter(({ row, score }) => (
+            score >= 0
+            && (
+              activeFilter === "all"
+              || normaliseFilter(row.evidence) === activeFilter
+              || normaliseFilter(row.status) === activeFilter
+            )
+          ))
+          .sort((left, right) => right.score - left.score
+            || String(left.row.name || "").localeCompare(String(right.row.name || "")))
+          .slice(0, Number.isFinite(limit) && limit > 0 ? limit : 16)
+          .map(({ row }) => row);
+
+        const fragment = document.createDocumentFragment();
+        if (!found.length) {
+          const empty = document.createElement("div");
+          empty.className = "search-empty empty";
+          empty.textContent = "No matching record. Try a more literal visual property.";
+          fragment.append(empty);
+        } else {
+          const listContainer = results.matches("ul, ol");
+          found.forEach((row) => fragment.append(resultNode(row, assetPrefix(form), listContainer)));
+        }
+        show(fragment);
+      };
+
+      input.addEventListener("focus", () => { void ensureRows().catch(() => {}); });
+      input.addEventListener("input", () => { void run(); });
+      input.addEventListener("keydown", (event) => {
+        const links = all("a", results);
+        if (event.key === "ArrowDown" && links.length) {
+          event.preventDefault();
+          links[0].focus();
+        } else if (event.key === "Escape" && !form.closest("dialog[open]")) {
+          input.value = "";
+          close();
+        }
+      });
+      results.addEventListener("keydown", (event) => {
+        const links = all("a", results);
+        const index = links.indexOf(document.activeElement);
+        if (event.key === "ArrowDown" && links.length) {
+          event.preventDefault();
+          links[Math.min(links.length - 1, index + 1)].focus();
+        } else if (event.key === "ArrowUp") {
+          event.preventDefault();
+          if (index <= 0) input.focus();
+          else links[index - 1].focus();
+        } else if (event.key === "Escape" && !form.closest("dialog[open]")) {
+          event.preventDefault();
+          input.focus();
+          close();
+        }
+      });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        void run({ allowEmpty: activeFilter !== "all" }).then(() => results.querySelector("a")?.focus());
+      });
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = normaliseFilter(button.getAttribute("data-search-filter") || button.value || "all");
+          filterButtons.forEach((candidate) => {
+            const selected = normaliseFilter(candidate.getAttribute("data-search-filter") || candidate.value || "all") === activeFilter;
+            candidate.classList.toggle("is-active", selected);
+            candidate.setAttribute("aria-pressed", String(selected));
+          });
+          void run({ allowEmpty: true });
+        });
+      });
+
+      document.addEventListener("pointerdown", (event) => {
+        if (!scope.contains(event.target)) close();
+      });
+      controllers.push({ form, input, results, close });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const target = event.target;
+      const typing = target instanceof HTMLInputElement
+        || target instanceof HTMLTextAreaElement
+        || target instanceof HTMLSelectElement
+        || target?.isContentEditable;
+      if (event.key !== "/" || typing || event.metaKey || event.ctrlKey || event.altKey) return;
+      const dialogTrigger = document.querySelector("[data-search-open]");
+      if (dialogTrigger && dialogForTrigger(dialogTrigger)) {
+        event.preventDefault();
+        dialogTrigger.click();
+        return;
+      }
+      const available = controllers.find(({ form }) => !form.closest("dialog:not([open])"));
+      if (!available) return;
+      event.preventDefault();
+      available.input.focus();
+    });
+  }
+
+  function dialogForTrigger(trigger) {
+    const controlled = trigger.getAttribute("aria-controls") || trigger.dataset.searchOpen;
+    if (controlled) {
+      const candidate = document.getElementById(controlled.replace(/^#/, ""));
+      if (candidate?.matches("[data-search-dialog]")) return candidate;
+    }
+    return document.querySelector("[data-search-dialog]");
+  }
+
+  function bootSearchDialogs() {
+    const returnFocus = new WeakMap();
+    all("[data-search-open]").forEach((trigger) => {
+      const controlledDialog = dialogForTrigger(trigger);
+      if (controlledDialog) {
+        if (!controlledDialog.id) controlledDialog.id = `atlas-search-dialog-${++generatedId}`;
+        trigger.setAttribute("aria-haspopup", "dialog");
+        trigger.setAttribute("aria-controls", controlledDialog.id);
+        trigger.setAttribute("aria-expanded", String(controlledDialog.open));
+      }
+      trigger.addEventListener("click", (event) => {
+        const dialog = dialogForTrigger(trigger);
+        if (!dialog) return;
+        event.preventDefault();
+        returnFocus.set(dialog, trigger);
+        trigger.setAttribute("aria-expanded", "true");
+        if (!dialog.open) {
+          if (typeof dialog.showModal === "function") dialog.showModal();
+          else dialog.setAttribute("open", "");
+        }
+        const searchInput = dialog.querySelector("input[type='search']");
+        searchInput?.focus({ preventScroll: true });
+        if (searchInput && document.activeElement !== searchInput) {
+          window.requestAnimationFrame(() => searchInput.focus({ preventScroll: true }));
+        }
+      });
+    });
+
+    all("[data-search-dialog]").forEach((dialog) => {
+      dialog.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || event.isComposing || !dialog.open) return;
+        event.preventDefault();
+        event.stopPropagation();
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.removeAttribute("open");
+      }, { capture: true });
+      all("[data-search-close]", dialog).forEach((button) => {
+        button.addEventListener("click", () => {
+          if (typeof dialog.close === "function") dialog.close();
+          else dialog.removeAttribute("open");
+        });
+      });
+      dialog.addEventListener("click", (event) => {
+        if (event.target !== dialog) return;
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.removeAttribute("open");
+      });
+      dialog.addEventListener("close", () => {
+        const trigger = returnFocus.get(dialog);
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
+          if (trigger.isConnected) trigger.focus();
+        }
+      });
+    });
+  }
+
+  function bootCompare() {
+    all("[data-compare]").forEach((stage) => {
+      const pane = stage.querySelector(".compare-b");
+      const range = stage.querySelector(".compare-range, input[type='range']");
+      if (!range) return;
+
+      const set = (percent) => {
+        const value = Math.max(Number(range.min) || 4, Math.min(Number(range.max) || 96, Number(percent)));
+        stage.style.setProperty("--split", `${value}%`);
+        if (pane) pane.style.width = `${value}%`;
+        range.value = String(value);
+        const output = stage.querySelector("[data-compare-value]");
+        if (output) output.textContent = `${Math.round(value)}%`;
+      };
+      const fromPointer = (event) => {
+        const bounds = stage.getBoundingClientRect();
+        if (!bounds.width) return;
+        set(((event.clientX - bounds.left) / bounds.width) * 100);
+      };
+
+      set(range.value);
+      range.addEventListener("input", () => set(range.value));
+      stage.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 || event.target === range || event.target.closest("a, button")) return;
+        stage.setPointerCapture(event.pointerId);
+        fromPointer(event);
+      });
+      stage.addEventListener("pointermove", (event) => {
+        if (stage.hasPointerCapture(event.pointerId)) fromPointer(event);
+      });
+    });
+  }
+
+  function boot() {
+    bootHeroInstruments();
+    bootResponseInstruments();
+    bootContextInstruments();
+    bootCorrelationInstruments();
+    bootResidualPanels();
+    bootSearchDialogs();
+    bootSearch();
+    bootCompare();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
+})();

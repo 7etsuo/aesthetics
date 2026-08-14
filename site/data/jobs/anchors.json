@@ -1,0 +1,135 @@
+{
+  "instrument": {
+    "name": "grok-imagine",
+    "tools": [
+      "image_gen",
+      "image_edit"
+    ],
+    "seed_control": "unavailable",
+    "aspect_ratio_control": true,
+    "source_image_lock": true,
+    "notes": "image_gen and image_edit do not accept a seed. Hold subject by generating a locked anchor, then image_edit that file while asking for a single change."
+  },
+  "jobs": [
+    {
+      "id": "job_anchor_architecture",
+      "study_id": "study_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "An empty museum gallery with pale limestone walls, a smooth concrete floor, one rectangular skylight centered above, and a dark walnut bench in the middle of the room. No people, no art on the walls. Quiet daylight from the skylight. Clean contemporary architectural photograph: natural color, moderate contrast, deep focus, no film effects, no glow, no grain, no stylization. 24mm-equivalent, centered symmetry, eye-level, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_architecture",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_architecture.jpg",
+      "observation_id": "obs_0001",
+      "notes": ""
+    },
+    {
+      "id": "job_anchor_character",
+      "study_id": "study_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A small standing fox creature made of painted wood and stitched fabric, large amber glass eyes, a tiny brown corduroy vest, visible seams and brush marks in the paint. Standing on a gray studio sweep. Even soft studio light from camera left. Clean contemporary character reference photograph: natural color, moderate contrast, sharp focus, no film effects, no glow, no grain, no extra stylization beyond the subject's own materials. Full body, 50mm-equivalent, camera at the creature's eye level, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_character",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_character.jpg",
+      "observation_id": "obs_0002",
+      "notes": ""
+    },
+    {
+      "id": "job_anchor_landscape",
+      "study_id": "study_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A grassy coastal cliff dropping to a calm gray-blue sea, late afternoon, a single dirt path in the lower left, no people, no buildings. Clear air, natural daylight. Clean contemporary landscape photograph: natural color, moderate contrast, sharp focus, no film effects, no glow, no added haze, no grain, no stylization. 35mm-equivalent, eye-level, horizon on the upper third, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_landscape",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_landscape.jpg",
+      "observation_id": "obs_0003",
+      "notes": ""
+    },
+    {
+      "id": "job_anchor_object",
+      "study_id": "study_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A glazed stoneware teapot with a warm gray-green glaze, unglazed clay handle and lid knob, sitting on a raw pale oak table. A single linen napkin lies folded to the right. Pale plaster wall behind. Neutral daylight from a window at camera left. Clean contemporary still-life photograph: natural color, moderate contrast, sharp focus on the spout, no film effects, no glow, no grain, no stylization. Three-quarter view, 50mm-equivalent, camera at pot height, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_object",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_object.jpg",
+      "observation_id": "obs_0004",
+      "notes": ""
+    },
+    {
+      "id": "job_anchor_portrait",
+      "study_id": "study_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A 34-year-old woman with medium-brown skin, a narrow gold nose ring, shoulder-length black hair parted off-center, and a calm closed-mouth expression. She faces the camera in a three-quarter pose, body turned slightly left, eyes to lens. She wears a plain charcoal knit sweater. Seated in a quiet studio against a medium gray seamless backdrop. Even soft key light from camera left, gentle fill from the right, no colored gels, no haze. Clean contemporary reference photograph: natural color, moderate contrast, sharp focus on the near eye, no film effects, no glow, no grain, no stylization. Medium close-up, 85mm-equivalent, eye-level, square 1:1 frame, subject centered.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_portrait",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_portrait.jpg",
+      "observation_id": "obs_0005",
+      "notes": ""
+    }
+  ]
+}

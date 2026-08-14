@@ -48,7 +48,6 @@ Darks do get heavier across subjects. The instrument often restages lighting to 
 - Low pole sometimes flattens lighting instead of lifting only the toe.
 
 ## Next experiments
-- Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.
-- Paired study of shadow density vs key-to-fill vs black level on the same anchors.
+- See study_shadow_density_002 for the clean density sweep.
 
 ## Notes

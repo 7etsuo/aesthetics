@@ -1,0 +1,97 @@
+{
+  "anchor_id": "anchor_object",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0106",
+  "image_path": "artifacts/studies/study_shadow_density_002/anchor_object_high.jpg",
+  "intended_level": "high",
+  "intended_vector_id": "vec_shadow_density",
+  "model": "grok-imagine",
+  "notes": "Intended shadow density high (clean sweep 002). No new handle shadow. Napkin became black cloth. Isolation better than 001, content leak.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only shadow density. Set shadow density to: heavy inky shadow mass in recesses and dark cloth only, keep highlight cores, no new lights. Change only the mass of the darks as a grade. Do not move the key. Do not add or remove fill as a lamp. Do not harden the key into a new window. Do not invent a new cast-shadow edge. Do not lift or crush the black floor as fog. Do not add haze, grain, softness, hue, time of day, or a genre.",
+  "scores": [
+    {
+      "confidence": 0.64,
+      "method": "agent_visual",
+      "score": 0.62,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.6,
+      "method": "agent_visual",
+      "score": 0.48,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.4,
+      "vector_id": "vec_global_contrast"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.5,
+      "vector_id": "vec_exposure_bias"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_veiling_glare"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.35,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only the mass of the darks as a grade. Do not move the key. Do not add or remove fill as a lamp. Do not harden the key into a new window. Do not invent a new cast-shadow edge. Do not lift or crush the black floor as fog. Do not add haze, grain, softness, hue, time of day, or a genre."
+    ],
+    "job_id": "job_study_shadow_density_002_object_high",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_object.jpg",
+  "source_type": "generated",
+  "study_id": "study_shadow_density_002",
+  "unintended_changes": [
+    "napkin recolored black",
+    "scene content changed"
+  ]
+}

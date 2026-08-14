@@ -1,0 +1,8 @@
+aesthetic_id,vec_analog_video_texture,vec_chroma_density,vec_color_separation,vec_crt_bloom_feel,vec_grain_structure,vec_halation,vec_highlight_rolloff,vec_key_to_fill_ratio,vec_microcontrast,vec_miniature_set_feel,vec_optical_softness,vec_practical_material_feel,vec_shadow_density,vec_telecine_softness,vec_theatrical_blocking,vec_vhs_bandwidth_loss
+aes_80s_fantasy_tv,0.0000,0.4000,0.3500,0.0000,0.0000,0.4100,0.0000,0.5800,0.2800,0.4600,0.7200,0.6800,0.6300,0.7900,0.5200,0.0000
+aes_analog_generic,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+aes_cinematic_generic,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+aes_film_emulation,0.0000,0.4500,0.0000,0.0000,0.5500,0.3000,0.6000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+aes_soft_halated_shadow,0.0000,0.0000,0.0000,0.0000,0.0000,0.5800,0.0000,0.0000,0.0000,0.0000,0.7800,0.0000,0.7000,0.0000,0.0000,0.0000
+aes_vhs_look,0.7400,0.0000,0.3000,0.4800,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.8200
+aes_vintage_generic,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000

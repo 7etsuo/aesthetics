@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_key_to_fill_ratio",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "Portrait high sculpts the face: fill dies, knit stays readable. That is lighting ratio, not ink. Teapot high restages a hard window and a handle shadow. Ratio is real. Hardness still leaks.",
+  "entanglement_notes": [
+    "Object high is also source hardness.",
+    "Landscape is a weak ratio read."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_key_to_fill_ratio_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Key-to-fill vs source hardness on the teapot only, with an explicit hold against new window edges."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0131",
+    "obs_0132",
+    "obs_0133",
+    "obs_0134",
+    "obs_0135",
+    "obs_0136",
+    "obs_0137",
+    "obs_0138",
+    "obs_0139",
+    "obs_0140",
+    "obs_0141",
+    "obs_0142",
+    "obs_0143",
+    "obs_0144",
+    "obs_0145"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of key-to-fill ratio"
+}

@@ -9,7 +9,7 @@ How brightness is mapped: blacks, shadows, midtones, highlights, contrast, and r
 
 ## Vectors
 
-- [black level](../vectors/vec_black_level.md) `candidate`
+- [black level](../vectors/vec_black_level.md) `provisional`
 - [dynamic range compression](../vectors/vec_dynamic_range_compression.md) `candidate`
 - [exposure bias](../vectors/vec_exposure_bias.md) `candidate`
 - [gamma response](../vectors/vec_gamma_response.md) `candidate`

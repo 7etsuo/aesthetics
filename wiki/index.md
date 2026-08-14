@@ -36,7 +36,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [analog video texture](vectors/vec_analog_video_texture.md) (vec_analog_video_texture, conf 0.22)
 - `candidate` [animatronic feel](vectors/vec_animatronic_feel.md) (vec_animatronic_feel, conf 0.22)
 - `candidate` [atmospheric haze response](vectors/vec_atmospheric_haze_response.md) (vec_atmospheric_haze_response, conf 0.22)
-- `candidate` [black level](vectors/vec_black_level.md) (vec_black_level, conf 0.22)
+- `provisional` [black level](vectors/vec_black_level.md) (vec_black_level, conf 0.60)
 - `provisional` [bokeh softness](vectors/vec_bokeh_softness.md) (vec_bokeh_softness, conf 0.62)
 - `candidate` [channel crosstalk](vectors/vec_channel_crosstalk.md) (vec_channel_crosstalk, conf 0.22)
 - `candidate` [chroma density](vectors/vec_chroma_density.md) (vec_chroma_density, conf 0.22)
@@ -72,7 +72,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [highlight color bias](vectors/vec_highlight_color_bias.md) (vec_highlight_color_bias, conf 0.22)
 - `candidate` [highlight roll-off](vectors/vec_highlight_rolloff.md) (vec_highlight_rolloff, conf 0.22)
 - `candidate` [hue bias](vectors/vec_hue_bias.md) (vec_hue_bias, conf 0.22)
-- `candidate` [key-to-fill ratio](vectors/vec_key_to_fill_ratio.md) (vec_key_to_fill_ratio, conf 0.22)
+- `provisional` [key-to-fill ratio](vectors/vec_key_to_fill_ratio.md) (vec_key_to_fill_ratio, conf 0.58)
 - `candidate` [latex or foam feel](vectors/vec_latex_foam_feel.md) (vec_latex_foam_feel, conf 0.22)
 - `candidate` [lens distance feel](vectors/vec_lens_distance_feel.md) (vec_lens_distance_feel, conf 0.22)
 - `candidate` [local contrast](vectors/vec_local_contrast.md) (vec_local_contrast, conf 0.22)
@@ -99,7 +99,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [roughness](vectors/vec_roughness.md) (vec_roughness, conf 0.22)
 - `candidate` [saturation](vectors/vec_saturation.md) (vec_saturation, conf 0.22)
 - `candidate` [shadow color bias](vectors/vec_shadow_color_bias.md) (vec_shadow_color_bias, conf 0.22)
-- `provisional` [shadow density](vectors/vec_shadow_density.md) (vec_shadow_density, conf 0.58)
+- `provisional` [shadow density](vectors/vec_shadow_density.md) (vec_shadow_density, conf 0.61)
 - `candidate` [shadow toe](vectors/vec_shadow_toe.md) (vec_shadow_toe, conf 0.22)
 - `candidate` [sharpening intensity](vectors/vec_sharpening_intensity.md) (vec_sharpening_intensity, conf 0.22)
 - `candidate` [shutter-angle feel](vectors/vec_shutter_angle_feel.md) (vec_shutter_angle_feel, conf 0.22)
@@ -132,18 +132,21 @@ These are not assumed to be a mathematically orthogonal basis.
 ## Studies
 
 - `complete` [Locked anchor set](studies/study_anchor_set_001.md) (study_anchor_set_001)
+- `complete` [Controlled variation of black level](studies/study_black_level_001.md) (study_black_level_001)
 - `complete` [Controlled variation of bokeh softness](studies/study_bokeh_softness_001.md) (study_bokeh_softness_001)
 - `complete` [Controlled variation of diffusion](studies/study_diffusion_001.md) (study_diffusion_001)
 - `complete` [Controlled variation of edge softness](studies/study_edge_softness_001.md) (study_edge_softness_001)
 - `complete` [Controlled variation of halation](studies/study_halation_001.md) (study_halation_001)
+- `complete` [Controlled variation of key-to-fill ratio](studies/study_key_to_fill_ratio_001.md) (study_key_to_fill_ratio_001)
 - `complete` [Controlled variation of optical softness](studies/study_optical_softness_001.md) (study_optical_softness_001)
 - `complete` [Linear reconstruction of aes_soft_halated_shadow](studies/study_reconstruction_soft_halated_shadow_001.md) (study_reconstruction_soft_halated_shadow_001)
 - `complete` [Controlled variation of shadow density](studies/study_shadow_density_001.md) (study_shadow_density_001)
+- `complete` [Controlled variation of shadow density](studies/study_shadow_density_002.md) (study_shadow_density_002)
 
 ## Counts
 
 - vectors: 88
-- observations: 100
-- studies: 8
+- observations: 145
+- studies: 11
 - aesthetics: 7
 - aliases: 36

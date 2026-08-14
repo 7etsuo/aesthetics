@@ -6,7 +6,7 @@
     "open shadows"
   ],
   "canonical_name": "shadow density",
-  "confidence": 0.58,
+  "confidence": 0.61,
   "definition": "How heavy, inky, or open the shadow masses are, independent of highlight behavior.",
   "family_id": "fam_tonal_response",
   "high_pole": "murky, dense, inked shadows",
@@ -44,32 +44,50 @@
     "obs_0032",
     "obs_0033",
     "obs_0034",
-    "obs_0035"
+    "obs_0035",
+    "obs_0101",
+    "obs_0102",
+    "obs_0103",
+    "obs_0104",
+    "obs_0105",
+    "obs_0106",
+    "obs_0107",
+    "obs_0108",
+    "obs_0109",
+    "obs_0110",
+    "obs_0111",
+    "obs_0112",
+    "obs_0113",
+    "obs_0114",
+    "obs_0115"
   ],
   "open_questions": [
-    "Can density move with lighting ratio held?",
-    "Where does black level end and shadow density begin on these anchors?"
+    "Can object density rise without recoloring props?",
+    "How much fill drop is allowed before this is key-to-fill?"
   ],
   "polarity": "unipolar",
   "prompt_phrases": {
-    "high": "heavy inky shadow density, murky recesses, compressed shadow detail",
-    "low": "open, readable shadows with visible interior detail",
-    "medium": "naturalistic shadow density"
+    "high": "heavy inky shadow mass in recesses and dark cloth only, keep highlight cores, no new lights",
+    "low": "open readable shadow interiors, same key, same highlight cores",
+    "medium": "naturalistic shadow mass, same lighting as the source"
   },
   "scoring_guidance": "0.00 open, 0.50 natural, 1.00 crushed murky shadow mass.",
   "status": "provisional",
   "study_ids": [
-    "study_shadow_density_001"
+    "study_shadow_density_001",
+    "study_shadow_density_002"
   ],
   "testable_claim": "Increasing shadow density darkens and fills shadow masses while subject, key direction, and highlight structure stay fixed.",
   "validation": {
+    "clean_study": "study_shadow_density_002",
+    "contaminated_prior": "study_shadow_density_001",
     "describable": true,
     "directional": true,
     "isolatable": "partial",
     "legible": true,
     "n_levels": 3,
     "n_subjects": 5,
-    "non_redundant": "pending_vs_key_to_fill",
+    "non_redundant": "distinct_from_black_level",
     "transferable": true,
     "useful": true
   }

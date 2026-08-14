@@ -5,7 +5,7 @@
     "black crush"
   ],
   "canonical_name": "black level",
-  "confidence": 0.22,
+  "confidence": 0.6,
   "definition": "The floor of the tone scale: how close the darkest values sit to true black.",
   "family_id": "fam_tonal_response",
   "high_pole": "lifted or milky blacks",
@@ -14,29 +14,61 @@
   "nearby_ids": [
     "vec_shadow_density",
     "vec_dynamic_range_compression",
-    "vec_global_contrast"
+    "vec_global_contrast",
+    "vec_key_to_fill_ratio"
   ],
   "not_the_same_as": {
-    "vec_shadow_density": "Shadow density is how heavy the shadow masses feel, not only the black floor."
+    "vec_key_to_fill_ratio": "Ratio changes the lights. Black level lifts or sets the floor on the same lighting.",
+    "vec_shadow_density": "Shadow density is how heavy the shadow masses feel, not only the black floor.",
+    "vec_veiling_glare": "Glare is a lens haze. Black lift is a tone-floor change without a required veil."
   },
   "notes": "",
   "observable_effects": [
-    "blacks lift or crush",
+    "blacks lift or sit dense",
     "shadow floor fog or ink"
   ],
-  "observation_ids": [],
+  "observation_ids": [
+    "obs_0116",
+    "obs_0117",
+    "obs_0118",
+    "obs_0119",
+    "obs_0120",
+    "obs_0121",
+    "obs_0122",
+    "obs_0123",
+    "obs_0124",
+    "obs_0125",
+    "obs_0126",
+    "obs_0127",
+    "obs_0128",
+    "obs_0129",
+    "obs_0130"
+  ],
   "open_questions": [
-    "Can black lift be isolated from haze and veiling glare?"
+    "Is the still-life high too weak to keep this as a working axis?"
   ],
   "polarity": "unipolar",
   "prompt_phrases": {
-    "high": "lifted milky blacks, raised floor",
-    "low": "true dense black floor, no lift",
+    "high": "lifted milky black floor, raised darkest values, no new fill light, no atmospheric haze",
+    "low": "true dense black floor, no milk, no fog, no raised floor",
     "medium": "natural black floor"
   },
-  "scoring_guidance": "0 = true black floor, 1 = strongly lifted blacks.",
-  "status": "candidate",
-  "study_ids": [],
+  "scoring_guidance": "0.00 true black floor, 0.50 natural, 1.00 strongly lifted milky floor. High is lift, not crush.",
+  "status": "provisional",
+  "study_ids": [
+    "study_black_level_001"
+  ],
   "testable_claim": "Raising black level lifts the floor without necessarily opening mid-shadows the same way.",
-  "validation": {}
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": true,
+    "polarity": "high_means_lifted",
+    "transferable": true,
+    "useful": true
+  }
 }

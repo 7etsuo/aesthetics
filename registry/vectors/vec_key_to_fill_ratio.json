@@ -4,7 +4,7 @@
     "contrasty lighting"
   ],
   "canonical_name": "key-to-fill ratio",
-  "confidence": 0.22,
+  "confidence": 0.58,
   "definition": "The lighting contrast between key and fill, a scene-light property.",
   "family_id": "fam_lighting_response",
   "high_pole": "hard unfilled key",
@@ -12,20 +12,61 @@
   "low_pole": "flat fill",
   "nearby_ids": [
     "vec_shadow_density",
-    "vec_source_hardness"
+    "vec_source_hardness",
+    "vec_black_level"
   ],
   "not_the_same_as": {
-    "vec_shadow_density": "Ratio is how the scene is lit. Density can be a grade on the same lighting."
+    "vec_black_level": "Black level is the floor. Ratio is lighting contrast.",
+    "vec_shadow_density": "Ratio is how the scene is lit. Density can be a grade on the same lighting.",
+    "vec_source_hardness": "Hardness is the shadow-edge transfer. Ratio is fill strength versus key."
   },
   "notes": "",
-  "observable_effects": [],
-  "observation_ids": [],
-  "open_questions": [],
+  "observable_effects": [
+    "fill rises or dies",
+    "lighting-shadow shape deepens",
+    "key side stays the same"
+  ],
+  "observation_ids": [
+    "obs_0131",
+    "obs_0132",
+    "obs_0133",
+    "obs_0134",
+    "obs_0135",
+    "obs_0136",
+    "obs_0137",
+    "obs_0138",
+    "obs_0139",
+    "obs_0140",
+    "obs_0141",
+    "obs_0142",
+    "obs_0143",
+    "obs_0144",
+    "obs_0145"
+  ],
+  "open_questions": [
+    "Can ratio rise on the teapot without a new hard window?"
+  ],
   "polarity": "unipolar",
-  "prompt_phrases": {},
-  "scoring_guidance": "",
-  "status": "candidate",
-  "study_ids": [],
+  "prompt_phrases": {
+    "high": "weak fill, high key-to-fill ratio, key still from the same side, no new lamps",
+    "low": "strong fill, flat lighting ratio, key still from the same side",
+    "medium": "naturalistic key-to-fill, same key direction"
+  },
+  "scoring_guidance": "0.00 flat fill, 0.50 natural ratio, 1.00 unfilled key.",
+  "status": "provisional",
+  "study_ids": [
+    "study_key_to_fill_ratio_001"
+  ],
   "testable_claim": "Raising the ratio deepens lighting shadows without a required tone-curve change.",
-  "validation": {}
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": "distinct_from_density_on_portrait",
+    "transferable": true,
+    "useful": true
+  }
 }

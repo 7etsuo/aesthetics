@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_shadow_density",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "Cleaner than 001. Portrait high inks sweater and far cheek with the key still camera-left. Teapot high does not invent a handle shadow. The napkin was recolored black. Mild fill drop remains. Distinct enough from black-level lift and from the intended ratio pole.",
+  "entanglement_notes": [
+    "Object high changed napkin color (content leak).",
+    "Portrait high still drops fill a little."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_shadow_density_002",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Retry object high with an explicit hold: keep the napkin the same linen color."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0101",
+    "obs_0102",
+    "obs_0103",
+    "obs_0104",
+    "obs_0105",
+    "obs_0106",
+    "obs_0107",
+    "obs_0108",
+    "obs_0109",
+    "obs_0110",
+    "obs_0111",
+    "obs_0112",
+    "obs_0113",
+    "obs_0114",
+    "obs_0115"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of shadow density"
+}

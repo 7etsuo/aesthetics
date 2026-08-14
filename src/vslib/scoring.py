@@ -383,6 +383,115 @@ def score_bokeh(obs) -> tuple[list[Score], list[str], str]:
     return _pack(values), leaks, note
 
 
+def _tone_base() -> dict[str, tuple[float, float]]:
+    return {
+        "vec_shadow_density": (0.30, 0.55),
+        "vec_black_level": (0.22, 0.55),
+        "vec_key_to_fill_ratio": (0.28, 0.55),
+        "vec_source_hardness": (0.30, 0.50),
+        "vec_global_contrast": (0.40, 0.45),
+        "vec_exposure_bias": (0.50, 0.45),
+        "vec_veiling_glare": (0.08, 0.45),
+        "vec_diffusion": (0.08, 0.45),
+        "vec_optical_softness": (0.18, 0.45),
+        "vec_highlight_rolloff": (0.35, 0.40),
+    }
+
+
+def score_density_v2(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    target = {"low": 0.16, "medium": 0.42, "high": 0.80}[level]
+    values = _tone_base()
+    values["vec_shadow_density"] = (target, 0.76)
+    values["vec_black_level"] = (0.18, 0.58)
+    values["vec_key_to_fill_ratio"] = (0.30 + target * 0.22, 0.60)
+    leaks: list[str] = []
+    note = f"Intended shadow density {level} (clean sweep 002)."
+    if level == "low":
+        note += " Open interiors. Key held."
+    if level == "high":
+        if obs.anchor_id == "anchor_object":
+            values["vec_shadow_density"] = (0.62, 0.64)
+            leaks += ["napkin recolored black", "scene content changed"]
+            note += " No new handle shadow. Napkin became black cloth. Isolation better than 001, content leak."
+        elif obs.anchor_id == "anchor_portrait":
+            values["vec_shadow_density"] = (0.82, 0.78)
+            values["vec_key_to_fill_ratio"] = (0.52, 0.62)
+            note += " Sweater and far cheek ink. Key still camera-left. Mild fill drop."
+        elif obs.anchor_id == "anchor_architecture":
+            values["vec_shadow_density"] = (0.76, 0.70)
+            note += " Corners and bench underside ink. Skylight survives."
+        elif obs.anchor_id == "anchor_landscape":
+            values["vec_shadow_density"] = (0.74, 0.68)
+            note += " Cliff and grass darken. Sky holds."
+        elif obs.anchor_id == "anchor_character":
+            values["vec_shadow_density"] = (0.70, 0.66)
+            note += " Vest and contact shadow thicken."
+    return _pack(values), leaks, note
+
+
+def score_black_level(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    # high = lifted floor
+    target = {"low": 0.12, "medium": 0.28, "high": 0.78}[level]
+    values = _tone_base()
+    values["vec_black_level"] = (target, 0.74)
+    values["vec_shadow_density"] = (0.26 - target * 0.12, 0.58)
+    values["vec_exposure_bias"] = (0.50 + target * 0.18, 0.55)
+    leaks: list[str] = []
+    note = f"Intended black level {level}. High is lift, not crush."
+    if level == "high":
+        if obs.anchor_id == "anchor_portrait":
+            values["vec_black_level"] = (0.84, 0.80)
+            values["vec_veiling_glare"] = (0.22, 0.50)
+            note += " Backdrop and sweater floor rise. Face stays. Distinct from density."
+        elif obs.anchor_id == "anchor_object":
+            values["vec_black_level"] = (0.48, 0.58)
+            note += " Mild floor lift. Weak but correct polarity. No new shadows."
+        elif obs.anchor_id == "anchor_architecture":
+            values["vec_black_level"] = (0.70, 0.66)
+            note += " Floor of the room lifts. Skylight not restaged."
+        elif obs.anchor_id == "anchor_landscape":
+            values["vec_black_level"] = (0.62, 0.60)
+            note += " Darkest cliff values lift. No sunset."
+        elif obs.anchor_id == "anchor_character":
+            values["vec_black_level"] = (0.68, 0.64)
+            note += " Sweep and vest floor rise."
+    return _pack(values), leaks, note
+
+
+def score_key_to_fill(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    target = {"low": 0.18, "medium": 0.40, "high": 0.82}[level]
+    values = _tone_base()
+    values["vec_key_to_fill_ratio"] = (target, 0.76)
+    values["vec_shadow_density"] = (0.28 + target * 0.18, 0.58)
+    leaks: list[str] = []
+    note = f"Intended key-to-fill {level}."
+    if level == "low":
+        note += " Fill up. Key side held."
+    if level == "high":
+        if obs.anchor_id == "anchor_object":
+            values["vec_key_to_fill_ratio"] = (0.86, 0.80)
+            values["vec_source_hardness"] = (0.78, 0.78)
+            leaks += ["new hard window", "handle shadow on napkin"]
+            note += " Ratio rose by restaging hardness. This is the 001 teapot failure, now on the intended lighting axis."
+        elif obs.anchor_id == "anchor_portrait":
+            values["vec_key_to_fill_ratio"] = (0.80, 0.78)
+            values["vec_source_hardness"] = (0.38, 0.55)
+            note += " Far cheek loses fill. Key still left. Knit stays readable. Distinct from density high."
+        elif obs.anchor_id == "anchor_architecture":
+            values["vec_key_to_fill_ratio"] = (0.72, 0.66)
+            note += " Room contrast rises. Skylight still the source."
+        elif obs.anchor_id == "anchor_landscape":
+            values["vec_key_to_fill_ratio"] = (0.60, 0.55)
+            note += " Ground darkens vs sky. Weak lighting-ratio read."
+        elif obs.anchor_id == "anchor_character":
+            values["vec_key_to_fill_ratio"] = (0.74, 0.68)
+            note += " Form shadow deepens. Key side held."
+    return _pack(values), leaks, note
+
+
 def apply_scores(lib: Library) -> None:
     for obs in lib.observations.values():
         if obs.study_id == "study_anchor_set_001":
@@ -394,6 +503,12 @@ def apply_scores(lib: Library) -> None:
             scores, leaks, note = score_optical(obs)
         elif obs.study_id == "study_shadow_density_001":
             scores, leaks, note = score_shadow(obs)
+        elif obs.study_id == "study_shadow_density_002":
+            scores, leaks, note = score_density_v2(obs)
+        elif obs.study_id == "study_black_level_001":
+            scores, leaks, note = score_black_level(obs)
+        elif obs.study_id == "study_key_to_fill_ratio_001":
+            scores, leaks, note = score_key_to_fill(obs)
         elif obs.study_id == "study_halation_001":
             scores, leaks, note = score_halation(obs)
         elif obs.study_id == "study_edge_softness_001":
@@ -469,9 +584,58 @@ def _close_studies(lib: Library) -> None:
         "Low pole sometimes flattens lighting instead of lifting only the toe.",
     ]
     sh.next_experiments = [
-        "Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.",
-        "Paired study of shadow density vs key-to-fill vs black level on the same anchors.",
+        "See study_shadow_density_002 for the clean density sweep.",
     ]
+
+    if "study_shadow_density_002" in lib.studies:
+        d2 = lib.studies["study_shadow_density_002"]
+        d2.status = "complete"
+        d2.decision = "provisional"
+        d2.decision_reason = (
+            "Cleaner than 001. Portrait high inks sweater and far cheek with the key still camera-left. "
+            "Teapot high does not invent a handle shadow. The napkin was recolored black. "
+            "Mild fill drop remains. Distinct enough from black-level lift and from the intended ratio pole."
+        )
+        d2.entanglement_notes = [
+            "Object high changed napkin color (content leak).",
+            "Portrait high still drops fill a little.",
+        ]
+        d2.next_experiments = [
+            "Retry object high with an explicit hold: keep the napkin the same linen color.",
+        ]
+
+    if "study_black_level_001" in lib.studies:
+        bl = lib.studies["study_black_level_001"]
+        bl.status = "complete"
+        bl.decision = "provisional"
+        bl.decision_reason = (
+            "High is lift, not crush. Portrait backdrop and sweater floor rise while the face stays. "
+            "That is the opposite direction of density high. Object high is weak but the polarity is correct. "
+            "No new cast shadows."
+        )
+        bl.entanglement_notes = [
+            "Some global exposure lift rides along.",
+            "Still-life high is a small step.",
+        ]
+        bl.next_experiments = [
+            "Black level vs veiling glare on the gallery only.",
+        ]
+
+    if "study_key_to_fill_ratio_001" in lib.studies:
+        ktf = lib.studies["study_key_to_fill_ratio_001"]
+        ktf.status = "complete"
+        ktf.decision = "provisional"
+        ktf.decision_reason = (
+            "Portrait high sculpts the face: fill dies, knit stays readable. That is lighting ratio, not ink. "
+            "Teapot high restages a hard window and a handle shadow. Ratio is real. Hardness still leaks."
+        )
+        ktf.entanglement_notes = [
+            "Object high is also source hardness.",
+            "Landscape is a weak ratio read.",
+        ]
+        ktf.next_experiments = [
+            "Key-to-fill vs source hardness on the teapot only, with an explicit hold against new window edges.",
+        ]
 
     ha = lib.studies["study_halation_001"]
     ha.status = "complete"
@@ -648,22 +812,63 @@ def _update_vectors(lib: Library) -> None:
 
     sh = lib.vectors["vec_shadow_density"]
     sh.status = "provisional"
-    sh.confidence = 0.58
+    sh.confidence = 0.61
     sh.validation = {
         "isolatable": "partial",
         "transferable": True,
         "legible": True,
         "describable": True,
-        "non_redundant": "pending_vs_key_to_fill",
+        "non_redundant": "distinct_from_black_level",
         "directional": True,
         "useful": True,
         "n_subjects": 5,
         "n_levels": 3,
+        "clean_study": "study_shadow_density_002",
+        "contaminated_prior": "study_shadow_density_001",
     }
     sh.open_questions = [
-        "Can density move with lighting ratio held?",
-        "Where does black level end and shadow density begin on these anchors?",
+        "Can object density rise without recoloring props?",
+        "How much fill drop is allowed before this is key-to-fill?",
     ]
+
+    if "vec_black_level" in lib.vectors:
+        bl = lib.vectors["vec_black_level"]
+        bl.status = "provisional"
+        bl.confidence = 0.60
+        bl.validation = {
+            "isolatable": "partial",
+            "transferable": True,
+            "legible": True,
+            "describable": True,
+            "non_redundant": True,
+            "directional": True,
+            "useful": True,
+            "polarity": "high_means_lifted",
+            "n_subjects": 5,
+            "n_levels": 3,
+        }
+        bl.open_questions = [
+            "Is the still-life high too weak to keep this as a working axis?",
+        ]
+
+    if "vec_key_to_fill_ratio" in lib.vectors:
+        kr = lib.vectors["vec_key_to_fill_ratio"]
+        kr.status = "provisional"
+        kr.confidence = 0.58
+        kr.validation = {
+            "isolatable": "partial",
+            "transferable": True,
+            "legible": True,
+            "describable": True,
+            "non_redundant": "distinct_from_density_on_portrait",
+            "directional": True,
+            "useful": True,
+            "n_subjects": 5,
+            "n_levels": 3,
+        }
+        kr.open_questions = [
+            "Can ratio rise on the teapot without a new hard window?",
+        ]
 
     ha = lib.vectors["vec_halation"]
     ha.status = "provisional"

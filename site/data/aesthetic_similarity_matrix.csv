@@ -1,0 +1,8 @@
+aesthetic_id,aes_80s_fantasy_tv,aes_analog_generic,aes_cinematic_generic,aes_film_emulation,aes_soft_halated_shadow,aes_vhs_look,aes_vintage_generic
+aes_80s_fantasy_tv,1.0000,0.0000,0.0000,0.1694,0.5658,0.0462,0.0000
+aes_analog_generic,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+aes_cinematic_generic,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+aes_film_emulation,0.1694,0.0000,0.0000,1.0000,0.1486,0.0000,0.0000
+aes_soft_halated_shadow,0.5658,0.0000,0.0000,0.1486,1.0000,0.0000,0.0000
+aes_vhs_look,0.0462,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000
+aes_vintage_generic,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000

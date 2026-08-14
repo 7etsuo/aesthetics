@@ -1,0 +1,94 @@
+{
+  "anchor_id": "anchor_portrait",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0117",
+  "image_path": "artifacts/studies/study_black_level_001/anchor_portrait_medium.jpg",
+  "intended_level": "medium",
+  "intended_vector_id": "vec_black_level",
+  "model": "grok-imagine",
+  "notes": "Intended black level medium. High is lift, not crush.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only black level. Set black level to: natural black floor. Change only the black floor. High means lifted milky blacks, not crushed blacks. Do not add fill light. Do not change key direction. Do not add haze or diffusion. Do not ink mid-shadows as a density sweep. Do not change sharpness, grain, hue, or time of day.",
+  "scores": [
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.23,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.74,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.4,
+      "vector_id": "vec_global_contrast"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.55,
+      "vector_id": "vec_exposure_bias"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_veiling_glare"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.35,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only the black floor. High means lifted milky blacks, not crushed blacks. Do not add fill light. Do not change key direction. Do not add haze or diffusion. Do not ink mid-shadows as a density sweep. Do not change sharpness, grain, hue, or time of day."
+    ],
+    "job_id": "job_study_black_level_001_portrait_medium",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_portrait.jpg",
+  "source_type": "generated",
+  "study_id": "study_black_level_001",
+  "unintended_changes": []
+}

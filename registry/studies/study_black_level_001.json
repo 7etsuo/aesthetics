@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_black_level",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "High is lift, not crush. Portrait backdrop and sweater floor rise while the face stays. That is the opposite direction of density high. Object high is weak but the polarity is correct. No new cast shadows.",
+  "entanglement_notes": [
+    "Some global exposure lift rides along.",
+    "Still-life high is a small step."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_black_level_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Black level vs veiling glare on the gallery only."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0116",
+    "obs_0117",
+    "obs_0118",
+    "obs_0119",
+    "obs_0120",
+    "obs_0121",
+    "obs_0122",
+    "obs_0123",
+    "obs_0124",
+    "obs_0125",
+    "obs_0126",
+    "obs_0127",
+    "obs_0128",
+    "obs_0129",
+    "obs_0130"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of black level"
+}

@@ -10,7 +10,7 @@
 - high_pole: murky, dense, inked shadows
 - polarity: unipolar
 - range: low to high
-- confidence: 0.58
+- confidence: 0.61
 
 ## Definition
 How heavy, inky, or open the shadow masses are, independent of highlight behavior.
@@ -36,6 +36,7 @@ Increasing shadow density darkens and fills shadow masses while subject, key dir
 
 ## Controlled studies
 - [study_shadow_density_001](../studies/study_shadow_density_001.md)
+- [study_shadow_density_002](../studies/study_shadow_density_002.md)
 
 ## Evidence images
 - [obs_0021](../observations/obs_0021.md)
@@ -53,15 +54,30 @@ Increasing shadow density darkens and fills shadow masses while subject, key dir
 - [obs_0033](../observations/obs_0033.md)
 - [obs_0034](../observations/obs_0034.md)
 - [obs_0035](../observations/obs_0035.md)
+- [obs_0101](../observations/obs_0101.md)
+- [obs_0102](../observations/obs_0102.md)
+- [obs_0103](../observations/obs_0103.md)
+- [obs_0104](../observations/obs_0104.md)
+- [obs_0105](../observations/obs_0105.md)
+- [obs_0106](../observations/obs_0106.md)
+- [obs_0107](../observations/obs_0107.md)
+- [obs_0108](../observations/obs_0108.md)
+- [obs_0109](../observations/obs_0109.md)
+- [obs_0110](../observations/obs_0110.md)
+- [obs_0111](../observations/obs_0111.md)
+- [obs_0112](../observations/obs_0112.md)
+- [obs_0113](../observations/obs_0113.md)
+- [obs_0114](../observations/obs_0114.md)
+- [obs_0115](../observations/obs_0115.md)
 
 ## Scoring guidance
 0.00 open, 0.50 natural, 1.00 crushed murky shadow mass.
 
 ## Prompt phrases
-- low: open, readable shadows with visible interior detail
-- medium: naturalistic shadow density
-- high: heavy inky shadow density, murky recesses, compressed shadow detail
+- low: open readable shadow interiors, same key, same highlight cores
+- medium: naturalistic shadow mass, same lighting as the source
+- high: heavy inky shadow mass in recesses and dark cloth only, keep highlight cores, no new lights
 
 ## Open questions
-- Can density move with lighting ratio held?
-- Where does black level end and shadow density begin on these anchors?
+- Can object density rise without recoloring props?
+- How much fill drop is allowed before this is key-to-fill?

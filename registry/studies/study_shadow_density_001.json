@@ -31,8 +31,7 @@
     "high"
   ],
   "next_experiments": [
-    "Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.",
-    "Paired study of shadow density vs key-to-fill vs black level on the same anchors."
+    "See study_shadow_density_002 for the clean density sweep."
   ],
   "notes": "",
   "observation_ids": [
