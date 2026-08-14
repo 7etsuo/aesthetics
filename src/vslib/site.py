@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import shutil
 from pathlib import Path
 
@@ -11,110 +12,156 @@ from vslib.store import Library
 
 CSS = """
 :root {
-  --zinc: #2b3038;
-  --zinc-2: #353b45;
-  --paper: #d8d2c4;
-  --ink: #1c1714;
-  --muted: #6a645a;
-  --glass: #2a6f73;
-  --glass-2: #8fd0c8;
-  --amber: #c9842a;
-  --rule: #b7b09f;
-  --danger: #8a3b2a;
-  --ok: #2f6b45;
+  --void: #0e1116;
+  --plate: #161b22;
+  --line: #2a3140;
+  --star: #e8dcc4;
+  --fog: #8b94a3;
+  --gold: #c9a35a;
+  --ember: #c45c48;
+  --cyan: #7aa3a8;
+  --print: #ece6d8;
+  --ink: #1a1712;
+  --ok: #6f9b78;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: var(--zinc); color: var(--paper); }
+html, body { margin: 0; padding: 0; background: var(--void); color: var(--star); }
 body {
-  font: 16px/1.5 "Literata", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  font: 16px/1.55 "Source Sans 3", "Source Sans Pro", "Helvetica Neue", sans-serif;
 }
-a { color: var(--glass-2); text-decoration: none; }
-a:hover { text-decoration: underline; }
-code, .mono, input, kbd {
-  font-family: "IBM Plex Mono", "Fragment Mono", ui-monospace, monospace;
+a { color: var(--cyan); text-decoration: none; }
+a:hover { color: var(--gold); }
+code, .mono, input, kbd, .eq {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
 }
-.shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
-nav {
-  background: #23272e;
-  border-right: 1px solid #1a1d22;
-  padding: 1.25rem 1rem 3rem;
-  position: sticky; top: 0; height: 100vh; overflow: auto;
+.shell { min-height: 100vh; }
+nav.top {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.7rem 1.2rem;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: #0c0f14;
+  position: sticky; top: 0; z-index: 20;
 }
-nav .mark {
-  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  color: var(--glass-2);
+nav.top .mark {
+  font-family: "Bodoni Moda", "Didot", serif;
+  font-size: 1.35rem; letter-spacing: 0.16em; font-weight: 500;
+  color: var(--star); margin-right: 0.4rem;
 }
-nav h1 { font-size: 1.15rem; margin: 0.35rem 0 1rem; color: var(--paper); font-weight: 600; }
-nav a { display: block; color: var(--paper); padding: 0.18rem 0; font-size: 0.92rem; }
-nav .sec {
-  margin-top: 1.2rem;
+nav.top .mark em { color: var(--gold); font-style: normal; }
+nav.top a {
   font-family: "IBM Plex Sans Condensed", sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.68rem;
-  color: var(--amber);
+  font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--fog);
 }
-main { padding: 1.5rem 2rem 4rem; max-width: 1100px; }
-.mtf {
-  display: flex; gap: 3px; height: 18px; margin: 0 0 1.25rem;
-}
-.mtf i { display: block; height: 100%; background: var(--paper); opacity: 0.85; }
-.search {
-  display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1.25rem;
-}
+nav.top a[aria-current="page"] { color: var(--gold); }
+main { padding: 1.6rem 1.6rem 4rem; max-width: 1180px; margin: 0 auto; }
+.search { margin: 0 0 1.2rem; }
 .search input {
-  flex: 1; background: var(--zinc-2); color: var(--paper);
-  border: 1px solid #4a5160; padding: 0.65rem 0.8rem; font-size: 0.95rem;
+  width: 100%; background: var(--plate); color: var(--star);
+  border: 1px solid var(--line); padding: 0.7rem 0.85rem; font-size: 0.95rem;
 }
-.search input:focus { outline: 2px solid var(--glass); border-color: var(--glass); }
-.hits { background: #1f2329; border: 1px solid #3a404c; margin-bottom: 1rem; display: none; }
-.hits a { display: block; padding: 0.45rem 0.7rem; color: var(--paper); border-bottom: 1px solid #2c313a; }
-.hits a:hover { background: #2a313b; text-decoration: none; }
-.hits .k { color: var(--amber); font-size: 0.75rem; margin-right: 0.5rem; }
-h1.page { font-size: 2.1rem; line-height: 1.15; margin: 0 0 0.3rem; }
-.lede { color: #c9c2b3; max-width: 62ch; }
-.meta {
-  display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0 1.2rem;
+.search input:focus { outline: 1px solid var(--gold); border-color: var(--gold); }
+.hits { background: #11151c; border: 1px solid var(--line); display: none; }
+.hits a { display: block; padding: 0.45rem 0.7rem; color: var(--star); border-bottom: 1px solid var(--line); }
+.hits a:hover { background: #1c222c; }
+.hits .k { color: var(--gold); font-size: 0.72rem; margin-right: 0.5rem; }
+h1.page {
+  font-family: "Bodoni Moda", "Didot", serif;
+  font-weight: 500; font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.05; margin: 0 0 0.5rem; letter-spacing: -0.02em;
 }
+h2 {
+  font-family: "IBM Plex Sans Condensed", sans-serif;
+  font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); font-weight: 500; margin: 2rem 0 0.7rem;
+}
+.lede { color: var(--fog); max-width: 64ch; font-size: 1.08rem; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.9rem 0 1.3rem; }
 .chip {
   font-family: "IBM Plex Sans Condensed", sans-serif;
-  font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
-  border: 1px solid #5a6170; padding: 0.15rem 0.45rem; color: #d7d1c4;
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid var(--line); padding: 0.16rem 0.45rem; color: var(--fog);
 }
-.chip.canonical { border-color: var(--ok); color: #b6e0c4; }
-.chip.provisional { border-color: var(--amber); color: #f0d09a; }
-.chip.candidate { border-color: #6a645a; }
-.chip.vague, .chip.rejected { border-color: var(--danger); color: #e3b2a6; }
-.chip.composite, .chip.system { border-color: var(--glass); }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.chip.canonical { border-color: var(--ok); color: #b6d4bc; }
+.chip.provisional { border-color: var(--gold); color: #ecd6a4; }
+.chip.candidate, .chip.count { border-color: var(--line); }
+.chip.vague, .chip.rejected, .chip.near_alias { border-color: var(--ember); color: #e3b2a6; }
+.chip.composite, .chip.system { border-color: var(--cyan); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.stage {
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.6rem;
+  align-items: center; margin: 1.4rem 0 2rem;
+}
 .card {
-  background: var(--paper); color: var(--ink); padding: 0.9rem 1rem;
-  border-radius: 0;
+  background: var(--print); color: var(--ink); padding: 1rem 1.05rem;
 }
-.card h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
-.card p, .card li { color: #2a241f; }
-.card a { color: #174f52; }
+.card h3 { margin: 0 0 0.35rem; font-family: "Bodoni Moda", serif; font-weight: 500; }
+.card p, .card li { color: #2c281f; }
+.card a { color: #3d5c60; }
 table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-th, td { text-align: left; padding: 0.35rem 0.4rem; border-bottom: 1px solid #3d4450; }
-th { font-family: "IBM Plex Sans Condensed", sans-serif; letter-spacing: 0.06em;
-     text-transform: uppercase; font-size: 0.72rem; color: #c3bcae; font-weight: 600; }
-.bar { height: 8px; background: #1a1d22; width: 140px; display: inline-block; vertical-align: middle; }
-.bar > span { display: block; height: 100%; background: var(--glass-2); }
+th, td { text-align: left; padding: 0.4rem 0.35rem; border-bottom: 1px solid var(--line); }
+th {
+  font-family: "IBM Plex Sans Condensed", sans-serif; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 0.7rem; color: var(--fog); font-weight: 500;
+}
+.bar { height: 7px; background: #1a1d22; width: 140px; display: inline-block; vertical-align: middle; }
+.bar > span { display: block; height: 100%; background: var(--gold); }
 .strip { display: grid; gap: 8px; }
 .strip.levels { grid-template-columns: repeat(3, 1fr); }
-.strip img, .thumb img { width: 100%; height: auto; display: block; background: #111; }
-.caption { font-size: 0.78rem; color: #b7b09f; font-family: "IBM Plex Mono", monospace; margin-top: 0.25rem; }
+.strip img, .thumb img { width: 100%; height: auto; display: block; background: #0a0c10; }
+.caption { font-size: 0.74rem; color: var(--fog); font-family: "IBM Plex Mono", monospace; margin-top: 0.25rem; }
 .anchor-row { display: grid; grid-template-columns: 140px 1fr 1fr 1fr; gap: 8px; align-items: start; margin-bottom: 12px; }
-.anchor-row .an { font-size: 0.8rem; color: #c9c2b3; padding-top: 0.4rem; }
-.warning { border-left: 3px solid var(--amber); padding: 0.4rem 0.8rem; color: #e6d3ad; }
-footer { margin-top: 3rem; color: #8b8578; font-size: 0.8rem; }
+.anchor-row .an { font-size: 0.8rem; color: var(--fog); padding-top: 0.4rem; }
+.warning { border-left: 2px solid var(--gold); padding: 0.35rem 0.8rem; color: #d9cba6; }
+footer { margin-top: 3.2rem; color: #66707d; font-size: 0.78rem; }
+.eq-block {
+  font-size: clamp(1.02rem, 2.3vw, 1.5rem);
+  line-height: 1.75; color: var(--star);
+  padding: 0.4rem 0 0.2rem;
+}
+.eq-block .sum { font-family: "Bodoni Moda", serif; font-style: italic; font-size: 1.15em; }
+.eq-term {
+  display: inline-block; white-space: nowrap; margin: 0 0.08em;
+  border-bottom: 1px solid transparent; color: inherit;
+}
+.eq-term:hover { border-bottom-color: var(--gold); color: var(--gold); }
+.eq-term .w { color: var(--gold); }
+.eq-term .v { color: var(--cyan); font-style: italic; }
+.axis {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.7rem; align-items: center;
+  margin: 1.2rem 0 1.6rem;
+}
+.axis .pole { font-size: 0.86rem; color: var(--fog); }
+.axis .pole.hi { text-align: right; }
+.axis .track {
+  height: 2px; background: linear-gradient(90deg, var(--cyan), var(--gold));
+  position: relative; min-width: 120px;
+}
+.axis .track i {
+  position: absolute; top: -5px; width: 12px; height: 12px;
+  border: 2px solid var(--gold); border-radius: 50%; background: var(--void);
+}
+.weights { display: grid; gap: 0.55rem; }
+.weight-row { display: grid; grid-template-columns: minmax(8rem, 14rem) 1fr 3.2rem; gap: 0.6rem; align-items: center; }
+.weight-row .lab { font-size: 0.88rem; }
+.weight-row .track { height: 10px; background: #1b2028; }
+.weight-row .track > i {
+  display: block; height: 100%; background: var(--gold);
+  transform-origin: left center;
+  animation: grow 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.weight-row .w { font-family: "IBM Plex Mono", monospace; color: var(--gold); font-size: 0.84rem; text-align: right; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.sky { width: 100%; max-width: 460px; margin: 0 auto; }
+.sky svg { width: 100%; height: auto; display: block; }
+.sky text { font-family: "IBM Plex Sans Condensed", sans-serif; letter-spacing: 0.04em; }
+@media (prefers-reduced-motion: reduce) {
+  .weight-row .track > i { animation: none; }
+}
 @media (max-width: 860px) {
-  .shell { grid-template-columns: 1fr; }
-  nav { position: relative; height: auto; }
-  .grid-2, .anchor-row, .strip.levels { grid-template-columns: 1fr; }
+  .stage, .grid-2, .anchor-row, .strip.levels, .weight-row { grid-template-columns: 1fr; }
+  .axis { grid-template-columns: 1fr; }
+  .axis .pole.hi { text-align: left; }
 }
 """
 
@@ -128,7 +175,7 @@ def generate_site(lib: Library) -> None:
     (site / "assets" / "app.css").write_text(CSS, encoding="utf-8")
     index = _search_index(lib)
     (site / "assets" / "index.json").write_text(json.dumps(index), encoding="utf-8")
-    _page(site / "index.html", "Library", _home(lib), nav="home")
+    _page(site / "index.html", "Atlas", _home(lib), nav="home")
     _page(site / "vectors.html", "Vectors", _vector_index(lib), nav="vectors")
     _page(site / "families.html", "Families", _family_index(lib), nav="families")
     _page(site / "aesthetics.html", "Aesthetics", _aesthetic_index(lib), nav="aesthetics")
@@ -183,24 +230,6 @@ def _search_index(lib: Library) -> list[dict]:
     return rows
 
 
-def _nav(active: str) -> str:
-    links = [
-        ("home", "index.html", "Overview"),
-        ("vectors", "vectors.html", "Vectors"),
-        ("families", "families.html", "Families"),
-        ("aesthetics", "aesthetics.html", "Aesthetics"),
-        ("aliases", "aliases.html", "Aliases"),
-        ("studies", "studies.html", "Studies"),
-        ("matrices", "matrices.html", "Matrices"),
-        ("questions", "questions.html", "Questions"),
-    ]
-    items = []
-    for key, href, label in links:
-        mark = " aria-current='page'" if key == active else ""
-        items.append(f'<a href="{href}"{mark}>{label}</a>')
-    return "\n".join(items)
-
-
 def _page(path: Path, title: str, body: str, nav: str) -> None:
     site_root = path
     while site_root.name != "site" and site_root.parent != site_root:
@@ -211,25 +240,23 @@ def _page(path: Path, title: str, body: str, nav: str) -> None:
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{_esc(title)} · visual timbre lab</title>
+<title>{_esc(title)} · atlas</title>
 <link rel="stylesheet" href="{prefix}assets/app.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=Literata:opsz,wght@7..72,460;7..72,650&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans+Condensed:wght@500&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
 <body>
 <div class="shell">
-<nav>
-  <div class="mark">Image-formation atlas</div>
-  <h1>Visual timbre lab</h1>
+<nav class="top">
+  <a class="mark" href="{prefix}index.html">AT<i></i><em>LAS</em></a>
   {_nav_prefixed(nav, prefix)}
 </nav>
 <main>
-  <div class="mtf" aria-hidden="true">{_mtf()}</div>
   <form class="search" role="search" data-prefix="{prefix}">
-    <input id="q" type="search" placeholder="Search vectors, aliases, aesthetics…" autocomplete="off">
+    <input id="q" type="search" placeholder="Map a phrase to a vector or a look…" autocomplete="off">
   </form>
   <div class="hits" id="hits"></div>
   {body}
-  <footer>Canonical records live in registry/. Pages are generated. Basis is operational, not orthogonal.</footer>
+  <footer>Operational basis. Not assumed orthogonal. Records in registry/. Live combination a = sum w_i v_i.</footer>
 </main>
 </div>
 <script src="{prefix}assets/app.js"></script>
@@ -242,25 +269,20 @@ def _page(path: Path, title: str, body: str, nav: str) -> None:
 
 def _nav_prefixed(active: str, prefix: str) -> str:
     links = [
-        ("home", "index.html", "Overview"),
+        ("home", "index.html", "Atlas"),
         ("vectors", "vectors.html", "Vectors"),
-        ("families", "families.html", "Families"),
         ("aesthetics", "aesthetics.html", "Aesthetics"),
-        ("aliases", "aliases.html", "Aliases"),
         ("studies", "studies.html", "Studies"),
+        ("families", "families.html", "Families"),
+        ("aliases", "aliases.html", "Aliases"),
         ("matrices", "matrices.html", "Matrices"),
         ("questions", "questions.html", "Questions"),
     ]
     items = []
     for key, href, label in links:
-        mark = " aria-current='page'" if key == active else ""
+        mark = ' aria-current="page"' if key == active else ""
         items.append(f'<a href="{prefix}{href}"{mark}>{label}</a>')
     return "\n".join(items)
-
-
-def _mtf() -> str:
-    widths = [3, 5, 8, 12, 18, 26, 36, 48, 28, 16, 10, 6, 4]
-    return "".join(f'<i style="width:{w}px"></i>' for w in widths)
 
 
 def _esc(text: str) -> str:
@@ -283,36 +305,138 @@ def _bar(value: float) -> str:
     return f'<span class="bar"><span style="width:{pct:.0f}%"></span></span> {value:.2f}'
 
 
+def _short_v(vector_id: str) -> str:
+    return vector_id.removeprefix("vec_")
+
+
+def _equation(lib: Library, aesthetic_id: str, href_prefix: str = "") -> str:
+    aes = lib.aesthetics.get(aesthetic_id)
+    if not aes or not aes.weights:
+        return '<p class="eq-block"><span class="sum">a</span> = Σ w<sub>i</sub> v<sub>i</sub></p>'
+    terms = []
+    for i, item in enumerate(sorted(aes.weights, key=lambda w: abs(w.weight), reverse=True)):
+        name = lib.vectors[item.vector_id].canonical_name if item.vector_id in lib.vectors else item.vector_id
+        op = "" if i == 0 else " + "
+        terms.append(
+            f'{op}<a class="eq-term" href="{href_prefix}vectors/{item.vector_id}.html" title="{_esc(name)}">'
+            f'<span class="w">{item.weight:.2f}</span> '
+            f'<span class="v">v<sub>{_esc(_short_v(item.vector_id))}</sub></span></a>'
+        )
+    return (
+        f'<p class="eq-block"><a class="sum" href="{href_prefix}aesthetics/{aes.id}.html">{_esc(aes.canonical_name)}</a>'
+        f' = {"".join(terms)}</p>'
+    )
+
+
+def _constellation(lib: Library, aesthetic_id: str | None, href_prefix: str = "") -> str:
+    axes = [v for v in lib.vectors.values() if v.study_ids and v.status in {"canonical", "provisional"}]
+    axes.sort(key=lambda v: v.id)
+    if not axes:
+        axes = sorted(lib.vectors.values(), key=lambda v: v.canonical_name)[:8]
+    weights = {}
+    if aesthetic_id and aesthetic_id in lib.aesthetics:
+        weights = lib.aesthetics[aesthetic_id].coordinate()
+    n = max(len(axes), 1)
+    cx, cy, r = 200, 200, 132
+    parts = [
+        f'<svg viewBox="0 0 400 400" role="img" aria-label="weight constellation">'
+        f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#2a3140"/>'
+        f'<circle cx="{cx}" cy="{cy}" r="{r*0.5}" fill="none" stroke="#222833"/>'
+        f'<circle cx="{cx}" cy="{cy}" r="3" fill="#c9a35a"/>'
+    ]
+    pts = []
+    for i, vec in enumerate(axes):
+        ang = -math.pi / 2 + (2 * math.pi * i / n)
+        x2 = cx + r * math.cos(ang)
+        y2 = cy + r * math.sin(ang)
+        w = max(0.0, min(1.0, abs(weights.get(vec.id, 0.0))))
+        px = cx + r * w * math.cos(ang)
+        py = cy + r * w * math.sin(ang)
+        lx = cx + (r + 22) * math.cos(ang)
+        ly = cy + (r + 22) * math.sin(ang)
+        anchor = "start" if math.cos(ang) > 0.2 else ("end" if math.cos(ang) < -0.2 else "middle")
+        parts.append(f'<line x1="{cx}" y1="{cy}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="#2a3140"/>')
+        parts.append(
+            f'<a href="{href_prefix}vectors/{vec.id}.html">'
+            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="5" fill="#c9a35a">'
+            f'<title>{_esc(vec.canonical_name)} {w:.2f}</title></circle></a>'
+        )
+        parts.append(
+            f'<text x="{lx:.1f}" y="{ly:.1f}" fill="#8b94a3" font-size="10" text-anchor="{anchor}">'
+            f'{_esc(vec.canonical_name)}</text>'
+        )
+        if vec.id in weights:
+            pts.append((px, py))
+    if len(pts) >= 3:
+        d = "M " + " L ".join(f"{x:.1f},{y:.1f}" for x, y in pts) + " Z"
+        parts.append(f'<path d="{d}" fill="rgba(201,163,90,0.12)" stroke="#c9a35a"/>')
+    elif len(pts) == 2:
+        parts.append(
+            f'<line x1="{pts[0][0]:.1f}" y1="{pts[0][1]:.1f}" x2="{pts[1][0]:.1f}" y2="{pts[1][1]:.1f}" stroke="#c9a35a"/>'
+        )
+    parts.append("</svg>")
+    return f'<div class="sky">{"".join(parts)}</div>'
+
+
+def _weight_rows(lib: Library, aesthetic_id: str, href_prefix: str = "") -> str:
+    aes = lib.aesthetics.get(aesthetic_id)
+    if not aes or not aes.weights:
+        return ""
+    rows = []
+    for item in sorted(aes.weights, key=lambda w: abs(w.weight), reverse=True):
+        name = lib.vectors[item.vector_id].canonical_name if item.vector_id in lib.vectors else item.vector_id
+        pct = max(0, min(100, abs(item.weight) * 100))
+        flag = " hypothesized" if item.hypothesized else ""
+        rows.append(
+            f'<div class="weight-row">'
+            f'<a class="lab" href="{href_prefix}vectors/{item.vector_id}.html">{_esc(name)}</a>'
+            f'<div class="track"><i style="width:{pct:.0f}%"></i></div>'
+            f'<div class="w">{item.weight:.2f}{flag}</div></div>'
+        )
+    return f'<div class="weights">{"".join(rows)}</div>'
+
+
 def _home(lib: Library) -> str:
+    featured = "aes_soft_halated_shadow" if "aes_soft_halated_shadow" in lib.aesthetics else next(iter(lib.aesthetics), "")
     studied = [v for v in lib.vectors.values() if v.study_ids]
+    studied.sort(key=lambda v: (-v.confidence, v.canonical_name))
     return f"""
-<h1 class="page">Smallest controllable visual properties</h1>
+<p class="chip count">visual basis atlas</p>
+<h1 class="page">Hidden associations, mapped as vectors.</h1>
 <p class="lede">
-A navigable library of visual basis vectors: dimensions that can be isolated,
-tested with Grok Imagine, named, and recombined. Phrases such as cinematic,
-vintage, analog, or 1980s fantasy are not atoms. They are composites or vague labels.
+Atlas turns a named look into a coordinate. Each axis is a tested visual basis vector.
+An aesthetic is a weighted combination over that basis.
 </p>
+{_equation(lib, featured)}
+<div class="stage">
+  {_constellation(lib, featured)}
+  <div>
+    <h2>Live combination</h2>
+    {_weight_rows(lib, featured)}
+    <p class="lede" style="margin-top:1rem">
+    Operational basis only. Correlation and reconstruction error stay in the record.
+    A vector is canonical only after isolation across unrelated subjects.
+    </p>
+  </div>
+</div>
 <div class="meta">
   {_chip(str(len(lib.vectors)) + " vectors", "count")}
   {_chip(str(len(lib.observations)) + " observations", "count")}
   {_chip(str(len(lib.studies)) + " studies", "count")}
   {_chip(str(len(lib.aesthetics)) + " aesthetics", "count")}
 </div>
-<div class="warning">
-  Operational basis only. Correlation, redundancy, dependence, and reconstruction error are tracked.
-  A vector is canonical only after controlled tests across unrelated subjects.
-</div>
-<div class="grid-2" style="margin-top:1.2rem">
+<div class="grid-2">
   <div class="card">
-    <h3>Studied in this slice</h3>
+    <h3>Studied axes</h3>
     <ul>
-      {''.join(f'<li><a href="vectors/{v.id}.html">{_esc(v.canonical_name)}</a> · {v.status} · conf {v.confidence:.2f}</li>' for v in studied) or "<li>none yet</li>"}
+      {''.join(f'<li><a href="vectors/{v.id}.html">{_esc(v.canonical_name)}</a> · {v.status} · {v.confidence:.2f}</li>' for v in studied) or "<li>none yet</li>"}
     </ul>
   </div>
   <div class="card">
-    <h3>Agent entry points</h3>
-    <p>Use <code>vslib map "old-tv softness"</code>, <code>vslib profile aes_80s_fantasy_tv</code>,
-    <code>vslib reconstruct aes_soft_halated_shadow</code>, <code>vslib next</code>.</p>
+    <h3>How to query</h3>
+    <p><code>vslib map "old-tv softness"</code></p>
+    <p><code>vslib reconstruct aes_soft_halated_shadow</code></p>
+    <p>Vague words stay vague. They never become atoms.</p>
   </div>
 </div>
 """
@@ -330,7 +454,7 @@ def _vector_index(lib: Library) -> str:
         )
     return f"""
 <h1 class="page">Vector index</h1>
-<p class="lede">Every candidate and canonical dimension currently in the registry.</p>
+<p class="lede">Every candidate and tested axis in the current basis.</p>
 <table>
 <thead><tr><th>name</th><th>id</th><th>status</th><th>family</th><th>confidence</th></tr></thead>
 <tbody>{''.join(rows)}</tbody>
@@ -361,18 +485,18 @@ def _family_page(lib: Library, family_id: str) -> str:
 
 
 def _aesthetic_index(lib: Library) -> str:
-    rows = []
+    blocks = []
     for aes in sorted(lib.aesthetics.values(), key=lambda a: a.canonical_name):
-        rows.append(
-            f"<tr><td><a href='aesthetics/{aes.id}.html'>{_esc(aes.canonical_name)}</a></td>"
-            f"<td class='mono'>{aes.id}</td><td>{_chip(aes.status)}</td>"
-            f"<td>{_bar(aes.confidence)}</td></tr>"
+        blocks.append(
+            f"<article class='card' style='margin-bottom:1rem'>"
+            f"<h3><a href='aesthetics/{aes.id}.html'>{_esc(aes.canonical_name)}</a> {_chip(aes.status)}</h3>"
+            f"{_equation(lib, aes.id)}"
+            f"</article>"
         )
     return f"""
 <h1 class="page">Composite aesthetics</h1>
-<p class="lede">Named looks stored as weight vectors over the basis. Linear first.</p>
-<table><thead><tr><th>name</th><th>id</th><th>status</th><th>confidence</th></tr></thead>
-<tbody>{''.join(rows)}</tbody></table>
+<p class="lede">Named looks as coordinates. Linear first: a = sum w_i v_i.</p>
+{''.join(blocks)}
 """
 
 
@@ -392,7 +516,7 @@ def _alias_index(lib: Library) -> str:
         )
     return f"""
 <h1 class="page">Alias search</h1>
-<p class="lede">Type in the search box, or scan the table. Vague labels stay vague.</p>
+<p class="lede">Map a raw phrase onto the basis. Vague labels stay vague.</p>
 <table><thead><tr><th>phrase</th><th>target</th><th>mapping</th><th>conf</th><th>notes</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table>
 """
@@ -461,7 +585,9 @@ def _vector_page(lib: Library, vector_id: str) -> str:
     effects = "".join(f"<li>{_esc(e)}</li>" for e in vec.observable_effects) or "<li>not yet observed</li>"
     qs = "".join(f"<li>{_esc(q)}</li>" for q in vec.open_questions) or "<li>none</li>"
     evidence = _vector_evidence(lib, vec.id)
+    mark = max(8.0, min(92.0, vec.confidence * 100))
     return f"""
+<p class="eq-block"><span class="sum">v</span> = <span class="v">v<sub>{_esc(_short_v(vec.id))}</sub></span></p>
 <h1 class="page">{_esc(vec.canonical_name)}</h1>
 <div class="meta">
   {_chip(vec.status)}
@@ -469,14 +595,15 @@ def _vector_page(lib: Library, vector_id: str) -> str:
   <span class="chip">conf {_esc(f"{vec.confidence:.2f}")}</span>
   <span class="chip"><a href="../families/{vec.family_id}.html">{_esc(fam.name if fam else vec.family_id)}</a></span>
 </div>
+<div class="axis">
+  <div class="pole">{_esc(vec.low_pole)}</div>
+  <div class="track"><i style="left:{mark:.0f}%"></i></div>
+  <div class="pole hi">{_esc(vec.high_pole)}</div>
+</div>
 <p class="lede">{_esc(vec.definition)}</p>
 <div class="grid-2">
   <div class="card"><h3>What it changes</h3><p>{_esc(vec.testable_claim)}</p><ul>{effects}</ul></div>
-  <div class="card"><h3>Poles</h3>
-    <p>Low: {_esc(vec.low_pole)}</p>
-    <p>High: {_esc(vec.high_pole)}</p>
-    <p>Aliases: {_esc(", ".join(vec.aliases) or "none")}</p>
-  </div>
+  <div class="card"><h3>Aliases</h3><p>{_esc(", ".join(vec.aliases) or "none")}</p></div>
 </div>
 <h2>Controlled examples</h2>
 {evidence}
@@ -518,14 +645,6 @@ def _vector_evidence(lib: Library, vector_id: str) -> str:
 
 def _aesthetic_page(lib: Library, aesthetic_id: str) -> str:
     aes = lib.aesthetics[aesthetic_id]
-    rows = []
-    for item in sorted(aes.weights, key=lambda w: abs(w.weight), reverse=True):
-        name = lib.vectors[item.vector_id].canonical_name if item.vector_id in lib.vectors else item.vector_id
-        flag = " hypothesized" if item.hypothesized else ""
-        rows.append(
-            f"<tr><td><a href='../vectors/{item.vector_id}.html'>{_esc(name)}</a></td>"
-            f"<td>{_bar(item.weight)}</td><td>{flag}</td></tr>"
-        )
     nearest = nearest_aesthetics(lib, aes.id)
     near = "".join(
         f"<li><a href='{i}.html'>{_esc(lib.aesthetics[i].canonical_name)}</a> cosine {s:.3f}</li>"
@@ -535,15 +654,35 @@ def _aesthetic_page(lib: Library, aesthetic_id: str) -> str:
         f"<li><a href='../observations/{o}.html'>{o}</a></li>" for o in aes.observation_ids
     ) or "<li>none</li>"
     notes = "".join(f"<li>{_esc(n)}</li>" for n in aes.interaction_notes) or "<li>none</li>"
+    ev = ""
+    if aes.observation_ids:
+        thumbs = []
+        for oid in aes.observation_ids[:5]:
+            obs = lib.observations.get(oid)
+            if not obs:
+                continue
+            thumbs.append(
+                f"<div><a href='../observations/{obs.id}.html'><img src='../{obs.image_path}' alt='{obs.id}'></a>"
+                f"<div class='caption'>{obs.anchor_id} · {obs.id}</div></div>"
+            )
+        ev = f"<div class='strip levels'>{''.join(thumbs)}</div>"
     return f"""
+{_equation(lib, aes.id, "../")}
 <h1 class="page">{_esc(aes.canonical_name)}</h1>
 <div class="meta">{_chip(aes.status)}<span class="chip mono">{aes.id}</span>{_chip("conf "+f"{aes.confidence:.2f}")}</div>
 <p class="lede">{_esc(aes.definition)}</p>
-<h2>Coordinate vector</h2>
-<table><thead><tr><th>vector</th><th>weight</th><th></th></tr></thead><tbody>{''.join(rows)}</tbody></table>
+<div class="stage">
+  {_constellation(lib, aes.id, "../")}
+  <div>
+    <h2>Coordinate</h2>
+    {_weight_rows(lib, aes.id, "../")}
+  </div>
+</div>
+<h2>Reconstruction plates</h2>
+{ev or "<p>No reconstruction plates yet.</p>"}
 <h2>Interactions</h2><ul>{notes}</ul>
 <h2>Nearest neighbors</h2><ul>{near}</ul>
-<h2>Reconstruction</h2><p>{_esc(aes.reconstruction_notes)}</p>
+<h2>Notes</h2><p>{_esc(aes.reconstruction_notes)}</p>
 <h2>Evidence</h2><ul>{refs}</ul>
 """
 
@@ -551,7 +690,6 @@ def _aesthetic_page(lib: Library, aesthetic_id: str) -> str:
 def _study_page(lib: Library, study_id: str) -> str:
     study = lib.studies[study_id]
     grid = f"<p><img src='../artifacts/grids/{study.id}.jpg' alt='grid'></p>" if (lib.root / "artifacts" / "grids" / f"{study.id}.jpg").exists() else ""
-    # side by side by anchor
     by_anchor: dict[str, dict[str, object]] = {}
     for obs_id in study.observation_ids:
         obs = lib.observations.get(obs_id)
@@ -624,7 +762,6 @@ def _copy_artifacts(lib: Library, site: Path) -> None:
         shutil.rmtree(dest)
     if src.exists():
         shutil.copytree(src, dest)
-    # also write JS next to css
     (site / "assets" / "app.js").write_text(JS, encoding="utf-8")
 
 
@@ -658,7 +795,3 @@ async function boot() {
 }
 boot();
 """
-
-
-# Fix _page writing JS: generate_site already writes JS in _copy_artifacts.
-# Rewrite _page to drop the broken js path logic at the end.

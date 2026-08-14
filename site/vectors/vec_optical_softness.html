@@ -2,31 +2,30 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>optical softness · visual timbre lab</title>
+<title>optical softness · atlas</title>
 <link rel="stylesheet" href="../assets/app.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=Literata:opsz,wght@7..72,460;7..72,650&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans+Condensed:wght@500&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
 <body>
 <div class="shell">
-<nav>
-  <div class="mark">Image-formation atlas</div>
-  <h1>Visual timbre lab</h1>
-  <a href="../index.html">Overview</a>
-<a href="../vectors.html" aria-current='page'>Vectors</a>
-<a href="../families.html">Families</a>
+<nav class="top">
+  <a class="mark" href="../index.html">AT<i></i><em>LAS</em></a>
+  <a href="../index.html">Atlas</a>
+<a href="../vectors.html" aria-current="page">Vectors</a>
 <a href="../aesthetics.html">Aesthetics</a>
-<a href="../aliases.html">Aliases</a>
 <a href="../studies.html">Studies</a>
+<a href="../families.html">Families</a>
+<a href="../aliases.html">Aliases</a>
 <a href="../matrices.html">Matrices</a>
 <a href="../questions.html">Questions</a>
 </nav>
 <main>
-  <div class="mtf" aria-hidden="true"><i style="width:3px"></i><i style="width:5px"></i><i style="width:8px"></i><i style="width:12px"></i><i style="width:18px"></i><i style="width:26px"></i><i style="width:36px"></i><i style="width:48px"></i><i style="width:28px"></i><i style="width:16px"></i><i style="width:10px"></i><i style="width:6px"></i><i style="width:4px"></i></div>
   <form class="search" role="search" data-prefix="../">
-    <input id="q" type="search" placeholder="Search vectors, aliases, aesthetics…" autocomplete="off">
+    <input id="q" type="search" placeholder="Map a phrase to a vector or a look…" autocomplete="off">
   </form>
   <div class="hits" id="hits"></div>
   
+<p class="eq-block"><span class="sum">v</span> = <span class="v">v<sub>optical_softness</sub></span></p>
 <h1 class="page">optical softness</h1>
 <div class="meta">
   <span class="chip provisional">provisional</span>
@@ -34,14 +33,15 @@
   <span class="chip">conf 0.64</span>
   <span class="chip"><a href="../families/fam_optical_character.html">optical character</a></span>
 </div>
+<div class="axis">
+  <div class="pole">clinical optical crispness</div>
+  <div class="track"><i style="left:64%"></i></div>
+  <div class="pole hi">heavy optical diffusion</div>
+</div>
 <p class="lede">Overall lens-like softening: reduced bite, slight highlight spread, and melted fine detail from the optical path.</p>
 <div class="grid-2">
   <div class="card"><h3>What it changes</h3><p>Increasing optical softness while holding subject, pose, framing, and key direction should melt fine detail and gently spread highlight cores without requiring a grain, color, or lighting-ratio change.</p><ul><li>pores and fabric weave melt</li><li>specular cores widen slightly</li><li>edges lose bite</li><li>image feels lens-like rather than sharpened-digital</li></ul></div>
-  <div class="card"><h3>Poles</h3>
-    <p>Low: clinical optical crispness</p>
-    <p>High: heavy optical diffusion</p>
-    <p>Aliases: vintage softness, lens softness, old-cinema softness, optical diffusion feel</p>
-  </div>
+  <div class="card"><h3>Aliases</h3><p>vintage softness, lens softness, old-cinema softness, optical diffusion feel</p></div>
 </div>
 <h2>Controlled examples</h2>
 <div class="strip">
@@ -58,7 +58,7 @@
 <h2>Scoring</h2><p>0.00 clinical crisp, 0.50 moderate lens softness, 1.00 heavy optical melt.</p>
 <h2>Open questions</h2><ul><li>Can high softness be produced without bloom orbs or glowing eyes?</li><li>Is the landscape high pole DOF or optical softness?</li><li>Should edge softness be retired as a near-alias?</li></ul>
 
-  <footer>Canonical records live in registry/. Pages are generated. Basis is operational, not orthogonal.</footer>
+  <footer>Operational basis. Not assumed orthogonal. Records in registry/. Live combination a = sum w_i v_i.</footer>
 </main>
 </div>
 <script src="../assets/app.js"></script>
