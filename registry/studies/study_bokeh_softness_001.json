@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_bokeh_softness",
+  "date": "2026-08-13",
+  "decision": "provisional",
+  "decision_reason": "When a subject plane exists, the field creams and the subject stays sharp: teapot, fox, portrait. The deep-focus gallery has no plane, so the whole room defocuses. Distinct, conditional on geometry.",
+  "entanglement_notes": [
+    "Portrait and fox gained invented backdrop folds so the field could dissolve.",
+    "Architecture high is optical softness, not bokeh."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_bokeh_softness_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Bokeh study only on frames that already have a clear subject/field split."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0086",
+    "obs_0087",
+    "obs_0088",
+    "obs_0089",
+    "obs_0090",
+    "obs_0091",
+    "obs_0092",
+    "obs_0093",
+    "obs_0094",
+    "obs_0095",
+    "obs_0096",
+    "obs_0097",
+    "obs_0098",
+    "obs_0099",
+    "obs_0100"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of bokeh softness"
+}

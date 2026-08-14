@@ -14,7 +14,8 @@
     "High optical softness co-produces highlight bloom and, on the teapot, circular orbs.",
     "Character high turns glass eyes into lamps (halation leak).",
     "Landscape high behaves like shallow DOF more than like a uniform optical melt.",
-    "Microcontrast falls whenever softness rises. Inverse test still needed."
+    "Microcontrast falls whenever softness rises. Inverse test still needed.",
+    "Discrimination 002: edge softness usually collapses into this vector. Diffusion and bokeh do not."
   ],
   "hold_constant": [
     "subject identity",
@@ -32,8 +33,7 @@
     "high"
   ],
   "next_experiments": [
-    "Discrimination study: optical softness vs edge softness vs diffusion vs bokeh softness.",
-    "Retry high softness with an explicit ban on bokeh discs and glowing eyes.",
+    "Treat optical softness as a parent cluster: edge melt plus some bloom. Do not merge it with diffusion or bokeh.",
     "Add a mid-high step (0.65) because medium is too close to the anchor."
   ],
   "notes": "",

@@ -29,14 +29,14 @@
   
 <h1 class="page">edge softness</h1>
 <div class="meta">
-  <span class="chip candidate">candidate</span>
+  <span class="chip provisional">provisional</span>
   <span class="chip mono">vec_edge_softness</span>
-  <span class="chip">conf 0.22</span>
+  <span class="chip">conf 0.36</span>
   <span class="chip"><a href="../families/fam_spatial_definition.html">spatial definition</a></span>
 </div>
 <p class="lede">Width and melt of edges, independent of highlight glow.</p>
 <div class="grid-2">
-  <div class="card"><h3>What it changes</h3><p>Increasing edge softness thickens and dissolves contours without requiring halation.</p><ul><li>not yet observed</li></ul></div>
+  <div class="card"><h3>What it changes</h3><p>Increasing edge softness thickens and dissolves contours without requiring a veil, highlight spread, or background disk melt.</p><ul><li>contours thicken</li><li>hair and fabric edges lose snap</li><li>highlight cores stay relatively tight</li></ul></div>
   <div class="card"><h3>Poles</h3>
     <p>Low: hard razor edges</p>
     <p>High: melted wide edges</p>
@@ -44,12 +44,19 @@
   </div>
 </div>
 <h2>Controlled examples</h2>
-<p>No controlled examples yet.</p>
-<h2>Nearby</h2><ul><li><a href='vec_optical_softness.html'>optical softness</a></li><li><a href='vec_fine_detail_rolloff.html'>fine-detail roll-off</a></li><li><a href='vec_acutance.html'>acutance</a></li></ul>
-<h2>Commonly confused with</h2><ul><li><a href='vec_optical_softness.html'>vec_optical_softness</a>: Optical softness includes highlight spread and diffusion, not only edge width.</li></ul>
-<h2>Studies</h2><ul><li>none</li></ul>
-<h2>Scoring</h2><p>0 absent, 0.5 moderate, 1 dominant.</p>
-<h2>Open questions</h2><ul><li>none</li></ul>
+<div class="strip">
+<div class='anchor-row'><div></div><div class='caption'>low</div><div class='caption'>medium</div><div class='caption'>high</div></div>
+<div class='anchor-row'><div class='an'>human portrait</div><div class='thumb'><a href='../observations/obs_0056.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_portrait_low.jpg' alt='obs_0056'></a><div class='caption'>obs_0056</div></div><div class='thumb'><a href='../observations/obs_0057.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_portrait_medium.jpg' alt='obs_0057'></a><div class='caption'>obs_0057</div></div><div class='thumb'><a href='../observations/obs_0058.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_portrait_high.jpg' alt='obs_0058'></a><div class='caption'>obs_0058</div></div></div>
+<div class='anchor-row'><div class='an'>ordinary physical object</div><div class='thumb'><a href='../observations/obs_0059.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_object_low.jpg' alt='obs_0059'></a><div class='caption'>obs_0059</div></div><div class='thumb'><a href='../observations/obs_0060.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_object_medium.jpg' alt='obs_0060'></a><div class='caption'>obs_0060</div></div><div class='thumb'><a href='../observations/obs_0061.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_object_high.jpg' alt='obs_0061'></a><div class='caption'>obs_0061</div></div></div>
+<div class='anchor-row'><div class='an'>architecture or interior</div><div class='thumb'><a href='../observations/obs_0062.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_architecture_low.jpg' alt='obs_0062'></a><div class='caption'>obs_0062</div></div><div class='thumb'><a href='../observations/obs_0063.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_architecture_medium.jpg' alt='obs_0063'></a><div class='caption'>obs_0063</div></div><div class='thumb'><a href='../observations/obs_0064.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_architecture_high.jpg' alt='obs_0064'></a><div class='caption'>obs_0064</div></div></div>
+<div class='anchor-row'><div class='an'>landscape</div><div class='thumb'><a href='../observations/obs_0065.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_landscape_low.jpg' alt='obs_0065'></a><div class='caption'>obs_0065</div></div><div class='thumb'><a href='../observations/obs_0066.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_landscape_medium.jpg' alt='obs_0066'></a><div class='caption'>obs_0066</div></div><div class='thumb'><a href='../observations/obs_0067.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_landscape_high.jpg' alt='obs_0067'></a><div class='caption'>obs_0067</div></div></div>
+<div class='anchor-row'><div class='an'>stylized character or creature</div><div class='thumb'><a href='../observations/obs_0068.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_character_low.jpg' alt='obs_0068'></a><div class='caption'>obs_0068</div></div><div class='thumb'><a href='../observations/obs_0069.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_character_medium.jpg' alt='obs_0069'></a><div class='caption'>obs_0069</div></div><div class='thumb'><a href='../observations/obs_0070.html'><img src='../artifacts/studies/study_edge_softness_001/anchor_character_high.jpg' alt='obs_0070'></a><div class='caption'>obs_0070</div></div></div>
+</div>
+<h2>Nearby</h2><ul><li><a href='vec_optical_softness.html'>optical softness</a></li><li><a href='vec_fine_detail_rolloff.html'>fine-detail roll-off</a></li><li><a href='vec_acutance.html'>acutance</a></li><li><a href='vec_diffusion.html'>diffusion</a></li><li><a href='vec_bokeh_softness.html'>bokeh softness</a></li></ul>
+<h2>Commonly confused with</h2><ul><li><a href='vec_bokeh_softness.html'>vec_bokeh_softness</a>: Bokeh softness is the out-of-focus field. Edge softness can sit on an in-focus subject.</li><li><a href='vec_diffusion.html'>vec_diffusion</a>: Diffusion is a veil over the whole field. Edge softness is contour width.</li><li><a href='vec_optical_softness.html'>vec_optical_softness</a>: Optical softness includes highlight spread and micro-detail melt, not only edge width.</li></ul>
+<h2>Studies</h2><ul><li><a href='../studies/study_edge_softness_001.html'>study_edge_softness_001</a></li></ul>
+<h2>Scoring</h2><p>0.00 razor edges, 0.50 mild contour melt, 1.00 wide melted outlines.</p>
+<h2>Open questions</h2><ul><li>Is there any prompt that thickens contours without defocusing the subject?</li></ul>
 
   <footer>Canonical records live in registry/. Pages are generated. Basis is operational, not orthogonal.</footer>
 </main>

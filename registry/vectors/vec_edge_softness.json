@@ -4,7 +4,7 @@
     "edge melt"
   ],
   "canonical_name": "edge softness",
-  "confidence": 0.22,
+  "confidence": 0.36,
   "definition": "Width and melt of edges, independent of highlight glow.",
   "family_id": "fam_spatial_definition",
   "high_pole": "melted wide edges",
@@ -13,20 +13,63 @@
   "nearby_ids": [
     "vec_optical_softness",
     "vec_fine_detail_rolloff",
-    "vec_acutance"
+    "vec_acutance",
+    "vec_diffusion",
+    "vec_bokeh_softness"
   ],
   "not_the_same_as": {
-    "vec_optical_softness": "Optical softness includes highlight spread and diffusion, not only edge width."
+    "vec_bokeh_softness": "Bokeh softness is the out-of-focus field. Edge softness can sit on an in-focus subject.",
+    "vec_diffusion": "Diffusion is a veil over the whole field. Edge softness is contour width.",
+    "vec_optical_softness": "Optical softness includes highlight spread and micro-detail melt, not only edge width."
   },
   "notes": "",
-  "observable_effects": [],
-  "observation_ids": [],
-  "open_questions": [],
+  "observable_effects": [
+    "contours thicken",
+    "hair and fabric edges lose snap",
+    "highlight cores stay relatively tight"
+  ],
+  "observation_ids": [
+    "obs_0056",
+    "obs_0057",
+    "obs_0058",
+    "obs_0059",
+    "obs_0060",
+    "obs_0061",
+    "obs_0062",
+    "obs_0063",
+    "obs_0064",
+    "obs_0065",
+    "obs_0066",
+    "obs_0067",
+    "obs_0068",
+    "obs_0069",
+    "obs_0070"
+  ],
+  "open_questions": [
+    "Is there any prompt that thickens contours without defocusing the subject?"
+  ],
   "polarity": "unipolar",
-  "prompt_phrases": {},
-  "scoring_guidance": "",
-  "status": "candidate",
-  "study_ids": [],
-  "testable_claim": "Increasing edge softness thickens and dissolves contours without requiring halation.",
-  "validation": {}
+  "prompt_phrases": {
+    "high": "heavy edge softness only: wide melted contours, dissolved outlines, highlight cores remain tight, no haze",
+    "low": "razor-hard contours, high acutance, no edge melt, tight subject outline",
+    "medium": "slightly widened edges, mild contour melt, highlight cores still tight"
+  },
+  "scoring_guidance": "0.00 razor edges, 0.50 mild contour melt, 1.00 wide melted outlines.",
+  "status": "provisional",
+  "study_ids": [
+    "study_edge_softness_001"
+  ],
+  "testable_claim": "Increasing edge softness thickens and dissolves contours without requiring a veil, highlight spread, or background disk melt.",
+  "validation": {
+    "decision": "near_alias_of_optical_softness",
+    "describable": true,
+    "directional": true,
+    "isolatable": "weak",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": false,
+    "transferable": "partial",
+    "useful": "low"
+  }
 }

@@ -29,14 +29,14 @@
   
 <h1 class="page">bokeh softness</h1>
 <div class="meta">
-  <span class="chip candidate">candidate</span>
+  <span class="chip provisional">provisional</span>
   <span class="chip mono">vec_bokeh_softness</span>
-  <span class="chip">conf 0.22</span>
+  <span class="chip">conf 0.62</span>
   <span class="chip"><a href="../families/fam_optical_character.html">optical character</a></span>
 </div>
-<p class="lede">How smoothly out-of-focus areas dissolve.</p>
+<p class="lede">How smoothly out-of-focus areas dissolve while the focus plane stays sharp.</p>
 <div class="grid-2">
-  <div class="card"><h3>What it changes</h3><p>Softer bokeh melts background disks; harder bokeh keeps busy edges.</p><ul><li>not yet observed</li></ul></div>
+  <div class="card"><h3>What it changes</h3><p>Raising bokeh softness should melt only the out-of-focus field. The subject plane stays sharp. No disks on in-focus surfaces.</p><ul><li>background disks cream out</li><li>busy out-of-focus edges melt</li><li>in-focus subject stays sharp</li></ul></div>
   <div class="card"><h3>Poles</h3>
     <p>Low: hard nervous bokeh</p>
     <p>High: creamy soft bokeh</p>
@@ -44,12 +44,19 @@
   </div>
 </div>
 <h2>Controlled examples</h2>
-<p>No controlled examples yet.</p>
-<h2>Nearby</h2><ul><li>none</li></ul>
-<h2>Commonly confused with</h2><ul><li>no notes</li></ul>
-<h2>Studies</h2><ul><li>none</li></ul>
-<h2>Scoring</h2><p>0 absent, 0.5 moderate, 1 dominant.</p>
-<h2>Open questions</h2><ul><li>none</li></ul>
+<div class="strip">
+<div class='anchor-row'><div></div><div class='caption'>low</div><div class='caption'>medium</div><div class='caption'>high</div></div>
+<div class='anchor-row'><div class='an'>human portrait</div><div class='thumb'><a href='../observations/obs_0086.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_portrait_low.jpg' alt='obs_0086'></a><div class='caption'>obs_0086</div></div><div class='thumb'><a href='../observations/obs_0087.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_portrait_medium.jpg' alt='obs_0087'></a><div class='caption'>obs_0087</div></div><div class='thumb'><a href='../observations/obs_0088.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_portrait_high.jpg' alt='obs_0088'></a><div class='caption'>obs_0088</div></div></div>
+<div class='anchor-row'><div class='an'>ordinary physical object</div><div class='thumb'><a href='../observations/obs_0089.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_object_low.jpg' alt='obs_0089'></a><div class='caption'>obs_0089</div></div><div class='thumb'><a href='../observations/obs_0090.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_object_medium.jpg' alt='obs_0090'></a><div class='caption'>obs_0090</div></div><div class='thumb'><a href='../observations/obs_0091.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_object_high.jpg' alt='obs_0091'></a><div class='caption'>obs_0091</div></div></div>
+<div class='anchor-row'><div class='an'>architecture or interior</div><div class='thumb'><a href='../observations/obs_0092.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_architecture_low.jpg' alt='obs_0092'></a><div class='caption'>obs_0092</div></div><div class='thumb'><a href='../observations/obs_0093.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_architecture_medium.jpg' alt='obs_0093'></a><div class='caption'>obs_0093</div></div><div class='thumb'><a href='../observations/obs_0094.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_architecture_high.jpg' alt='obs_0094'></a><div class='caption'>obs_0094</div></div></div>
+<div class='anchor-row'><div class='an'>landscape</div><div class='thumb'><a href='../observations/obs_0095.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_landscape_low.jpg' alt='obs_0095'></a><div class='caption'>obs_0095</div></div><div class='thumb'><a href='../observations/obs_0096.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_landscape_medium.jpg' alt='obs_0096'></a><div class='caption'>obs_0096</div></div><div class='thumb'><a href='../observations/obs_0097.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_landscape_high.jpg' alt='obs_0097'></a><div class='caption'>obs_0097</div></div></div>
+<div class='anchor-row'><div class='an'>stylized character or creature</div><div class='thumb'><a href='../observations/obs_0098.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_character_low.jpg' alt='obs_0098'></a><div class='caption'>obs_0098</div></div><div class='thumb'><a href='../observations/obs_0099.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_character_medium.jpg' alt='obs_0099'></a><div class='caption'>obs_0099</div></div><div class='thumb'><a href='../observations/obs_0100.html'><img src='../artifacts/studies/study_bokeh_softness_001/anchor_character_high.jpg' alt='obs_0100'></a><div class='caption'>obs_0100</div></div></div>
+</div>
+<h2>Nearby</h2><ul><li><a href='vec_optical_softness.html'>optical softness</a></li><li><a href='vec_edge_softness.html'>edge softness</a></li><li><a href='vec_focal_length_feel.html'>focal-length feel</a></li></ul>
+<h2>Commonly confused with</h2><ul><li><a href='vec_edge_softness.html'>vec_edge_softness</a>: Edge softness is contour width on the subject. Bokeh is background dissolve.</li><li><a href='vec_optical_softness.html'>vec_optical_softness</a>: Optical softness melts the whole image. Bokeh softness is only the defocused field.</li></ul>
+<h2>Studies</h2><ul><li><a href='../studies/study_bokeh_softness_001.html'>study_bokeh_softness_001</a></li></ul>
+<h2>Scoring</h2><p>0.00 hard busy bokeh, 0.50 moderate cream, 1.00 fully dissolved field with sharp subject.</p>
+<h2>Open questions</h2><ul><li>Should architecture be excluded from bokeh tests, or is failure itself evidence?</li></ul>
 
   <footer>Canonical records live in registry/. Pages are generated. Basis is operational, not orthogonal.</footer>
 </main>

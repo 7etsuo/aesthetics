@@ -1,0 +1,112 @@
+{
+  "anchor_id": "anchor_portrait",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-13",
+  "id": "obs_0056",
+  "image_path": "artifacts/studies/study_edge_softness_001/anchor_portrait_low.jpg",
+  "intended_level": "low",
+  "intended_vector_id": "vec_edge_softness",
+  "model": "grok-imagine",
+  "notes": "Intended edge softness low.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only edge softness. Set edge softness to: razor-hard contours, high acutance, no edge melt, tight subject outline. Change only edge width. Do not add a diffusion veil, do not spread highlight cores, do not add circular bokeh orbs, do not glow the eyes, do not change lighting, do not change time of day, do not add grain, and do not restyle into a genre.",
+  "scores": [
+    {
+      "confidence": 0.6,
+      "method": "agent_visual",
+      "score": 0.23,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.62,
+      "method": "agent_visual",
+      "score": 0.12,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.1,
+      "vector_id": "vec_bokeh_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.59,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.06,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_highlight_bloom"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_veiling_glare"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.22,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.35,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only edge width. Do not add a diffusion veil, do not spread highlight cores, do not add circular bokeh orbs, do not glow the eyes, do not change lighting, do not change time of day, do not add grain, and do not restyle into a genre."
+    ],
+    "job_id": "job_study_edge_softness_001_portrait_low",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_portrait.jpg",
+  "source_type": "generated",
+  "study_id": "study_edge_softness_001",
+  "unintended_changes": []
+}

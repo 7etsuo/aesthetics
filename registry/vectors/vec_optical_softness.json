@@ -6,7 +6,7 @@
     "optical diffusion feel"
   ],
   "canonical_name": "optical softness",
-  "confidence": 0.63,
+  "confidence": 0.64,
   "definition": "Overall lens-like softening: reduced bite, slight highlight spread, and melted fine detail from the optical path.",
   "family_id": "fam_optical_character",
   "high_pole": "heavy optical diffusion",
@@ -54,7 +54,7 @@
   "open_questions": [
     "Can high softness be produced without bloom orbs or glowing eyes?",
     "Is the landscape high pole DOF or optical softness?",
-    "How distinct is this from diffusion and edge softness?"
+    "Should edge softness be retired as a near-alias?"
   ],
   "polarity": "unipolar",
   "prompt_phrases": {
@@ -75,7 +75,10 @@
     "legible": true,
     "n_levels": 3,
     "n_subjects": 5,
-    "non_redundant": "pending_vs_diffusion",
+    "non_redundant": "distinct_from_diffusion_and_bokeh",
+    "parent_of": [
+      "vec_edge_softness"
+    ],
     "transferable": true,
     "useful": true
   }

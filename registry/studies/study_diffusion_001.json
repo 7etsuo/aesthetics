@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_diffusion",
+  "date": "2026-08-13",
+  "decision": "provisional",
+  "decision_reason": "High diffusion adds a scattering veil while edges stay closer to the source than in optical-softness highs. Architecture and portrait isolate it best. Landscape invents a sun. Distinct enough to stay in the basis as provisional.",
+  "entanglement_notes": [
+    "Often co-produces atmospheric haze and god rays.",
+    "Landscape high adds flare orbs and a time-of-day shift."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_diffusion_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Diffusion vs veiling glare vs atmospheric haze on the gallery and portrait only."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0071",
+    "obs_0072",
+    "obs_0073",
+    "obs_0074",
+    "obs_0075",
+    "obs_0076",
+    "obs_0077",
+    "obs_0078",
+    "obs_0079",
+    "obs_0080",
+    "obs_0081",
+    "obs_0082",
+    "obs_0083",
+    "obs_0084",
+    "obs_0085"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of diffusion"
+}

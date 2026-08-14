@@ -44,4 +44,4 @@ Grok Imagine does not expose a seed. Anchors are locked by generating a referenc
 
 ## Status
 
-First slice is in `reports/milestone_01.md`. Three vectors are provisional after controlled studies. None is canonical yet.
+See `reports/milestone_01.md` and `reports/milestone_02.md`. Diffusion and bokeh softness are provisional. Edge softness is a near-alias of optical softness. None is canonical yet.

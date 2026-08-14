@@ -1,0 +1,57 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_edge_softness",
+  "date": "2026-08-13",
+  "decision": "near_alias",
+  "decision_reason": "High edge softness usually melts the whole subject, especially the teapot. That is optical softness, not contour width. The fox is the only mild edge-only result. Treat as a near-alias or child of optical softness on this instrument.",
+  "entanglement_notes": [
+    "Object high is global defocus.",
+    "Portrait high melts hair and face together.",
+    "No circular orbs and no glowing eyes. The hold against those leaks worked."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_edge_softness_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "If kept, test a weaker high phrase: thicken outlines only, keep pores and glaze texture."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0056",
+    "obs_0057",
+    "obs_0058",
+    "obs_0059",
+    "obs_0060",
+    "obs_0061",
+    "obs_0062",
+    "obs_0063",
+    "obs_0064",
+    "obs_0065",
+    "obs_0066",
+    "obs_0067",
+    "obs_0068",
+    "obs_0069",
+    "obs_0070"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of edge softness"
+}

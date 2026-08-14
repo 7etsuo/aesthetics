@@ -263,11 +263,24 @@ def vector_records() -> list[dict]:
            not_same={"edge_softness": "Softness is edge width. Acutance is edge contrast."}),
         _v("edge_softness", "edge softness", "spatial_definition",
            "Width and melt of edges, independent of highlight glow.",
-           "Increasing edge softness thickens and dissolves contours without requiring halation.",
+           "Increasing edge softness thickens and dissolves contours without requiring a veil, highlight spread, or background disk melt.",
            "hard razor edges", "melted wide edges",
            aliases=["soft edges", "edge melt"],
-           nearby=["optical_softness", "fine_detail_rolloff", "acutance"],
-           not_same={"optical_softness": "Optical softness includes highlight spread and diffusion, not only edge width."}),
+           nearby=["optical_softness", "fine_detail_rolloff", "acutance", "diffusion", "bokeh_softness"],
+           not_same={
+               "optical_softness": "Optical softness includes highlight spread and micro-detail melt, not only edge width.",
+               "diffusion": "Diffusion is a veil over the whole field. Edge softness is contour width.",
+               "bokeh_softness": "Bokeh softness is the out-of-focus field. Edge softness can sit on an in-focus subject.",
+           },
+           effects=["contours thicken", "hair and fabric edges lose snap", "highlight cores stay relatively tight"],
+           phrases={
+               "low": "razor-hard contours, high acutance, no edge melt, tight subject outline",
+               "medium": "slightly widened edges, mild contour melt, highlight cores still tight",
+               "high": "heavy edge softness only: wide melted contours, dissolved outlines, highlight cores remain tight, no haze",
+           },
+           scoring="0.00 razor edges, 0.50 mild contour melt, 1.00 wide melted outlines.",
+           questions=["Can Imagine widen edges without adding a diffusion veil or bokeh disks?"],
+           confidence=0.28),
         _v("micro_detail_retention", "micro-detail retention", "spatial_definition",
            "How much of the finest texture survives.",
            "Lowering retention erases pores, fibers, and distant grit while large forms remain.",
@@ -319,9 +332,23 @@ def vector_records() -> list[dict]:
            confidence=0.35),
         _v("diffusion", "diffusion", "optical_character",
            "A scattering layer that veils the image, often from filters or atmosphere.",
-           "Increasing diffusion adds a veil and spreads lights more than a pure edge-softness change.",
+           "Increasing diffusion adds a veil and lifts contrast slightly while edge width stays closer to the source than in an optical-softness sweep.",
            "no diffusion veil", "heavy diffusion veil",
-           nearby=["optical_softness", "veiling_glare", "atmospheric_haze_response"]),
+           nearby=["optical_softness", "veiling_glare", "atmospheric_haze_response", "edge_softness"],
+           not_same={
+               "optical_softness": "Optical softness melts definition. Diffusion is a scattering veil that can sit on still-edged forms.",
+               "veiling_glare": "Veiling glare is internal lens scatter that fogs blacks. Diffusion is a filter or atmosphere layer.",
+               "edge_softness": "Edge softness is contour width. Diffusion is a field veil.",
+           },
+           effects=["whites and midtones gain a veil", "contrast lowers slightly", "lights spread into a mist"],
+           phrases={
+               "low": "clear air, no diffusion filter, no atmospheric veil",
+               "medium": "mild diffusion filter, slight scattering veil, modest contrast lift in the blacks",
+               "high": "heavy diffusion veil, strong scattering mist, lights bloom into haze, keep subject edges closer to the source than a defocus",
+           },
+           scoring="0.00 no veil, 0.50 mild filter, 1.00 heavy scattering veil.",
+           questions=["Does high diffusion stay distinct from optical softness and veiling glare?"],
+           confidence=0.28),
         _v("halation", "halation", "optical_character",
            "A spatial bleed of light, often warm or reddish, around bright sources into adjacent darker areas.",
            "Increasing only halation should make bright edges glow and leak into neighboring darks without a required global softness or grade change.",
@@ -354,9 +381,23 @@ def vector_records() -> list[dict]:
            "Changing only this should defocus parts of a flat subject while the focus aim stays put.",
            "flat field", "strongly curved field"),
         _v("bokeh_softness", "bokeh softness", "optical_character",
-           "How smoothly out-of-focus areas dissolve.",
-           "Softer bokeh melts background disks; harder bokeh keeps busy edges.",
-           "hard nervous bokeh", "creamy soft bokeh"),
+           "How smoothly out-of-focus areas dissolve while the focus plane stays sharp.",
+           "Raising bokeh softness should melt only the out-of-focus field. The subject plane stays sharp. No disks on in-focus surfaces.",
+           "hard nervous bokeh", "creamy soft bokeh",
+           nearby=["optical_softness", "edge_softness", "focal_length_feel"],
+           not_same={
+               "optical_softness": "Optical softness melts the whole image. Bokeh softness is only the defocused field.",
+               "edge_softness": "Edge softness is contour width on the subject. Bokeh is background dissolve.",
+           },
+           effects=["background disks cream out", "busy out-of-focus edges melt", "in-focus subject stays sharp"],
+           phrases={
+               "low": "hard, nervous out-of-focus field, busy background edges, subject plane sharp",
+               "medium": "moderately creamy background dissolve, subject plane still sharp",
+               "high": "very creamy bokeh, out-of-focus field fully dissolved, keep the subject plane sharp, no blur disks on in-focus surfaces",
+           },
+           scoring="0.00 hard busy bokeh, 0.50 moderate cream, 1.00 fully dissolved field with sharp subject.",
+           questions=["Can Imagine cream the field without defocusing the subject or painting orbs onto the teapot?"],
+           confidence=0.28),
         _v("corner_softness", "corner softness", "optical_character",
            "Definition loss toward the frame corners.",
            "Raising it softens corners while the center stays nearer to sharp.",
@@ -925,6 +966,22 @@ def extra_hold_for(vector_id: str) -> str:
         "vec_halation": (
             "Do not globally soften the image, do not add grain, do not crush the whole tone scale, "
             "and do not change the subject's materials."
+        ),
+        "vec_edge_softness": (
+            "Change only edge width. Do not add a diffusion veil, do not spread highlight cores, "
+            "do not add circular bokeh orbs, do not glow the eyes, do not change lighting, "
+            "do not change time of day, do not add grain, and do not restyle into a genre."
+        ),
+        "vec_diffusion": (
+            "Change only the scattering veil. Do not defocus the subject, do not add circular bokeh "
+            "orbs on in-focus surfaces, do not glow the eyes, do not change lighting direction, "
+            "do not change time of day, do not add grain, and do not restyle into a genre."
+        ),
+        "vec_bokeh_softness": (
+            "Change only the out-of-focus field. Keep the subject plane sharp. "
+            "Do not paint bokeh disks onto in-focus surfaces, do not melt the whole frame, "
+            "do not glow the eyes, do not change lighting, do not change time of day, "
+            "and do not restyle into a genre."
         ),
     }
     return holds.get(vector_id, "Do not change any other visual dimension.")

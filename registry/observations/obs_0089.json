@@ -1,0 +1,112 @@
+{
+  "anchor_id": "anchor_object",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-13",
+  "id": "obs_0089",
+  "image_path": "artifacts/studies/study_bokeh_softness_001/anchor_object_low.jpg",
+  "intended_level": "low",
+  "intended_vector_id": "vec_bokeh_softness",
+  "model": "grok-imagine",
+  "notes": "Intended bokeh softness low.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only bokeh softness. Set bokeh softness to: hard, nervous out-of-focus field, busy background edges, subject plane sharp. Change only the out-of-focus field. Keep the subject plane sharp. Do not paint bokeh disks onto in-focus surfaces, do not melt the whole frame, do not glow the eyes, do not change lighting, do not change time of day, and do not restyle into a genre.",
+  "scores": [
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.14,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.74,
+      "method": "agent_visual",
+      "score": 0.14,
+      "vector_id": "vec_bokeh_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.6,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.06,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_highlight_bloom"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_veiling_glare"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.22,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.35,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only the out-of-focus field. Keep the subject plane sharp. Do not paint bokeh disks onto in-focus surfaces, do not melt the whole frame, do not glow the eyes, do not change lighting, do not change time of day, and do not restyle into a genre."
+    ],
+    "job_id": "job_study_bokeh_softness_001_object_low",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_object.jpg",
+  "source_type": "generated",
+  "study_id": "study_bokeh_softness_001",
+  "unintended_changes": []
+}

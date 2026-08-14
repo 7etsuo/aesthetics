@@ -1,7 +1,7 @@
 {
   "aliases": [],
   "canonical_name": "diffusion",
-  "confidence": 0.22,
+  "confidence": 0.67,
   "definition": "A scattering layer that veils the image, often from filters or atmosphere.",
   "family_id": "fam_optical_character",
   "high_pole": "heavy diffusion veil",
@@ -10,18 +10,61 @@
   "nearby_ids": [
     "vec_optical_softness",
     "vec_veiling_glare",
-    "vec_atmospheric_haze_response"
+    "vec_atmospheric_haze_response",
+    "vec_edge_softness"
   ],
-  "not_the_same_as": {},
+  "not_the_same_as": {
+    "vec_edge_softness": "Edge softness is contour width. Diffusion is a field veil.",
+    "vec_optical_softness": "Optical softness melts definition. Diffusion is a scattering veil that can sit on still-edged forms.",
+    "vec_veiling_glare": "Veiling glare is internal lens scatter that fogs blacks. Diffusion is a filter or atmosphere layer."
+  },
   "notes": "",
-  "observable_effects": [],
-  "observation_ids": [],
-  "open_questions": [],
+  "observable_effects": [
+    "whites and midtones gain a veil",
+    "contrast lowers slightly",
+    "lights spread into a mist"
+  ],
+  "observation_ids": [
+    "obs_0071",
+    "obs_0072",
+    "obs_0073",
+    "obs_0074",
+    "obs_0075",
+    "obs_0076",
+    "obs_0077",
+    "obs_0078",
+    "obs_0079",
+    "obs_0080",
+    "obs_0081",
+    "obs_0082",
+    "obs_0083",
+    "obs_0084",
+    "obs_0085"
+  ],
+  "open_questions": [
+    "How much of the high pole is atmospheric haze rather than a filter veil?"
+  ],
   "polarity": "unipolar",
-  "prompt_phrases": {},
-  "scoring_guidance": "",
-  "status": "candidate",
-  "study_ids": [],
-  "testable_claim": "Increasing diffusion adds a veil and spreads lights more than a pure edge-softness change.",
-  "validation": {}
+  "prompt_phrases": {
+    "high": "heavy diffusion veil, strong scattering mist, lights bloom into haze, keep subject edges closer to the source than a defocus",
+    "low": "clear air, no diffusion filter, no atmospheric veil",
+    "medium": "mild diffusion filter, slight scattering veil, modest contrast lift in the blacks"
+  },
+  "scoring_guidance": "0.00 no veil, 0.50 mild filter, 1.00 heavy scattering veil.",
+  "status": "provisional",
+  "study_ids": [
+    "study_diffusion_001"
+  ],
+  "testable_claim": "Increasing diffusion adds a veil and lifts contrast slightly while edge width stays closer to the source than in an optical-softness sweep.",
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": true,
+    "transferable": true,
+    "useful": true
+  }
 }

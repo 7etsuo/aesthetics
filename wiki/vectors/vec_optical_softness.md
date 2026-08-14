@@ -10,7 +10,7 @@
 - high_pole: heavy optical diffusion
 - polarity: unipolar
 - range: low to high
-- confidence: 0.63
+- confidence: 0.64
 
 ## Definition
 Overall lens-like softening: reduced bite, slight highlight spread, and melted fine detail from the optical path.
@@ -70,4 +70,4 @@ Increasing optical softness while holding subject, pose, framing, and key direct
 ## Open questions
 - Can high softness be produced without bloom orbs or glowing eyes?
 - Is the landscape high pole DOF or optical softness?
-- How distinct is this from diffusion and edge softness?
+- Should edge softness be retired as a near-alias?

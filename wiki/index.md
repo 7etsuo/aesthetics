@@ -37,7 +37,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [animatronic feel](vectors/vec_animatronic_feel.md) (vec_animatronic_feel, conf 0.22)
 - `candidate` [atmospheric haze response](vectors/vec_atmospheric_haze_response.md) (vec_atmospheric_haze_response, conf 0.22)
 - `candidate` [black level](vectors/vec_black_level.md) (vec_black_level, conf 0.22)
-- `candidate` [bokeh softness](vectors/vec_bokeh_softness.md) (vec_bokeh_softness, conf 0.22)
+- `provisional` [bokeh softness](vectors/vec_bokeh_softness.md) (vec_bokeh_softness, conf 0.62)
 - `candidate` [channel crosstalk](vectors/vec_channel_crosstalk.md) (vec_channel_crosstalk, conf 0.22)
 - `candidate` [chroma density](vectors/vec_chroma_density.md) (vec_chroma_density, conf 0.22)
 - `candidate` [chromatic aberration](vectors/vec_chromatic_aberration.md) (vec_chromatic_aberration, conf 0.22)
@@ -46,10 +46,10 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [color separation](vectors/vec_color_separation.md) (vec_color_separation, conf 0.22)
 - `candidate` [compression texture](vectors/vec_compression_texture.md) (vec_compression_texture, conf 0.22)
 - `candidate` [corner softness](vectors/vec_corner_softness.md) (vec_corner_softness, conf 0.22)
-- `candidate` [diffusion](vectors/vec_diffusion.md) (vec_diffusion, conf 0.22)
+- `provisional` [diffusion](vectors/vec_diffusion.md) (vec_diffusion, conf 0.67)
 - `candidate` [digital oversharpening](vectors/vec_digital_oversharpening.md) (vec_digital_oversharpening, conf 0.22)
 - `candidate` [dynamic range compression](vectors/vec_dynamic_range_compression.md) (vec_dynamic_range_compression, conf 0.22)
-- `candidate` [edge softness](vectors/vec_edge_softness.md) (vec_edge_softness, conf 0.22)
+- `provisional` [edge softness](vectors/vec_edge_softness.md) (vec_edge_softness, conf 0.36)
 - `candidate` [exposure bias](vectors/vec_exposure_bias.md) (vec_exposure_bias, conf 0.22)
 - `candidate` [fabric heaviness](vectors/vec_fabric_heaviness.md) (vec_fabric_heaviness, conf 0.22)
 - `candidate` [field curvature feel](vectors/vec_field_curvature_feel.md) (vec_field_curvature_feel, conf 0.22)
@@ -84,7 +84,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [miniature-set feel](vectors/vec_miniature_set_feel.md) (vec_miniature_set_feel, conf 0.22)
 - `candidate` [negative-space bias](vectors/vec_negative_space_bias.md) (vec_negative_space_bias, conf 0.22)
 - `candidate` [noise character](vectors/vec_noise_character.md) (vec_noise_character, conf 0.22)
-- `provisional` [optical softness](vectors/vec_optical_softness.md) (vec_optical_softness, conf 0.63)
+- `provisional` [optical softness](vectors/vec_optical_softness.md) (vec_optical_softness, conf 0.64)
 - `candidate` [optical-composite feel](vectors/vec_optical_composite_feel.md) (vec_optical_composite_feel, conf 0.22)
 - `candidate` [optical-print softness](vectors/vec_optical_print_softness.md) (vec_optical_print_softness, conf 0.22)
 - `candidate` [palette compression](vectors/vec_palette_compression.md) (vec_palette_compression, conf 0.22)
@@ -132,6 +132,9 @@ These are not assumed to be a mathematically orthogonal basis.
 ## Studies
 
 - `complete` [Locked anchor set](studies/study_anchor_set_001.md) (study_anchor_set_001)
+- `complete` [Controlled variation of bokeh softness](studies/study_bokeh_softness_001.md) (study_bokeh_softness_001)
+- `complete` [Controlled variation of diffusion](studies/study_diffusion_001.md) (study_diffusion_001)
+- `complete` [Controlled variation of edge softness](studies/study_edge_softness_001.md) (study_edge_softness_001)
 - `complete` [Controlled variation of halation](studies/study_halation_001.md) (study_halation_001)
 - `complete` [Controlled variation of optical softness](studies/study_optical_softness_001.md) (study_optical_softness_001)
 - `complete` [Linear reconstruction of aes_soft_halated_shadow](studies/study_reconstruction_soft_halated_shadow_001.md) (study_reconstruction_soft_halated_shadow_001)
@@ -140,7 +143,7 @@ These are not assumed to be a mathematically orthogonal basis.
 ## Counts
 
 - vectors: 88
-- observations: 55
-- studies: 5
+- observations: 100
+- studies: 8
 - aesthetics: 7
 - aliases: 36

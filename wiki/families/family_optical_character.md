@@ -9,10 +9,10 @@ Lens and optical-path behavior: diffusion, halation, glare, bokeh, field curvatu
 
 ## Vectors
 
-- [bokeh softness](../vectors/vec_bokeh_softness.md) `candidate`
+- [bokeh softness](../vectors/vec_bokeh_softness.md) `provisional`
 - [chromatic aberration](../vectors/vec_chromatic_aberration.md) `candidate`
 - [corner softness](../vectors/vec_corner_softness.md) `candidate`
-- [diffusion](../vectors/vec_diffusion.md) `candidate`
+- [diffusion](../vectors/vec_diffusion.md) `provisional`
 - [field curvature feel](../vectors/vec_field_curvature_feel.md) `candidate`
 - [focal-length feel](../vectors/vec_focal_length_feel.md) `candidate`
 - [halation](../vectors/vec_halation.md) `provisional`

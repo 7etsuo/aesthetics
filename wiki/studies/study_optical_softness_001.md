@@ -47,10 +47,10 @@ Low versus high is visible on all five anchors. The change is transferable. It i
 - Character high turns glass eyes into lamps (halation leak).
 - Landscape high behaves like shallow DOF more than like a uniform optical melt.
 - Microcontrast falls whenever softness rises. Inverse test still needed.
+- Discrimination 002: edge softness usually collapses into this vector. Diffusion and bokeh do not.
 
 ## Next experiments
-- Discrimination study: optical softness vs edge softness vs diffusion vs bokeh softness.
-- Retry high softness with an explicit ban on bokeh discs and glowing eyes.
+- Treat optical softness as a parent cluster: edge melt plus some bloom. Do not merge it with diffusion or bokeh.
 - Add a mid-high step (0.65) because medium is too close to the anchor.
 
 ## Notes
