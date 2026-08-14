@@ -6,304 +6,27 @@ import json
 import shutil
 from pathlib import Path
 
+from PIL import Image
+
 from vslib.matrices import nearest_aesthetics
+from vslib.site_explorer import build_explorer_payload
 from vslib.store import Library
 
-CSS = """
-:root {
-  --bg: #09090b;
-  --fog: #a3a3a8;
-  --white: #f4f1ec;
-  --line: rgba(255,255,255,0.12);
-  --hot: #ff6a3d;
-  --ice: #9fd4ff;
-  --ok: #8fdbb0;
-}
-* { box-sizing: border-box; }
-html {
-  margin: 0; padding: 0;
-  overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-body {
-  margin: 0; padding: 0;
-  background: var(--bg); color: var(--white);
-  font: 16px/1.5 "Outfit", "Helvetica Neue", sans-serif;
-  letter-spacing: -0.011em;
-  overflow-x: hidden;
-  max-width: 100%;
-}
-img, video, svg { max-width: 100%; display: block; }
-.field-wrap canvas { width: 100%; height: 100%; display: block; }
-a { color: inherit; text-decoration: none; }
-a:hover { color: var(--ice); }
-code, .mono, input, kbd {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-}
-.grain {
-  pointer-events: none; position: fixed; inset: 0; z-index: 40; opacity: 0.09;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-nav.float {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 30;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem 0.85rem;
-  padding: 0.75rem 4.5vw;
-  background: linear-gradient(to bottom, rgba(9,9,11,0.78), rgba(9,9,11,0));
-  backdrop-filter: blur(10px);
-}
-nav.float .mark {
-  font-family: "Syne", sans-serif; font-weight: 700; letter-spacing: 0.18em;
-  font-size: 0.92rem;
-}
-nav.float a {
-  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(244,241,236,0.62);
-}
-nav.float a[aria-current="page"], nav.float a:hover { color: var(--white); }
-.hero {
-  position: relative;
-  min-height: 100svh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  overflow: hidden;
-}
-.hero-media {
-  position: absolute; inset: 0; overflow: hidden;
-}
-.hero-photo {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; max-width: none;
-  object-fit: cover; object-position: 68% 42%;
-}
-.hero-shade {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(9,9,11,0.18) 0%, rgba(9,9,11,0.08) 42%, rgba(9,9,11,0.62) 100%);
-}
-.hero-light {
-  position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(circle 28vmax at var(--mx, 68%) var(--my, 42%), rgba(255,186,120,0.28), transparent 62%);
-  mix-blend-mode: soft-light;
-}
-.hero-hud {
-  position: relative; z-index: 2;
-  padding: 6.5rem 4.5vw 2.2rem;
-  max-width: 1240px; width: 100%; margin: 0 auto;
-}
-.kicker {
-  font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--hot); margin: 0 0 0.6rem;
-}
-h1.display {
-  font-family: "Syne", sans-serif; font-weight: 750;
-  font-size: clamp(2.1rem, 7vw, 6.4rem); line-height: 0.92;
-  letter-spacing: -0.045em; margin: 0 0 0.7rem; max-width: 16ch;
-}
-.eq-live {
-  font-family: "JetBrains Mono", monospace;
-  font-size: clamp(0.72rem, 1.5vw, 1.02rem);
-  line-height: 1.75; color: rgba(244,241,236,0.88);
-  margin: 0 0 1.3rem;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-.eq-live a { border-bottom: 1px solid rgba(159,212,255,0.35); display: inline; }
-.eq-live .w { color: var(--hot); }
-.eq-live .v { color: var(--ice); }
-.rack {
-  display: flex; gap: 1.1rem; align-items: flex-end; flex-wrap: wrap;
-}
-.fader {
-  width: 56px; text-align: center; cursor: pointer;
-  background: none; border: 0; color: inherit; padding: 0; font: inherit;
-}
-.fader:hover .n { color: var(--white); }
-.fader-col {
-  height: 160px; width: 10px; margin: 0 auto 0.45rem;
-  background: rgba(255,255,255,0.08);
-  border-radius: 99px; position: relative; overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-}
-.fader-col .fill {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, var(--hot), #ffb089);
-  box-shadow: 0 0 18px rgba(255,106,61,0.45);
-  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.fader .n { font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fog); }
-.fader .w { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; color: var(--hot); }
-@keyframes rise { from { height: 0; } }
-.sheet { max-width: 1240px; margin: 0 auto; padding: 5.2rem 4.5vw 5rem; }
-.hero + .sheet { padding-top: 2rem; }
-.table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.search input {
-  width: 100%; background: #111114; color: var(--white);
-  border: 1px solid var(--line); padding: 0.85rem 1rem; font-size: 1rem;
-  border-radius: 999px;
-}
-.search input:focus { outline: 1px solid var(--ice); }
-.hits { background: #111114; border: 1px solid var(--line); border-radius: 12px; display: none; margin-top: 0.4rem; }
-.hits a { display: block; padding: 0.5rem 0.8rem; color: var(--white); }
-.hits a:hover { background: #1a1a1f; }
-.hits .k { color: var(--hot); font-size: 0.7rem; margin-right: 0.5rem; }
-h1.page {
-  font-family: "Syne", sans-serif; font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3.6rem); letter-spacing: -0.04em;
-  line-height: 0.95; margin: 0 0 0.6rem;
-}
-h2 {
-  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--hot); font-weight: 500; margin: 2.2rem 0 0.8rem;
-}
-.lede { color: var(--fog); max-width: 62ch; font-size: 1.05rem; }
-.meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0 1.2rem; }
-.chip {
-  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-  border: 1px solid var(--line); padding: 0.18rem 0.5rem; border-radius: 999px; color: var(--fog);
-}
-.chip.provisional { border-color: rgba(255,106,61,0.45); color: #ffc2ad; }
-.chip.canonical { border-color: var(--ok); color: var(--ok); }
-.chip.vague, .chip.rejected, .chip.near_alias { border-color: #7a3b32; color: #f0b0a6; }
-.chip.composite, .chip.system { border-color: rgba(159,212,255,0.4); color: var(--ice); }
-.rail {
-  display: flex; gap: 0.7rem; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 0.2rem 0 1rem;
-}
-.rail::-webkit-scrollbar { height: 6px; }
-.rail::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 99px; }
-.plate {
-  flex: 0 0 min(82vw, 520px); scroll-snap-align: start;
-  position: relative; overflow: hidden; border-radius: 14px;
-  background: #111;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
-  transform: translateZ(0);
-  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
-}
-.plate:hover { transform: translateY(-6px) scale(1.015); }
-.plate img { width: 100%; height: min(62vh, 560px); object-fit: cover; display: block; }
-.compare {
-  position: relative;
-  margin: 0 4.5vw 2.5rem;
-}
-.compare-stage {
-  position: relative; overflow: hidden; border-radius: 18px;
-  height: min(78vh, 760px); background: #111; cursor: ew-resize;
-  user-select: none;
-  container-type: size;
-}
-.compare-stage > img,
-.compare-b img {
-  position: absolute; top: 0; left: 0;
-  width: 100cqw; height: 100cqh; max-width: none;
-  object-fit: cover; object-position: 68% 42%;
-}
-.compare-b {
-  position: absolute; inset: 0 auto 0 0; width: 54%; overflow: hidden;
-  border-right: 1px solid rgba(255,255,255,0.55);
-  box-shadow: 8px 0 40px rgba(0,0,0,0.35);
-}
-.compare-range {
-  position: absolute; left: 0; right: 0; bottom: 1rem; width: min(420px, 80%);
-  margin: 0 auto; display: block; accent-color: #ff6a3d;
-}
-.compare-label {
-  position: absolute; left: 1rem; top: 1rem; z-index: 2;
-  font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
-  color: #fff;
-}
-.compare-poles {
-  position: absolute; left: 1rem; right: 1rem; bottom: 2.6rem;
-  display: flex; justify-content: space-between;
-  font-family: "JetBrains Mono", monospace; font-size: 0.72rem; color: #fff;
-  pointer-events: none;
-}
-.reveal { opacity: 0; transform: translate3d(0, 22px, 0); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1); }
-.reveal.on { opacity: 1; transform: none; }
-.plate .cap {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  padding: 2.2rem 0.8rem 0.7rem;
-  background: linear-gradient(transparent, rgba(0,0,0,0.78));
-  font-family: "JetBrains Mono", monospace; font-size: 0.72rem;
-}
-.field-wrap {
-  position: relative; height: min(62vh, 560px); margin: 1rem 0 2rem;
-  border-radius: 16px; overflow: hidden; background: #070708;
-  box-shadow: inset 0 0 80px rgba(255,106,61,0.08);
-}
-.field-wrap canvas { width: 100%; height: 100%; display: block; }
-.axis-film { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
-.axis-film img {
-  width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
-  border-radius: 10px;
-}
-.axis-card {
-  background: #111114; border: 1px solid var(--line); border-radius: 16px;
-  overflow: hidden; padding: 0.7rem;
-}
-.axis-card h3 { margin: 0.55rem 0 0.15rem; font-family: "Syne", sans-serif; font-size: 1.15rem; }
-.grid-axes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.9rem; }
-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-th, td { text-align: left; padding: 0.4rem 0.3rem; border-bottom: 1px solid var(--line); }
-th { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fog); }
-.bar { height: 6px; background: #1c1c20; width: 120px; display: inline-block; border-radius: 99px; }
-.bar > span { display: block; height: 100%; background: var(--hot); border-radius: 99px; }
-.strip.levels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-.strip img, .thumb img { width: 100%; height: auto; display: block; border-radius: 10px; background: #111; }
-.caption { font-size: 0.72rem; color: var(--fog); font-family: "JetBrains Mono", monospace; margin-top: 0.25rem; }
-.anchor-row { display: grid; grid-template-columns: 120px 1fr 1fr 1fr; gap: 0.45rem; margin-bottom: 0.7rem; }
-.anchor-row .an { font-size: 0.78rem; color: var(--fog); padding-top: 0.3rem; }
-.card {
-  background: #111114; border: 1px solid var(--line); border-radius: 16px; padding: 1rem;
-}
-.card h3 { margin: 0 0 0.4rem; font-family: "Syne", sans-serif; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-footer { margin-top: 3rem; color: #6b6b72; font-size: 0.78rem; }
-.mast {
-  position: relative; height: 42vh; min-height: 260px; overflow: hidden;
-  border-radius: 0 0 22px 22px; margin-bottom: 1.4rem;
-}
-.mast img { width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 60% 40%; display: block; }
-.mast .shade {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(9,9,11,0.15), rgba(9,9,11,0.82));
-}
-.mast .in { position: absolute; left: 4.5vw; right: 4.5vw; bottom: 1.1rem; }
-.mast .in .page { font-size: clamp(1.6rem, 6vw, 3.2rem); }
-@media (prefers-reduced-motion: reduce) {
-  .hero-photo { animation: none; transform: none; }
-  .fader-col .fill { animation: none; }
-}
-@media (max-width: 1100px) {
-  .grid-axes { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-}
-@media (max-width: 860px) {
-  nav.float a:not(.mark) { font-size: 0.64rem; letter-spacing: 0.08em; }
-  .hero { min-height: 100svh; }
-  .hero-hud { padding-top: 5.2rem; }
-  h1.display { font-size: clamp(1.9rem, 11vw, 3.4rem); }
-  .fader { width: 48px; }
-  .fader-col { height: 110px; }
-  .plate { flex-basis: min(84vw, 320px); }
-  .plate img { height: min(52vh, 320px); }
-  .compare-stage { height: min(62vh, 480px); }
-  .grid-2 { grid-template-columns: 1fr; }
-  .anchor-row { grid-template-columns: 1fr 1fr 1fr; }
-  .anchor-row .an { grid-column: 1 / -1; padding-top: 0.8rem; }
-  .field-wrap { height: min(52vh, 420px); }
-  .mast { height: 38vh; min-height: 200px; }
-}
-@media (max-width: 560px) {
-  nav.float { gap: 0.35rem 0.65rem; }
-  nav.float a.nav-more { display: none; }
-  .rack { gap: 0.7rem; }
-  .fader { width: 44px; }
-  .eq-live { font-size: 0.74rem; }
-  .strip.levels { grid-template-columns: 1fr; }
-}
-"""
 
+SITE_ORIGIN = "https://atlas.agenc.ag"
+SITE_NAME = "Visual Basis Atlas"
+HOME_TITLE = "Visual Basis Atlas — Grok Imagine Under Observation"
+SITE_DESCRIPTION = (
+    "A controlled visual study of 88 candidate properties across 100 Grok Imagine outputs."
+)
+SOCIAL_IMAGE = f"{SITE_ORIGIN}/assets/social-card-v2.jpg"
+SOCIAL_IMAGE_ALT = "Visual Basis Atlas — Grok Imagine under observation"
+
+HOME_MEDIA_IDS = (
+    "obs_0077", "obs_0078", "obs_0079",
+    "obs_0091", "obs_0094", "obs_0026", "obs_0029",
+    "obs_0052", "obs_0055",
+)
 
 def generate_site(lib: Library) -> None:
     site = lib.root / "site"
@@ -311,28 +34,80 @@ def generate_site(lib: Library) -> None:
         shutil.rmtree(site)
     site.mkdir(parents=True)
     (site / "assets").mkdir()
-    (site / "assets" / "app.css").write_text(CSS, encoding="utf-8")
-    (site / "assets" / "index.json").write_text(json.dumps(_search_index(lib)), encoding="utf-8")
-    _page(site / "index.html", "Atlas", _home(lib), nav="home", hero=True)
-    _page(site / "vectors.html", "Vectors", _vector_index(lib), nav="vectors")
-    _page(site / "families.html", "Families", _family_index(lib), nav="families")
-    _page(site / "aesthetics.html", "Aesthetics", _aesthetic_index(lib), nav="aesthetics")
-    _page(site / "aliases.html", "Aliases", _alias_index(lib), nav="aliases")
-    _page(site / "studies.html", "Studies", _study_index(lib), nav="studies")
-    _page(site / "questions.html", "Questions", _questions(lib), nav="questions")
-    _page(site / "matrices.html", "Matrices", _matrices(lib), nav="matrices")
+    css_source = lib.root / "assets" / "app.css"
+    js_source = lib.root / "assets" / "app.js"
+    if not css_source.exists() or not js_source.exists():
+        raise FileNotFoundError("assets/app.css and assets/app.js are required site sources")
+    (site / "assets" / "app.css").write_text(css_source.read_text(encoding="utf-8"), encoding="utf-8")
+    (site / "assets" / "app.js").write_text(js_source.read_text(encoding="utf-8"), encoding="utf-8")
+    (site / "assets" / "index.json").write_text(
+        json.dumps(_search_index(lib), separators=(",", ":")), encoding="utf-8"
+    )
+    explorer = build_explorer_payload(lib)
+    (site / "assets" / "atlas-explorer.json").write_text(
+        json.dumps(explorer, separators=(",", ":")), encoding="utf-8"
+    )
+    _write_presentation_assets(lib, site)
+    _page(site / "index.html", "Atlas", _home(lib), nav="home", hero=True, description=SITE_DESCRIPTION)
+    _page(
+        site / "vectors.html", "Vectors", _vector_index(lib), nav="vectors",
+        description="The full catalog of tested and candidate visual basis vectors.",
+    )
+    _page(
+        site / "families.html", "Families", _family_index(lib), nav="families",
+        description="Visual basis vectors grouped into provisional perceptual families.",
+    )
+    _page(
+        site / "aesthetics.html", "Coordinates", _aesthetic_index(lib), nav="aesthetics",
+        description="Named visual looks expressed as weighted coordinates over the basis.",
+    )
+    _page(
+        site / "aliases.html", "Aliases", _alias_index(lib), nav="aliases",
+        description="Common visual-language phrases mapped to operational vectors and looks.",
+    )
+    _page(
+        site / "studies.html", "Studies", _study_index(lib), nav="studies",
+        description="Controlled image studies used to test visual basis-vector candidates.",
+    )
+    _page(
+        site / "questions.html", "Open questions", _questions(lib), nav="questions",
+        description="Unresolved questions and next experiments in the visual basis atlas.",
+    )
+    _page(
+        site / "matrices.html", "Matrices", _matrices(lib), nav="matrices",
+        description="Similarity, confidence, interaction, and reconstruction matrices for the atlas.",
+    )
     for folder in ("vectors", "aesthetics", "studies", "families", "observations"):
         (site / folder).mkdir()
     for vec in lib.vectors.values():
-        _page(site / "vectors" / f"{vec.id}.html", vec.canonical_name, _vector_page(lib, vec.id), nav="vectors")
+        _page(
+            site / "vectors" / f"{vec.id}.html", vec.canonical_name,
+            _vector_page(lib, vec.id), nav="vectors", description=vec.definition,
+        )
     for aes in lib.aesthetics.values():
-        _page(site / "aesthetics" / f"{aes.id}.html", aes.canonical_name, _aesthetic_page(lib, aes.id), nav="aesthetics")
+        _page(
+            site / "aesthetics" / f"{aes.id}.html", aes.canonical_name,
+            _aesthetic_page(lib, aes.id), nav="aesthetics", description=aes.definition,
+        )
     for study in lib.studies.values():
-        _page(site / "studies" / f"{study.id}.html", study.title, _study_page(lib, study.id), nav="studies")
+        _page(
+            site / "studies" / f"{study.id}.html", study.title,
+            _study_page(lib, study.id), nav="studies",
+            description=study.protocol or study.decision_reason or SITE_DESCRIPTION,
+        )
     for fam in lib.families.values():
-        _page(site / "families" / f"{fam.id}.html", fam.name, _family_page(lib, fam.id), nav="families")
+        _page(
+            site / "families" / f"{fam.id}.html", fam.name,
+            _family_page(lib, fam.id), nav="families", description=fam.definition,
+        )
     for obs in lib.observations.values():
-        _page(site / "observations" / f"{obs.id}.html", obs.id, _obs_page(lib, obs.id), nav="studies")
+        intended = obs.intended_vector_id or "a visual property"
+        level = obs.intended_level or "controlled"
+        _page(
+            site / "observations" / f"{obs.id}.html", obs.id,
+            _obs_page(lib, obs.id), nav="studies",
+            description=f"A {level} observation of {intended} from the Visual Basis Atlas.",
+        )
     _copy_artifacts(lib, site)
 
 
@@ -342,30 +117,70 @@ def _search_index(lib: Library) -> list[dict]:
         rows.append({
             "id": vec.id, "name": vec.canonical_name, "kind": "vector",
             "href": f"vectors/{vec.id}.html", "status": vec.status,
+            "evidence": "studied" if vec.study_ids else vec.status,
             "text": " ".join([vec.canonical_name, *vec.aliases, vec.definition, vec.low_pole, vec.high_pole]),
         })
     for aes in lib.aesthetics.values():
         rows.append({
             "id": aes.id, "name": aes.canonical_name, "kind": "aesthetic",
             "href": f"aesthetics/{aes.id}.html", "status": aes.status,
+            "evidence": "studied" if aes.observation_ids else "hypothesis",
             "text": " ".join([aes.canonical_name, *aes.aliases, aes.definition]),
         })
     for alias in lib.aliases.values():
         rows.append({
             "id": alias.id, "name": alias.raw_phrase, "kind": "alias",
             "href": "aliases.html", "status": alias.mapping_type,
+            "evidence": alias.mapping_type,
             "text": f"{alias.raw_phrase} {alias.target_id} {alias.notes}",
         })
     for study in lib.studies.values():
         rows.append({
             "id": study.id, "name": study.title, "kind": "study",
             "href": f"studies/{study.id}.html", "status": study.status,
+            "evidence": "studied",
             "text": f"{study.title} {study.decision} {study.protocol}",
+        })
+    for family in lib.families.values():
+        rows.append({
+            "id": family.id, "name": family.name, "kind": "family",
+            "href": f"families/{family.id}.html", "status": "provisional",
+            "evidence": "hypothesis",
+            "text": f"{family.name} {family.definition} {' '.join(family.vector_ids)}",
         })
     return rows
 
 
-def _page(path: Path, title: str, body: str, nav: str, hero: bool = False) -> None:
+def _search_dialog(prefix: str) -> str:
+    return f"""
+<dialog class="search-dialog" data-search-dialog aria-labelledby="site-search-title">
+  <div class="search-dialog-head">
+    <div>
+      <p class="eyebrow">Research index</p>
+      <h2 id="site-search-title">Find a visible property.</h2>
+    </div>
+    <button type="button" data-search-close aria-label="Close search">Close</button>
+  </div>
+  <form class="search-form" role="search" data-atlas-search data-prefix="{prefix}">
+    <label for="site-search-q">Search vectors, studies, coordinates, and aliases</label>
+    <div class="search-input-row">
+      <input id="site-search-q" name="q" type="search" placeholder="Try halation or shadow density" autocomplete="off">
+      <button type="submit">Search</button>
+    </div>
+    <div class="search-results" data-search-results role="status" aria-live="polite"></div>
+  </form>
+</dialog>
+"""
+
+
+def _page(
+    path: Path,
+    title: str,
+    body: str,
+    nav: str,
+    hero: bool = False,
+    description: str = SITE_DESCRIPTION,
+) -> None:
     site_root = path
     while site_root.name != "site" and site_root.parent != site_root:
         site_root = site_root.parent
@@ -373,21 +188,75 @@ def _page(path: Path, title: str, body: str, nav: str, hero: bool = False) -> No
     prefix = (str(rel) + "/") if rel.parts else ""
     wrap_open = "" if hero else '<div class="sheet">'
     wrap_close = "" if hero else "</div>"
+    relative_path = path.relative_to(site_root).as_posix()
+    canonical_path = "/" if relative_path == "index.html" else f"/{relative_path}"
+    canonical_url = f"{SITE_ORIGIN}{canonical_path}"
+    page_title = HOME_TITLE if hero else f"{title} — {SITE_NAME}"
+    page_description = " ".join(str(description or SITE_DESCRIPTION).split())
+    home_current = ' aria-current="page"' if nav == "home" else ""
+    body_class = "is-home" if hero else f"is-record page-{_esc(nav)}"
+    og_type = "website" if hero else "article"
+    hero_preload = (
+        '<link rel="preload" as="image" href="assets/studies/obs_0079-1024.webp" '
+        'imagesrcset="assets/studies/obs_0079-640.webp 640w, assets/studies/obs_0079-1024.webp 1024w" '
+        'imagesizes="(max-width: 767px) 100vw, 58vw">'
+        if hero else ""
+    )
+    structured_data = ""
+    if hero:
+        data = {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": SITE_NAME,
+            "url": f"{SITE_ORIGIN}/",
+            "description": SITE_DESCRIPTION,
+        }
+        structured_data = f'<script type="application/ld+json">{json.dumps(data)}</script>'
     html = f"""<!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>{_esc(title)} · atlas</title>
+<meta name="color-scheme" content="dark">
+<title>{_esc(page_title)}</title>
+<meta name="description" content="{_esc(page_description)}">
+<meta name="theme-color" content="#0a0a09">
+<link rel="canonical" href="{_esc(canonical_url)}">
+<meta property="og:type" content="{og_type}">
+<meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:title" content="{_esc(page_title)}">
+<meta property="og:description" content="{_esc(page_description)}">
+<meta property="og:url" content="{_esc(canonical_url)}">
+<meta property="og:image" content="{SOCIAL_IMAGE}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{SOCIAL_IMAGE_ALT}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{_esc(page_title)}">
+<meta name="twitter:description" content="{_esc(page_description)}">
+<meta name="twitter:image" content="{SOCIAL_IMAGE}">
+<meta name="twitter:image:alt" content="{SOCIAL_IMAGE_ALT}">
+<link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{prefix}assets/app.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<body>
-<div class="grain" aria-hidden="true"></div>
-<nav class="float">
-  <a class="mark" href="{prefix}index.html">ATLAS</a>
-  {_nav(nav, prefix)}
-</nav>
-{wrap_open}{body}{wrap_close}
+{hero_preload}
+{structured_data}
+</head>
+<body class="{body_class}" data-prefix="{prefix}">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <nav class="site-nav float" aria-label="Primary navigation">
+    <a class="mark" href="{prefix}index.html" aria-label="Visual Basis Atlas — Home"{home_current}>
+      <span class="mark-index" aria-hidden="true">VBA/01</span>
+      <span class="mark-name">Visual Basis Atlas</span>
+    </a>
+    <div class="nav-links">{_nav(nav, prefix)}</div>
+    <a class="search-trigger" href="{prefix}index.html#atlas-search" data-search-open>Search <kbd>/</kbd></a>
+  </nav>
+</header>
+{_search_dialog(prefix)}
+<main id="main" tabindex="-1">{wrap_open}{body}{wrap_close}</main>
+{_site_footer(prefix)}
 <script src="{prefix}assets/app.js"></script>
 </body>
 </html>
@@ -398,20 +267,40 @@ def _page(path: Path, title: str, body: str, nav: str, hero: bool = False) -> No
 
 def _nav(active: str, prefix: str) -> str:
     links = [
-        ("home", "index.html", "Atlas", False),
         ("vectors", "vectors.html", "Vectors", False),
-        ("aesthetics", "aesthetics.html", "Looks", False),
         ("studies", "studies.html", "Studies", False),
-        ("aliases", "aliases.html", "Aliases", True),
-        ("families", "families.html", "Families", True),
-        ("questions", "questions.html", "Open", True),
+        ("aesthetics", "aesthetics.html", "Coordinates", False),
+        ("matrices", "matrices.html", "Matrices", True),
     ]
     out = []
     for key, href, label, more in links:
         mark = ' aria-current="page"' if key == active else ""
         extra = ' class="nav-more"' if more else ""
-        out.append(f'<a href="{prefix}{href}"{extra}{mark}>{label}</a>')
+        aria = ""
+        out.append(f'<a href="{prefix}{href}"{extra}{aria}{mark}>{label}</a>')
     return "\n".join(out)
+
+
+def _site_footer(prefix: str) -> str:
+    return f"""
+<footer class="site-footer">
+  <div class="site-footer-statement">
+    <div class="site-footer-mark">Visual Basis Atlas</div>
+    <p>Operational dimensions for visual style. Useful, provisional, and not assumed orthogonal.</p>
+  </div>
+  <div class="site-footer-ledger" aria-label="Evidence summary">
+    <span><strong>100</strong> Grok Imagine outputs</span>
+    <span><strong>6</strong> controlled axes</span>
+    <span><strong>0</strong> canonical vectors</span>
+  </div>
+  <div class="site-footer-links" aria-label="Secondary navigation">
+    <a href="{prefix}families.html">Families</a>
+    <a href="{prefix}aliases.html">Aliases</a>
+    <a href="{prefix}questions.html">Open questions</a>
+  </div>
+  <p class="site-footer-note">Research target: Grok Imagine · Scores: agent-visual · No model-native coefficients.</p>
+</footer>
+"""
 
 
 def _esc(text: str) -> str:
@@ -435,16 +324,6 @@ def _short_v(vector_id: str) -> str:
     return vector_id.removeprefix("vec_")
 
 
-def _hero_src(lib: Library, prefix: str = "") -> str:
-    path = "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_portrait_reconstruction.jpg"
-    if (lib.root / path).exists():
-        return prefix + path
-    for obs in lib.observations.values():
-        if obs.image_path:
-            return prefix + obs.image_path
-    return ""
-
-
 def _equation(lib: Library, aesthetic_id: str, href_prefix: str = "") -> str:
     aes = lib.aesthetics.get(aesthetic_id)
     if not aes or not aes.weights:
@@ -461,149 +340,371 @@ def _equation(lib: Library, aesthetic_id: str, href_prefix: str = "") -> str:
     return f'<p class="eq-live">{"".join(terms)}</p>'
 
 
-def _obs_path(lib: Library, vector_id: str, level: str, anchor: str = "anchor_portrait") -> str:
-    for obs in lib.observations.values():
-        if obs.intended_vector_id == vector_id and obs.intended_level == level and obs.anchor_id == anchor:
-            return obs.image_path
-    return ""
+def _home_media(
+    lib: Library,
+    observation_id: str,
+    *,
+    alt: str,
+    class_name: str = "",
+    loading: str = "lazy",
+    decoding: str = "async",
+    fetchpriority: str = "auto",
+    extra: str = "",
+) -> str:
+    observation = lib.observations[observation_id]
+    classes = f' class="{_esc(class_name)}"' if class_name else ""
+    return (
+        f'<img{classes} src="{_esc(observation.image_path)}" '
+        f'srcset="{_presentation_path(observation_id, 640)} 640w, '
+        f'{_presentation_path(observation_id, 1024)} 1024w" '
+        f'sizes="(max-width: 767px) 100vw, 50vw" alt="{_esc(alt)}" '
+        f'width="1024" height="1024" loading="{loading}" decoding="{decoding}" '
+        f'fetchpriority="{fetchpriority}" {extra}>'
+    )
 
 
-def _faders(lib: Library, aesthetic_id: str) -> str:
-    aes = lib.aesthetics.get(aesthetic_id)
-    if not aes:
-        return ""
-    bits = []
-    for item in sorted(aes.weights, key=lambda w: abs(w.weight), reverse=True)[:6]:
-        name = lib.vectors[item.vector_id].canonical_name if item.vector_id in lib.vectors else item.vector_id
-        pct = max(4, min(100, abs(item.weight) * 100))
-        src = _obs_path(lib, item.vector_id, "high")
-        bits.append(
-            f'<button type="button" class="fader" data-src="{_esc(src)}">'
-            f'<div class="fader-col"><div class="fill" style="height:{pct:.0f}%"></div></div>'
-            f'<div class="w">{item.weight:.2f}</div><div class="n">{_esc(name)}</div></button>'
+def _score_value(lib: Library, observation_id: str, vector_id: str) -> float | None:
+    observation = lib.observations.get(observation_id)
+    if not observation:
+        return None
+    return observation.score_map().get(vector_id)
+
+
+def _score_text(value: float | None) -> str:
+    return "—" if value is None else f"{value:.2f}".removeprefix("0")
+
+
+def _response_rows(response: dict, *, limit: int = 7) -> str:
+    rows = []
+    meaningful = [
+        component for component in response["mean_response_delta"]
+        if abs(component["value"]) >= 0.0005
+    ]
+    for component in meaningful[:limit]:
+        value = component["value"]
+        sign = "negative" if value < 0 else "positive"
+        rows.append(
+            f'<li class="response-row" data-sign="{sign}" style="--magnitude:{min(abs(value), 1) * 100:.1f}%">'
+            f'<span class="response-name">{_esc(component["name"])}</span>'
+            f'<span class="response-track" aria-hidden="true"><span class="response-fill"></span></span>'
+            f'<strong class="response-value">{value:+.3f}</strong></li>'
         )
-    return f'<div class="rack">{"".join(bits)}</div>'
+    return f'<ol class="response-chart-list">{"".join(rows)}</ol>'
 
 
-def _compare(lib: Library, vector_id: str, prefix: str = "") -> str:
-    low = _obs_path(lib, vector_id, "low")
-    high = _obs_path(lib, vector_id, "high")
-    if not low or not high:
-        return ""
-    name = lib.vectors[vector_id].canonical_name if vector_id in lib.vectors else vector_id
-    return f"""
-<section class="compare reveal">
-  <div class="compare-stage" data-compare>
-    <img src="{prefix}{high}" alt="high {name}">
-    <div class="compare-b" style="width:54%">
-      <img src="{prefix}{low}" alt="low {name}">
-    </div>
-    <div class="compare-label">Ride { _esc(name) }</div>
-    <div class="compare-poles"><span>low</span><span>high</span></div>
-    <input class="compare-range" type="range" min="4" max="96" value="54" aria-label="wipe {name}">
-  </div>
-</section>
-"""
+def _correlation_rows(payload: dict, axis_id: str, *, limit: int = 6) -> list[dict]:
+    found = []
+    for row in payload["correlations"]:
+        if row["a"] == axis_id:
+            found.append({"id": row["b"], "name": row["b_name"], "r": row["r"]})
+        elif row["b"] == axis_id:
+            found.append({"id": row["a"], "name": row["a_name"], "r": row["r"]})
+    return sorted(found, key=lambda item: (-abs(item["r"]), item["name"]))[:limit]
 
 
-def _field_payload(lib: Library, aesthetic_id: str) -> str:
-    axes = [v for v in lib.vectors.values() if v.study_ids]
-    axes.sort(key=lambda v: v.id)
-    weights = lib.aesthetics[aesthetic_id].coordinate() if aesthetic_id in lib.aesthetics else {}
-    payload = {
-        "nodes": [
-            {"id": v.id, "name": v.canonical_name, "w": weights.get(v.id, 0.0), "href": f"vectors/{v.id}.html"}
-            for v in axes
-        ]
-    }
-    return json.dumps(payload)
+def _correlation_fallback(rows: list[dict]) -> tuple[str, str]:
+    marks = []
+    table_rows = []
+    for row in rows:
+        position = (row["r"] + 1) * 50
+        sign = "negative" if row["r"] < 0 else "positive"
+        marks.append(
+            f'<li class="correlation-mark" data-sign="{sign}" style="--position:{position:.2f}%">'
+            f'<span class="correlation-name">{_esc(row["name"])}</span>'
+            f'<span class="correlation-line" aria-hidden="true"><span class="correlation-dot"></span></span>'
+            f'<strong class="correlation-value">{row["r"]:+.3f}</strong></li>'
+        )
+        table_rows.append(
+            f'<tr><th scope="row">{_esc(row["name"])}</th><td>{row["r"]:+.4f}</td><td>100</td></tr>'
+        )
+    return (
+        f'<ol class="correlation-list">{"".join(marks)}</ol>',
+        "".join(table_rows),
+    )
 
 
 def _home(lib: Library) -> str:
-    featured = "aes_soft_halated_shadow" if "aes_soft_halated_shadow" in lib.aesthetics else next(iter(lib.aesthetics), "")
-    hero = _hero_src(lib)
-    plates = []
-    if featured in lib.aesthetics:
-        for oid in lib.aesthetics[featured].observation_ids:
-            obs = lib.observations.get(oid)
-            if not obs:
-                continue
-            plates.append(
-                f'<a class="plate" href="observations/{obs.id}.html">'
-                f'<img src="{obs.image_path}" alt="{obs.id}">'
-                f'<div class="cap">{_esc(obs.anchor_id or "")} · reconstruction</div></a>'
+    payload = build_explorer_payload(lib)
+    hero = payload["hero"]
+    levels = {level["requested_level"]: level for level in hero["levels"]}
+    state_labels = {"low": "Clear air", "medium": "Slight veil", "high": "Heavy veil"}
+    hero_layers = []
+    hero_controls = []
+    for level_name in ("low", "medium", "high"):
+        level = levels[level_name]
+        observation_id = level["observation_id"]
+        active = level_name == "high"
+        hero_layers.append(
+            _home_media(
+                lib,
+                observation_id,
+                alt="",
+                class_name=f'hero-layer{" is-active" if active else ""}',
+                loading="eager",
+                decoding="sync" if active else "async",
+                fetchpriority="high" if active else "low",
+                extra=(
+                    f'data-hero-layer data-state="{level_name}" '
+                    f'aria-hidden="{"false" if active else "true"}"'
+                ),
             )
-    studied = [v for v in lib.vectors.values() if v.study_ids]
-    studied.sort(key=lambda v: (-v.confidence, v.canonical_name))
-    cards = []
-    for vec in studied:
-        triple = _level_triple(lib, vec.id, "")
-        cards.append(
-            f'<a class="axis-card" href="vectors/{vec.id}.html">'
-            f'{triple}'
-            f'<h3>{_esc(vec.canonical_name)}</h3>'
-            f'<div class="caption">{vec.status} · {vec.confidence:.2f}</div></a>'
         )
+        hero_controls.append(
+            f'<label class="hero-state-option{" is-active" if active else ""}">'
+            f'<input type="radio" name="hero-state" value="{level_name}" data-hero-state '
+            f'{"checked" if active else ""}>'
+            f'<span><b>{("01", "02", "03")[("low", "medium", "high").index(level_name)]}</b>'
+            f'{state_labels[level_name]}</span></label>'
+        )
+
+    hero_metric_ids = (
+        "vec_diffusion",
+        "vec_veiling_glare",
+        "vec_optical_softness",
+        "vec_black_level",
+    )
+    high_scores = {score["vector_id"]: score for score in levels["high"]["scores"]}
+    hero_metrics = []
+    for vector_id in hero_metric_ids:
+        score = high_scores[vector_id]
+        hero_metrics.append(
+            f'<div><dt>{_esc(score["name"])}</dt>'
+            f'<dd data-score="{vector_id}">{score["value"]:.2f}</dd></div>'
+        )
+
+    responses = payload["responses"]
+    default_response = next(row for row in responses if row["vector_id"] == "vec_diffusion")
+    response_buttons = []
+    for response in responses:
+        active = response["vector_id"] == default_response["vector_id"]
+        near_alias = response["vector_id"] == "vec_edge_softness"
+        response_buttons.append(
+            f'<button type="button" data-response-axis="{response["vector_id"]}" '
+            f'aria-pressed="{"true" if active else "false"}" class="{"is-active" if active else ""}">'
+            f'<span>{_esc(response["name"])}</span>'
+            f'{"<small>near-alias</small>" if near_alias else ""}</button>'
+        )
+
+    correlations = _correlation_rows(payload, "vec_optical_softness", limit=99)
+    correlation_marks, _ = _correlation_fallback(correlations[:6])
+    _, correlation_table = _correlation_fallback(correlations)
+    correlation_axes = (
+        "vec_optical_softness",
+        "vec_edge_softness",
+        "vec_halation",
+        "vec_shadow_density",
+        "vec_highlight_bloom",
+        "vec_black_level",
+    )
+    correlation_buttons = []
+    for vector_id in correlation_axes:
+        vector = lib.vectors[vector_id]
+        active = vector_id == "vec_optical_softness"
+        correlation_buttons.append(
+            f'<button type="button" data-correlation-axis="{vector_id}" '
+            f'aria-pressed="{"true" if active else "false"}" class="{"is-active" if active else ""}">'
+            f'{_esc(vector.canonical_name)}</button>'
+        )
+
+    reconstruction = payload["reconstruction"]
+    selected_plates = {plate["anchor_id"]: plate for plate in reconstruction["selected_plates"]}
+    recon_cards = []
+    for anchor_id in ("anchor_object", "anchor_landscape"):
+        plate = selected_plates[anchor_id]
+        recon_cards.append(
+            f'<a class="recon-card" href="observations/{plate["observation_id"]}.html">'
+            f'{_home_media(lib, plate["observation_id"], alt=f"{plate["anchor_name"]} reconstruction result")}'
+            f'<span><b>{_esc(plate["anchor_name"])}</b><em>score {plate["score"]:.2f}</em></span></a>'
+        )
+    residual_items = "".join(
+        f'<li><span>{_esc(item["name"])}</span><strong>{item["count"]}/{item["n"]}</strong></li>'
+        for item in reconstruction["residual_counts"]
+    )
+
+    studied_rows = []
+    for response in responses:
+        studied_rows.append(
+            f'<a class="ledger-row" href="vectors/{response["vector_id"]}.html">'
+            f'<span class="status-mark observed" aria-hidden="true"></span>'
+            f'<strong>{_esc(response["name"])}</strong><span>{_esc(response["decision"] or response["status"])}</span>'
+            f'<span>{response["n_pairs"]} paired scenes</span><b>↗</b></a>'
+        )
+
+    depth_object_bokeh = _score_value(lib, "obs_0091", "vec_bokeh_softness")
+    depth_object_optical = _score_value(lib, "obs_0091", "vec_optical_softness")
+    depth_arch_bokeh = _score_value(lib, "obs_0094", "vec_bokeh_softness")
+    depth_arch_optical = _score_value(lib, "obs_0094", "vec_optical_softness")
+    light_object_shadow = _score_value(lib, "obs_0026", "vec_shadow_density")
+    light_object_ratio = _score_value(lib, "obs_0026", "vec_key_to_fill_ratio")
+    light_arch_shadow = _score_value(lib, "obs_0029", "vec_shadow_density")
+    light_arch_ratio = _score_value(lib, "obs_0029", "vec_key_to_fill_ratio")
+
     return f"""
-<section class="hero" data-hero>
-  <div class="hero-media">
-    <img class="hero-photo" id="heroPhoto" src="{_esc(hero)}" alt="" data-default="{_esc(hero)}">
-    <div class="hero-light" id="heroLight"></div>
-    <div class="hero-shade"></div>
+<section class="atlas-hero" data-hero-instrument aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow">Visual Basis Atlas / Grok Imagine / Aug 2026</p>
+    <h1 id="hero-title">Hold the room.<br><em>Move the air.</em></h1>
+    <p class="hero-deck">One locked gallery. Three diffusion requests. Every visible change, recorded.</p>
+    <dl class="hero-ledger" aria-label="Atlas evidence summary">
+      <div><dt>{payload["stats"]["observations"]}</dt><dd>outputs</dd></div>
+      <div><dt>{payload["stats"]["controlled_vector_studies"]}</dt><dd>tested axes</dd></div>
+      <div><dt>{payload["stats"]["canonical_vectors"]}</dt><dd>canonical</dd></div>
+    </dl>
   </div>
-  <div class="hero-hud">
-    <p class="kicker">visual basis atlas</p>
-    <h1 class="display">a = Σ wᵢ vᵢ</h1>
-    {_equation(lib, featured)}
-    {_faders(lib, featured)}
+  <figure class="hero-stage">
+    <div class="hero-media">{"".join(hero_layers)}</div>
+    <figcaption id="hero-description">The same empty gallery edited at low, medium, and high requested diffusion. The active frame is a real Grok Imagine output, not a synthetic interpolation.</figcaption>
+  </figure>
+  <aside class="hero-measure" aria-describedby="hero-description">
+    <p class="sr-only" role="status" aria-live="polite" data-instrument-status></p>
+    <div class="instrument-head"><span>Requested state</span><strong data-hero-observation>obs_0079</strong></div>
+    <fieldset class="hero-state-controls"><legend class="sr-only">Diffusion request</legend>{"".join(hero_controls)}</fieldset>
+    <div class="measure-title"><span>Observed response</span><small>agent-visual score</small></div>
+    <dl class="metric-vector" data-hero-score>{"".join(hero_metrics)}</dl>
+    <p class="field-note" data-hero-note><span>High-only annotation</span> atmospheric haze .80 · “volumetric god rays”</p>
+  </aside>
+</section>
+
+<section class="atlas-chapter response-section" id="response">
+  <header class="chapter-head">
+    <p class="chapter-index">01 / Response vector</p>
+    <div><h2>A direction is everything that follows.</h2>
+    <p>Ask one property to move across five fixed scenes, then measure every scored dimension that comes with it.</p></div>
+  </header>
+  <div class="response-instrument" data-response-instrument data-active-axis="vec_diffusion">
+    <p class="sr-only" role="status" aria-live="polite" data-instrument-status></p>
+    <div class="axis-selector" aria-label="Controlled study">{"".join(response_buttons)}</div>
+    <div class="response-equation" aria-label="Mean response delta equals one fifth of the sum of each high state minus its low state">
+      <span>Δx̄</span><b>=</b><span class="fraction"><i>1</i><i>5</i></span><span>Σ</span><span>(x<sub>s,H</sub> − x<sub>s,L</sub>)</span>
+    </div>
+    <div class="response-chart" data-response-chart>{_response_rows(default_response)}</div>
+    <footer class="instrument-foot"><span data-response-meta>n=5 paired scenes · high − low</span><span>agent-visual scoring</span></footer>
   </div>
 </section>
-{_compare(lib, "vec_optical_softness")}
-<div class="sheet">
-  <form class="search" role="search" data-prefix="">
-    <input id="q" type="search" placeholder="Map a phrase. cinematic, analog, 80s fantasy…" autocomplete="off">
-  </form>
-  <div class="hits" id="hits"></div>
-  <h2 class="reveal">The look, reconstructed</h2>
-  <p class="lede reveal">The same five subjects after the weighted sum. Scroll sideways.</p>
-  <div class="rail" data-rail>{''.join(plates)}</div>
-  <h2 class="reveal">The basis</h2>
-  <p class="lede reveal">Each studied axis is a node. Distance from the core is its weight in this look.</p>
-  <div class="field-wrap reveal"><canvas id="field" data-field='{_esc(_field_payload(lib, featured))}'></canvas></div>
-  <h2 class="reveal">Tested axes</h2>
-  <div class="grid-axes reveal">{''.join(cards)}</div>
-  <footer>{len(lib.vectors)} vectors · {len(lib.observations)} observations · operational basis, not orthogonal</footer>
-</div>
+
+<section class="atlas-chapter context-section" id="context">
+  <header class="chapter-head">
+    <p class="chapter-index">02 / Conditional response</p>
+    <div><h2>The scene bends the axis.</h2>
+    <p>A visual direction is not independent of geometry. The same request can isolate cleanly—or rewrite the image around it.</p></div>
+  </header>
+  <div class="context-instrument" data-context-instrument data-active-mode="depth">
+    <p class="sr-only" role="status" aria-live="polite" data-instrument-status></p>
+    <div class="context-selector" aria-label="Context comparison">
+      <button type="button" class="is-active" data-context-mode="depth" aria-pressed="true">Depth</button>
+      <button type="button" data-context-mode="light" aria-pressed="false">Light</button>
+    </div>
+    <div class="context-panel is-active" data-context-panel="depth">
+      <div class="context-pair">
+        <a class="context-card" href="observations/obs_0091.html">{_home_media(lib, "obs_0091", alt="Ceramic teapot with a softly blurred background")}
+          <span class="context-caption"><b>Defined subject plane</b><em>object · obs_0091</em></span>
+          <dl><div><dt>Bokeh</dt><dd>{_score_text(depth_object_bokeh)}</dd></div><div><dt>Optical softness</dt><dd>{_score_text(depth_object_optical)}</dd></div></dl>
+        </a>
+        <a class="context-card" href="observations/obs_0094.html">{_home_media(lib, "obs_0094", alt="Empty gallery globally softened around a central bench")}
+          <span class="context-caption"><b>No subject plane</b><em>architecture · obs_0094</em></span>
+          <dl><div><dt>Bokeh</dt><dd>{_score_text(depth_arch_bokeh)}</dd></div><div><dt>Optical softness</dt><dd>{_score_text(depth_arch_optical)}</dd></div></dl>
+        </a>
+      </div>
+      <p class="context-conclusion"><span>Observed</span> Without a foreground plane, “bokeh” collapses into global defocus.</p>
+    </div>
+    <div class="context-panel" data-context-panel="light">
+      <div class="context-pair">
+        <a class="context-card" href="observations/obs_0029.html">{_home_media(lib, "obs_0029", alt="Empty gallery with dense, soft shadow")}
+          <span class="context-caption"><b>Ambient architecture</b><em>architecture · obs_0029</em></span>
+          <dl><div><dt>Shadow density</dt><dd>{_score_text(light_arch_shadow)}</dd></div><div><dt>Key-to-fill</dt><dd>{_score_text(light_arch_ratio)}</dd></div></dl>
+        </a>
+        <a class="context-card" href="observations/obs_0026.html">{_home_media(lib, "obs_0026", alt="Ceramic teapot relit with a hard key and cast shadow")}
+          <span class="context-caption"><b>Introduced hard key</b><em>object · obs_0026</em></span>
+          <dl><div><dt>Shadow density</dt><dd>{_score_text(light_object_shadow)}</dd></div><div><dt>Key-to-fill</dt><dd>{_score_text(light_object_ratio)}</dd></div></dl>
+        </a>
+      </div>
+      <p class="context-conclusion"><span>Observed</span> The shadow request becomes a relighting decision around the object.</p>
+    </div>
+  </div>
+</section>
+
+<section class="atlas-chapter correlation-section" id="correlation">
+  <header class="chapter-head">
+    <p class="chapter-index">03 / Coupling</p>
+    <div><h2>The basis is operational.<br>Not orthogonal.</h2>
+    <p>Select one dimension. Every mark sits on its literal Pearson relationship across the 100 scored outputs.</p></div>
+  </header>
+  <div class="correlation-instrument" data-correlation-instrument data-active-axis="vec_optical_softness">
+    <p class="sr-only" role="status" aria-live="polite" data-instrument-status></p>
+    <div class="correlation-controls" aria-label="Correlation focus">{"".join(correlation_buttons)}</div>
+    <div class="correlation-ruler" data-correlation-ruler>
+      <div class="ruler-axis" aria-hidden="true"><span>−1</span><span>0</span><span>+1</span></div>
+      {correlation_marks}
+    </div>
+    <details class="data-table-disclosure"><summary>View as table</summary>
+      <div class="table-wrap"><table data-correlation-table><thead><tr><th>Dimension</th><th>Pearson r</th><th>n</th></tr></thead><tbody>{correlation_table}</tbody></table></div>
+    </details>
+    <footer class="instrument-foot"><span>Pearson r across 100 outputs</span><span>association, not causality</span></footer>
+  </div>
+</section>
+
+<section class="atlas-chapter reconstruction-section" id="reconstruction">
+  <header class="chapter-head">
+    <p class="chapter-index">04 / Reconstruction</p>
+    <div><h2>Build the look.<br>Then inspect what escaped.</h2>
+    <p>A manual first-order coordinate can organize the result without pretending it fully explains it.</p></div>
+  </header>
+  <div class="reconstruction-instrument">
+    <div class="recon-equation" aria-label="Estimated aesthetic equals point seven eight optical softness plus point seven zero shadow density plus point five eight halation">
+      <span>â</span><b>=</b><span>.78v<sub>optical</sub></span><b>+</b><span>.70v<sub>shadow</sub></span><b>+</b><span>.58v<sub>halation</sub></span>
+    </div>
+    <p class="hypothesis-note"><span class="status-mark hypothesis" aria-hidden="true"></span> Manually assigned first-order hypothesis · not fitted coefficients</p>
+    <div class="recon-grid">{"".join(recon_cards)}</div>
+    <div class="recon-summary">
+      <dl><div><dt>Mean</dt><dd>{reconstruction["aggregate"]["mean"]:.3f}</dd></div><div><dt>Median</dt><dd>{reconstruction["aggregate"]["median"]:.2f}</dd></div><div><dt>Range</dt><dd>{reconstruction["aggregate"]["range"][0]:.2f}–{reconstruction["aggregate"]["range"][1]:.2f}</dd></div><div><dt>Human ratings</dt><dd>none</dd></div></dl>
+      <details class="residual-panel"><summary>What escaped <span>a = â + r</span></summary><ul>{residual_items}</ul><p>Recorded residual flags, not a pixel-error map or numerical residual norm.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="atlas-entry" id="atlas-search">
+  <header class="chapter-head">
+    <p class="chapter-index">05 / The atlas</p>
+    <div><h2>Enter through something you can see.</h2><p>Search the working language, then follow its evidence, status, and unresolved edges.</p></div>
+  </header>
+  <div class="archive-search" data-search-scope>
+    <form class="search-form" role="search" data-atlas-search data-prefix="">
+      <label for="atlas-search-q">Search the research index</label>
+      <div class="search-input-row"><input id="atlas-search-q" name="q" type="search" placeholder="Try halation, analog, or shadow density" autocomplete="off"><button type="submit">Search</button></div>
+      <div class="search-filters" aria-label="Filter results">
+        <button type="button" class="is-active" data-search-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-search-filter="studied" aria-pressed="false">Studied</button>
+        <button type="button" data-search-filter="provisional" aria-pressed="false">Provisional</button>
+        <button type="button" data-search-filter="candidate" aria-pressed="false">Candidate</button>
+        <button type="button" data-search-filter="system" aria-pressed="false">System</button>
+        <button type="button" data-search-filter="hypothesis" aria-pressed="false">Hypothesis</button>
+      </div>
+      <div class="search-results" data-search-results role="status" aria-live="polite"></div>
+    </form>
+    <div class="atlas-ledger" aria-label="Controlled vector studies">{"".join(studied_rows)}</div>
+  </div>
+  <footer class="entry-footer"><span>{payload["stats"]["vectors"]} vector records</span><span>{payload["stats"]["controlled_vector_studies"]} controlled axes</span><span>{payload["stats"]["observations"]} outputs</span><span>{payload["stats"]["canonical_vectors"]} canonical</span></footer>
+</section>
 """
 
 
-def _level_triple(lib: Library, vector_id: str, prefix: str) -> str:
-    by_level: dict[str, object] = {}
-    for obs in lib.observations.values():
-        if obs.intended_vector_id != vector_id or not obs.intended_level:
-            continue
-        current = by_level.get(obs.intended_level)
-        if current is None or obs.anchor_id == "anchor_portrait":
-            by_level[obs.intended_level] = obs
-    cells = []
-    for level in ("low", "medium", "high"):
-        obs = by_level.get(level)
-        if obs:
-            cells.append(f'<img src="{prefix}{obs.image_path}" alt="{level}">')
-        else:
-            cells.append("<div></div>")
-    return f'<div class="axis-film">{"".join(cells)}</div>'
+def _weight_rows(lib: Library, aesthetic_id: str, prefix: str = "") -> str:
+    aesthetic = lib.aesthetics.get(aesthetic_id)
+    if not aesthetic:
+        return ""
+    rows = []
+    for item in sorted(aesthetic.weights, key=lambda weight: abs(weight.weight), reverse=True):
+        vector = lib.vectors.get(item.vector_id)
+        name = vector.canonical_name if vector else item.vector_id
+        width = max(2, min(100, abs(item.weight) * 100))
+        rows.append(
+            f'<li><a href="{prefix}vectors/{item.vector_id}.html"><span>{_esc(name)}</span>'
+            f'<strong>{item.weight:.2f}</strong></a><i><b style="width:{width:.0f}%"></b></i></li>'
+        )
+    return f'<ol class="weight-list">{"".join(rows)}</ol>'
 
 
 def _vector_index(lib: Library) -> str:
-    studied = [v for v in lib.vectors.values() if v.study_ids]
-    studied.sort(key=lambda v: v.canonical_name)
-    cards = []
-    for vec in studied:
-        cards.append(
-            f'<a class="axis-card" href="vectors/{vec.id}.html">{_level_triple(lib, vec.id, "")}'
-            f'<h3>{_esc(vec.canonical_name)}</h3><div class="caption">{vec.status}</div></a>'
-        )
     rows = []
     for vec in sorted(lib.vectors.values(), key=lambda v: (v.family_id, v.canonical_name)):
         fam = lib.families.get(vec.family_id)
@@ -613,24 +714,23 @@ def _vector_index(lib: Library) -> str:
             f"<td>{_esc(fam.name if fam else '')}</td><td>{_bar(vec.confidence)}</td></tr>"
         )
     return f"""
+<p class="eyebrow">Research ledger / {len(lib.vectors)} records</p>
 <h1 class="page">Vectors</h1>
-<p class="lede">Tested axes first. The rest of the basis is still candidate.</p>
-<div class="grid-axes">{''.join(cards)}</div>
-<h2>Full catalog</h2>
+<p class="lede">Six controlled directions inside a deliberately provisional visual vocabulary. No vector is canonical yet.</p>
 <div class="table-wrap"><table><thead><tr><th>name</th><th>id</th><th>status</th><th>family</th><th>conf</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table></div>
 """
 
 
 def _family_index(lib: Library) -> str:
-    cards = []
+    rows = []
     for fam in sorted(lib.families.values(), key=lambda f: f.name):
         n = sum(1 for v in lib.vectors.values() if v.family_id == fam.id)
-        cards.append(
-            f"<div class='card'><h3><a href='families/{fam.id}.html'>{_esc(fam.name)}</a></h3>"
-            f"<p>{_esc(fam.definition)}</p><p class='mono'>{n} vectors</p></div>"
+        rows.append(
+            f'<a class="ledger-row" href="families/{fam.id}.html"><span class="status-mark hypothesis"></span>'
+            f'<strong>{_esc(fam.name)}</strong><span>{_esc(fam.definition)}</span><span>{n} vectors</span><b>↗</b></a>'
         )
-    return f"<h1 class='page'>Families</h1><p class='lede'>Provisional shelves.</p><div class='grid-2'>{''.join(cards)}</div>"
+    return f"<p class='eyebrow'>Provisional structure</p><h1 class='page'>Families</h1><p class='lede'>Twelve working shelves, built to be revised as evidence accumulates.</p><div class='atlas-ledger'>{''.join(rows)}</div>"
 
 
 def _family_page(lib: Library, family_id: str) -> str:
@@ -645,19 +745,15 @@ def _family_page(lib: Library, family_id: str) -> str:
 
 
 def _aesthetic_index(lib: Library) -> str:
-    blocks = []
+    rows = []
     for aes in sorted(lib.aesthetics.values(), key=lambda a: a.canonical_name):
-        img = ""
-        for oid in aes.observation_ids:
-            obs = lib.observations.get(oid)
-            if obs:
-                img = f'<div class="mast" style="height:220px;border-radius:16px;margin:0 0 0.7rem"><img src="{obs.image_path}" alt=""></div>'
-                break
-        blocks.append(
-            f"<article class='card'>{img}<h3><a href='aesthetics/{aes.id}.html'>{_esc(aes.canonical_name)}</a> {_chip(aes.status)}</h3>"
-            f"{_equation(lib, aes.id)}</article>"
+        evidence = "observed" if aes.observation_ids else "hypothesis"
+        rows.append(
+            f'<a class="ledger-row" href="aesthetics/{aes.id}.html"><span class="status-mark {evidence}"></span>'
+            f'<strong>{_esc(aes.canonical_name)}</strong><span>{_esc(aes.status)}</span>'
+            f'<span>confidence {aes.confidence:.2f}</span><b>↗</b></a>'
         )
-    return f"<h1 class='page'>Looks</h1><p class='lede'>Coordinates over the basis.</p><div class='grid-2'>{''.join(blocks)}</div>"
+    return f"<p class='eyebrow'>Weighted coordinates</p><h1 class='page'>Coordinates</h1><p class='lede'>Named aesthetics expressed as inspectable, provisional weights over the basis.</p><div class='atlas-ledger'>{''.join(rows)}</div>"
 
 
 def _alias_index(lib: Library) -> str:
@@ -682,14 +778,14 @@ def _alias_index(lib: Library) -> str:
 
 
 def _study_index(lib: Library) -> str:
-    cards = []
+    rows = []
     for s in sorted(lib.studies.values(), key=lambda x: x.id):
-        cards.append(
-            f"<div class='card'><h3><a href='studies/{s.id}.html'>{_esc(s.title)}</a></h3>"
-            f"<p class='mono'>{s.id}</p><p>{_chip(s.status)} {_chip(s.decision or 'undecided')}</p>"
-            f"<p>{_esc(s.protocol)}</p></div>"
+        rows.append(
+            f'<a class="ledger-row" href="studies/{s.id}.html"><span class="status-mark observed"></span>'
+            f'<strong>{_esc(s.title)}</strong><span>{_esc(s.decision or s.status)}</span>'
+            f'<span>{len(s.observation_ids)} observations</span><b>↗</b></a>'
         )
-    return f"<h1 class='page'>Studies</h1><div class='grid-2'>{''.join(cards)}</div>"
+    return f"<p class='eyebrow'>Controlled evidence</p><h1 class='page'>Studies</h1><p class='lede'>Fixed anchors, categorical requests, and recorded spill into neighboring properties.</p><div class='atlas-ledger'>{''.join(rows)}</div>"
 
 
 def _questions(lib: Library) -> str:
@@ -713,8 +809,43 @@ def _matrices(lib: Library) -> str:
         "aesthetic_similarity_matrix.csv", "vector_correlation_matrix.csv",
         "interaction_candidates.csv", "reconstruction_evaluations.csv",
     ]
-    lis = "".join(f"<li><span class='mono'>{f}</span></li>" for f in files)
-    return f"<h1 class='page'>Matrices</h1><ul>{lis}</ul><p>C = X<sup>T</sup>X. Not orthogonal.</p>"
+    payload = build_explorer_payload(lib)
+    dimensions = sorted(
+        {row["a"] for row in payload["correlations"]} | {row["b"] for row in payload["correlations"]},
+        key=lambda vector_id: lib.vectors[vector_id].canonical_name,
+    )
+    values: dict[tuple[str, str], float] = {}
+    for row in payload["correlations"]:
+        values[(row["a"], row["b"])] = row["r"]
+        values[(row["b"], row["a"])] = row["r"]
+    head = "".join(
+        f'<th scope="col"><abbr title="{_esc(lib.vectors[vector_id].canonical_name)}">'
+        f'{_esc(_short_v(vector_id)[:8])}</abbr></th>'
+        for vector_id in dimensions
+    )
+    body_rows = []
+    for row_id in dimensions:
+        cells = []
+        for column_id in dimensions:
+            value = 1.0 if row_id == column_id else values[(row_id, column_id)]
+            sign = "negative" if value < 0 else "positive"
+            cells.append(
+                f'<td data-sign="{sign}" style="--magnitude:{abs(value):.4f}" '
+                f'title="{_esc(lib.vectors[row_id].canonical_name)} × {_esc(lib.vectors[column_id].canonical_name)}: {value:+.4f}">'
+                f'<span>{value:+.2f}</span></td>'
+            )
+        body_rows.append(
+            f'<tr><th scope="row">{_esc(lib.vectors[row_id].canonical_name)}</th>{"".join(cells)}</tr>'
+        )
+    downloads = "".join(f'<li><a href="data/{f}" download>{_esc(f)} <span>CSV ↓</span></a></li>' for f in files)
+    return f"""
+<p class="eyebrow">Machine-readable evidence</p>
+<h1 class="page">Matrices</h1>
+<p class="lede">The primary view uses only the twelve dimensions scored in all 100 observations. Pearson association describes observed coupling; it does not establish causality.</p>
+<div class="matrix-legend"><span>−1 inverse</span><span>0 no linear association</span><span>+1 together</span></div>
+<div class="table-wrap matrix-wrap"><table class="matrix-table"><thead><tr><th>dimension</th>{head}</tr></thead><tbody>{"".join(body_rows)}</tbody></table></div>
+<h2>Download the working matrices</h2><ul class="download-ledger">{downloads}</ul>
+"""
 
 
 def _vector_page(lib: Library, vector_id: str) -> str:
@@ -732,12 +863,16 @@ def _vector_page(lib: Library, vector_id: str) -> str:
     qs = "".join(f"<li>{_esc(q)}</li>" for q in vec.open_questions) or "<li>none</li>"
     high = None
     for obs in lib.observations.values():
-        if obs.intended_vector_id == vector_id and obs.intended_level == "high" and obs.anchor_id == "anchor_portrait":
+        if obs.intended_vector_id == vector_id and obs.intended_level == "high" and obs.anchor_id == "anchor_architecture":
             high = obs
             break
     if not high:
         for obs in lib.observations.values():
-            if obs.intended_vector_id == vector_id and obs.intended_level == "high":
+            if (
+                obs.intended_vector_id == vector_id
+                and obs.intended_level == "high"
+                and obs.anchor_id in {"anchor_object", "anchor_landscape"}
+            ):
                 high = obs
                 break
     mast = ""
@@ -776,7 +911,10 @@ def _vector_page(lib: Library, vector_id: str) -> str:
 def _vector_evidence(lib: Library, vector_id: str) -> str:
     rows: dict[str, dict] = {}
     for obs in lib.observations.values():
-        if obs.intended_vector_id != vector_id or not obs.anchor_id:
+        if (
+            obs.intended_vector_id != vector_id
+            or obs.anchor_id not in {"anchor_object", "anchor_architecture", "anchor_landscape"}
+        ):
             continue
         rows.setdefault(obs.anchor_id, {})[obs.intended_level or ""] = obs
     if not rows:
@@ -791,7 +929,7 @@ def _vector_evidence(lib: Library, vector_id: str) -> str:
             if obs:
                 cells.append(
                     f"<div class='thumb'><a href='../observations/{obs.id}.html'>"
-                    f"<img src='../{obs.image_path}' alt='{obs.id}'></a></div>"
+                    f"<img src='../{obs.image_path}' alt='{_esc(name)}, {level} {_esc(lib.vectors[vector_id].canonical_name)}'></a></div>"
                 )
             else:
                 cells.append("<div></div>")
@@ -812,13 +950,13 @@ def _aesthetic_page(lib: Library, aesthetic_id: str) -> str:
     plates = []
     for oid in aes.observation_ids:
         obs = lib.observations.get(oid)
-        if not obs:
+        if not obs or obs.anchor_id not in {"anchor_object", "anchor_architecture", "anchor_landscape"}:
             continue
         if hero_obs is None:
             hero_obs = obs
         plates.append(
             f'<a class="plate" href="../observations/{obs.id}.html">'
-            f'<img src="../{obs.image_path}" alt="{obs.id}">'
+            f'<img src="../{obs.image_path}" alt="{_esc(lib.anchors[obs.anchor_id].name if obs.anchor_id in lib.anchors else obs.anchor_id or "Study plate")}">'
             f'<div class="cap">{_esc(obs.anchor_id or "")}</div></a>'
         )
     mast = ""
@@ -831,16 +969,15 @@ def _aesthetic_page(lib: Library, aesthetic_id: str) -> str:
         )
     else:
         mast = f'<h1 class="page">{_esc(aes.canonical_name)}</h1>{_equation(lib, aes.id, "../")}'
-    payload = _field_payload(lib, aes.id).replace('"href": "vectors/', '"href": "../vectors/')
     return f"""
 {mast}
 <div class="meta">{_chip(aes.status)}<span class="chip mono">{aes.id}</span>{_chip("conf "+f"{aes.confidence:.2f}")}</div>
 <p class="lede">{_esc(aes.definition)}</p>
-{_faders(lib, aes.id)}
+<h2>Coordinate</h2>
+{_equation(lib, aes.id, "../")}
+{_weight_rows(lib, aes.id, "../")}
 <h2>Plates</h2>
 <div class="rail">{''.join(plates) or "<p>None yet.</p>"}</div>
-<h2>Coordinate field</h2>
-<div class="field-wrap"><canvas id="field" data-field='{_esc(payload)}'></canvas></div>
 <h2>Interactions</h2><ul>{notes}</ul>
 <h2>Nearest</h2><ul>{near}</ul>
 <p class="lede">{_esc(aes.reconstruction_notes)}</p>
@@ -866,7 +1003,7 @@ def _study_page(lib: Library, study_id: str) -> str:
             if not obs:
                 continue
             cells.append(
-                f"<div><a href='../observations/{obs.id}.html'><img src='../{obs.image_path}' alt='{level}'></a>"
+                f"<div><a href='../observations/{obs.id}.html'><img src='../{obs.image_path}' alt='{_esc(name)}, {level} requested state'></a>"
                 f"<div class='caption'>{level}</div></div>"
             )
         blocks.append(f"<h3>{_esc(name)}</h3><div class='strip levels'>{''.join(cells)}</div>")
@@ -894,7 +1031,7 @@ def _obs_page(lib: Library, observation_id: str) -> str:
     )
     unintended = "".join(f"<li>{_esc(u)}</li>" for u in obs.unintended_changes) or "<li>none</li>"
     return f"""
-<div class="mast" style="height:70vh"><img src="../{obs.image_path}" alt="{obs.id}"><div class="shade"></div>
+<div class="mast" style="height:70vh"><img src="../{obs.image_path}" alt="{_esc((lib.anchors[obs.anchor_id].name if obs.anchor_id in lib.anchors else obs.anchor_id or "Generated observation") + ", " + (obs.intended_level or "controlled") + " requested state")}"><div class="shade"></div>
 <div class="in"><p class="kicker">{obs.id}</p><h1 class="page">{_esc(obs.anchor_id or "")} · {_esc(obs.intended_level or "")}</h1></div></div>
 <div class="meta">
   <a class="chip" href="../studies/{obs.study_id}.html">{obs.study_id}</a>
@@ -908,6 +1045,34 @@ def _obs_page(lib: Library, observation_id: str) -> str:
 """
 
 
+def _presentation_path(observation_id: str, width: int) -> str:
+    return f"assets/studies/{observation_id}-{width}.webp"
+
+
+def _write_presentation_assets(lib: Library, site: Path) -> None:
+    """Create display derivatives without modifying the canonical evidence plates."""
+    destination = site / "assets" / "studies"
+    destination.mkdir(parents=True, exist_ok=True)
+    for observation_id in HOME_MEDIA_IDS:
+        observation = lib.observations.get(observation_id)
+        if not observation or not observation.image_path:
+            continue
+        source = lib.root / observation.image_path
+        if not source.exists():
+            continue
+        with Image.open(source) as original:
+            rgb = original.convert("RGB")
+            for width in (640, 1024):
+                display = rgb.copy()
+                display.thumbnail((width, width), Image.Resampling.LANCZOS)
+                display.save(
+                    site / _presentation_path(observation_id, width),
+                    "WEBP",
+                    quality=84,
+                    method=6,
+                )
+
+
 def _copy_artifacts(lib: Library, site: Path) -> None:
     src = lib.root / "artifacts"
     dest = site / "artifacts"
@@ -915,179 +1080,9 @@ def _copy_artifacts(lib: Library, site: Path) -> None:
         shutil.rmtree(dest)
     if src.exists():
         shutil.copytree(src, dest)
-    (site / "assets" / "app.js").write_text(JS, encoding="utf-8")
-
-
-JS = r"""
-async function bootSearch() {
-  const form = document.querySelector(".search");
-  if (!form) return;
-  const prefix = form.dataset.prefix || "";
-  const box = document.getElementById("q");
-  const hits = document.getElementById("hits");
-  let data = [];
-  try { data = await (await fetch(prefix + "assets/index.json")).json(); } catch (e) { return; }
-  const run = () => {
-    const q = (box.value || "").trim().toLowerCase();
-    if (!q) { hits.style.display = "none"; hits.innerHTML = ""; return; }
-    const found = data.filter((row) => (row.name + " " + row.id + " " + row.text).toLowerCase().includes(q)).slice(0, 16);
-    hits.innerHTML = found.map((row) =>
-      `<a href="${prefix}${row.href}"><span class="k">${row.kind}</span>${row.name}</a>`
-    ).join("") || `<a>No match</a>`;
-    hits.style.display = "block";
-  };
-  box.addEventListener("input", run);
-  form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
-}
-
-function bootField() {
-  const canvas = document.getElementById("field");
-  if (!canvas) return;
-  let nodes = [];
-  try { nodes = JSON.parse(canvas.dataset.field || "{}").nodes || []; } catch (e) { return; }
-  if (!nodes.length) return;
-  const ctx = canvas.getContext("2d");
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  let w = 0, h = 0, t = 0;
-  const points = nodes.map((n, i) => {
-    const u = (i / nodes.length) * Math.PI * 2;
-    const v = 0.45 + (i % 3) * 0.18;
-    return { ...n, u, v, r: 0.28 + Math.abs(n.w) * 0.55 };
-  });
-  function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    w = rect.width; h = rect.height;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  function project(p, rot) {
-    const x = Math.cos(p.u + rot) * Math.sin(p.v) * p.r;
-    const y = Math.cos(p.v) * p.r;
-    const z = Math.sin(p.u + rot) * Math.sin(p.v) * p.r;
-    const f = 2.1 / (2.4 + z);
-    return { x: w/2 + x * Math.min(w,h) * 0.42 * f, y: h/2 + y * Math.min(w,h) * 0.42 * f, z, f };
-  }
-  function frame() {
-    t += 0.004;
-    ctx.clearRect(0, 0, w, h);
-    const g = ctx.createRadialGradient(w/2, h/2, 10, w/2, h/2, Math.min(w,h)*0.55);
-    g.addColorStop(0, "rgba(255,106,61,0.08)");
-    g.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-    const proj = points.map((p) => ({ p, s: project(p, t) })).sort((a,b) => a.s.z - b.s.z);
-    ctx.strokeStyle = "rgba(159,212,255,0.16)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    proj.forEach((item, i) => {
-      if (item.p.w <= 0) return;
-      if (i === 0) ctx.moveTo(item.s.x, item.s.y);
-      else ctx.lineTo(item.s.x, item.s.y);
-    });
-    ctx.closePath(); ctx.stroke();
-    proj.forEach((item) => {
-      const glow = 4 + item.p.w * 16;
-      ctx.beginPath();
-      ctx.fillStyle = item.p.w > 0 ? "rgba(255,106,61,0.95)" : "rgba(159,212,255,0.55)";
-      ctx.shadowColor = item.p.w > 0 ? "rgba(255,106,61,0.7)" : "rgba(159,212,255,0.35)";
-      ctx.shadowBlur = glow;
-      ctx.arc(item.s.x, item.s.y, 3 + item.p.w * 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = "rgba(244,241,236,0.78)";
-      ctx.font = "11px Outfit, sans-serif";
-      ctx.fillText(item.p.name, item.s.x + 8, item.s.y + 4);
-    });
-    requestAnimationFrame(frame);
-  }
-  resize();
-  window.addEventListener("resize", resize);
-  if (window.visualViewport) visualViewport.addEventListener("resize", resize);
-  frame();
-}
-
-function bootLight() {
-  const hero = document.querySelector("[data-hero]");
-  const light = document.getElementById("heroLight");
-  if (!hero || !light) return;
-  hero.addEventListener("pointermove", (e) => {
-    const r = hero.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width) * 100;
-    const y = ((e.clientY - r.top) / r.height) * 100;
-    light.style.setProperty("--mx", x + "%");
-    light.style.setProperty("--my", y + "%");
-  });
-}
-
-function bootHeroSwap() {
-  const photo = document.getElementById("heroPhoto");
-  if (!photo) return;
-  const fallback = photo.dataset.default || photo.src;
-  document.querySelectorAll(".fader[data-src]").forEach((el) => {
-    const src = el.getAttribute("data-src");
-    if (!src) return;
-    const show = () => { photo.src = src; };
-    const reset = () => { photo.src = fallback; };
-    el.addEventListener("pointerenter", show);
-    el.addEventListener("focus", show);
-    el.addEventListener("pointerleave", reset);
-    el.addEventListener("blur", reset);
-  });
-}
-
-function bootCompare() {
-  document.querySelectorAll("[data-compare]").forEach((stage) => {
-    const pane = stage.querySelector(".compare-b");
-    const range = stage.querySelector(".compare-range");
-    if (!pane || !range) return;
-    const set = (pct) => {
-      const v = Math.max(4, Math.min(96, Number(pct)));
-      pane.style.width = v + "%";
-      range.value = String(v);
-    };
-    range.addEventListener("input", () => set(range.value));
-    const fromEvent = (e) => {
-      const r = stage.getBoundingClientRect();
-      const x = ("touches" in e ? e.touches[0].clientX : e.clientX) - r.left;
-      set((x / r.width) * 100);
-    };
-    stage.addEventListener("pointerdown", (e) => {
-      if (e.target === range) return;
-      stage.setPointerCapture(e.pointerId);
-      fromEvent(e);
-    });
-    stage.addEventListener("pointermove", (e) => {
-      if (!stage.hasPointerCapture(e.pointerId)) return;
-      fromEvent(e);
-    });
-  });
-}
-
-function bootRail() {
-  const rail = document.querySelector("[data-rail]");
-  if (!rail) return;
-  rail.addEventListener("wheel", (e) => {
-    if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
-    rail.scrollLeft += e.deltaY;
-    e.preventDefault();
-  }, { passive: false });
-}
-
-function bootReveal() {
-  const nodes = document.querySelectorAll(".reveal");
-  if (!nodes.length) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add("on");
-    });
-  }, { threshold: 0.12 });
-  nodes.forEach((n) => io.observe(n));
-}
-
-bootSearch();
-bootField();
-bootLight();
-bootHeroSwap();
-bootCompare();
-bootRail();
-bootReveal();
-"""
+    source_data = lib.root / "data"
+    if source_data.exists():
+        shutil.copytree(source_data, site / "data")
+    source_assets = lib.root / "assets"
+    if source_assets.exists():
+        shutil.copytree(source_assets, site / "assets", dirs_exist_ok=True)
