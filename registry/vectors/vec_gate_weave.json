@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "gate weave",
+  "confidence": 0.22,
+  "definition": "Slow positional jitter of a film gate.",
+  "family_id": "fam_temporal_behavior",
+  "high_pole": "visible weave",
+  "id": "vec_gate_weave",
+  "low_pole": "locked registration",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A still cannot show this; video only.",
+  "validation": {}
+}

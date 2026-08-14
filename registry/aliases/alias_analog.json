@@ -1,0 +1,8 @@
+{
+  "confidence": 0.93,
+  "id": "alias_analog",
+  "mapping_type": "vague",
+  "notes": "Not atomic. Could be film, tape, or print.",
+  "raw_phrase": "analog",
+  "target_id": "aes_analog_generic"
+}

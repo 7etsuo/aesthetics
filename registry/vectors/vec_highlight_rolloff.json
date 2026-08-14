@@ -1,0 +1,34 @@
+{
+  "aliases": [
+    "highlight shoulder",
+    "soft shoulder",
+    "highlight clip"
+  ],
+  "canonical_name": "highlight roll-off",
+  "confidence": 0.22,
+  "definition": "How highlights compress toward white: soft shoulder versus hard clip.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "soft glowing shoulder",
+  "id": "vec_highlight_rolloff",
+  "low_pole": "hard clipped highlights",
+  "nearby_ids": [
+    "vec_halation",
+    "vec_highlight_bloom",
+    "vec_dynamic_range_compression",
+    "vec_optical_softness"
+  ],
+  "not_the_same_as": {
+    "vec_halation": "Roll-off is a tone curve. Halation is a spatial bleed around lights."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A softer shoulder holds highlight texture and spreads highlight cores; a hard shoulder clips them.",
+  "validation": {}
+}

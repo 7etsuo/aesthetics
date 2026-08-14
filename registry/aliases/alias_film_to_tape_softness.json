@@ -1,0 +1,8 @@
+{
+  "confidence": 0.88,
+  "id": "alias_film_to_tape_softness",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "film-to-tape softness",
+  "target_id": "vec_telecine_softness"
+}

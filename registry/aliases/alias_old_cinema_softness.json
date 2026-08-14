@@ -1,0 +1,8 @@
+{
+  "confidence": 0.78,
+  "id": "alias_old_cinema_softness",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "old-cinema softness",
+  "target_id": "vec_optical_softness"
+}

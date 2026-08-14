@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "digital oversharpening",
+  "confidence": 0.22,
+  "definition": "Haloed, crunchy edge enhancement typical of digital sharpening.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "crunchy haloed sharpening",
+  "id": "vec_digital_oversharpening",
+  "low_pole": "no sharpening halo",
+  "nearby_ids": [
+    "vec_acutance",
+    "vec_sharpening_intensity"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing it adds white/dark edge halos rather than true resolution.",
+  "validation": {}
+}

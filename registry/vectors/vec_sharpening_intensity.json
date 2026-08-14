@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "sharpening intensity",
+  "confidence": 0.22,
+  "definition": "Amount of finishing sharpening.",
+  "family_id": "fam_finishing_behavior",
+  "high_pole": "heavily sharpened",
+  "id": "vec_sharpening_intensity",
+  "low_pole": "unsharpened",
+  "nearby_ids": [
+    "vec_acutance",
+    "vec_digital_oversharpening"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raises edge contrast and often halos.",
+  "validation": {}
+}

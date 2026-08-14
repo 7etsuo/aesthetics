@@ -1,0 +1,135 @@
+{
+  "instrument": {
+    "name": "grok-imagine",
+    "tools": [
+      "image_gen",
+      "image_edit"
+    ],
+    "seed_control": "unavailable",
+    "aspect_ratio_control": true,
+    "source_image_lock": true,
+    "notes": "image_gen and image_edit do not accept a seed. Hold subject by generating a locked anchor, then image_edit that file while asking for a single change."
+  },
+  "jobs": [
+    {
+      "id": "job_study_reconstruction_soft_halated_shadow_001_architecture",
+      "study_id": "study_reconstruction_soft_halated_shadow_001",
+      "kind": "image_edit",
+      "prompt": "Use the attached source image as the locked subject. Preserve subject, pose, framing, and scene content. Do not describe a movie, decade, or named genre. Apply this image-formation change: heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition. Apply this image-formation change: heavy inky shadow density, murky recesses, compressed shadow detail. Apply this image-formation change: mild halation, slight warm glow around lamps and speculars.",
+      "intended_vector_id": null,
+      "intended_level": "reconstruction",
+      "anchor_id": "anchor_architecture",
+      "source_image": "artifacts/anchors/anchor_architecture.jpg",
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_architecture_reconstruction.jpg",
+      "observation_id": "obs_0054",
+      "notes": ""
+    },
+    {
+      "id": "job_study_reconstruction_soft_halated_shadow_001_character",
+      "study_id": "study_reconstruction_soft_halated_shadow_001",
+      "kind": "image_edit",
+      "prompt": "Use the attached source image as the locked subject. Preserve subject, pose, framing, and scene content. Do not describe a movie, decade, or named genre. Apply this image-formation change: heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition. Apply this image-formation change: heavy inky shadow density, murky recesses, compressed shadow detail. Apply this image-formation change: mild halation, slight warm glow around lamps and speculars.",
+      "intended_vector_id": null,
+      "intended_level": "reconstruction",
+      "anchor_id": "anchor_character",
+      "source_image": "artifacts/anchors/anchor_character.jpg",
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_character_reconstruction.jpg",
+      "observation_id": "obs_0051",
+      "notes": ""
+    },
+    {
+      "id": "job_study_reconstruction_soft_halated_shadow_001_landscape",
+      "study_id": "study_reconstruction_soft_halated_shadow_001",
+      "kind": "image_edit",
+      "prompt": "Use the attached source image as the locked subject. Preserve subject, pose, framing, and scene content. Do not describe a movie, decade, or named genre. Apply this image-formation change: heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition. Apply this image-formation change: heavy inky shadow density, murky recesses, compressed shadow detail. Apply this image-formation change: mild halation, slight warm glow around lamps and speculars.",
+      "intended_vector_id": null,
+      "intended_level": "reconstruction",
+      "anchor_id": "anchor_landscape",
+      "source_image": "artifacts/anchors/anchor_landscape.jpg",
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_landscape_reconstruction.jpg",
+      "observation_id": "obs_0055",
+      "notes": ""
+    },
+    {
+      "id": "job_study_reconstruction_soft_halated_shadow_001_object",
+      "study_id": "study_reconstruction_soft_halated_shadow_001",
+      "kind": "image_edit",
+      "prompt": "Use the attached source image as the locked subject. Preserve subject, pose, framing, and scene content. Do not describe a movie, decade, or named genre. Apply this image-formation change: heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition. Apply this image-formation change: heavy inky shadow density, murky recesses, compressed shadow detail. Apply this image-formation change: mild halation, slight warm glow around lamps and speculars.",
+      "intended_vector_id": null,
+      "intended_level": "reconstruction",
+      "anchor_id": "anchor_object",
+      "source_image": "artifacts/anchors/anchor_object.jpg",
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_object_reconstruction.jpg",
+      "observation_id": "obs_0052",
+      "notes": ""
+    },
+    {
+      "id": "job_study_reconstruction_soft_halated_shadow_001_portrait",
+      "study_id": "study_reconstruction_soft_halated_shadow_001",
+      "kind": "image_edit",
+      "prompt": "Use the attached source image as the locked subject. Preserve subject, pose, framing, and scene content. Do not describe a movie, decade, or named genre. Apply this image-formation change: heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition. Apply this image-formation change: heavy inky shadow density, murky recesses, compressed shadow detail. Apply this image-formation change: mild halation, slight warm glow around lamps and speculars.",
+      "intended_vector_id": null,
+      "intended_level": "reconstruction",
+      "anchor_id": "anchor_portrait",
+      "source_image": "artifacts/anchors/anchor_portrait.jpg",
+      "aspect_ratio": "1:1",
+      "hold_constant": [
+        "subject identity",
+        "pose and blocking",
+        "framing and crop",
+        "camera height and distance",
+        "key light direction",
+        "scene content",
+        "source image when editing"
+      ],
+      "status": "ingested",
+      "output_path": "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_portrait_reconstruction.jpg",
+      "observation_id": "obs_0053",
+      "notes": ""
+    }
+  ]
+}

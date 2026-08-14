@@ -1,0 +1,58 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_halation",
+  "date": "2026-08-13",
+  "decision": "provisional",
+  "decision_reason": "A glow appears at the high pole, but it is rarely film-base bleed around existing highlights. Imagine invents rim lights, sunsets, or silhouette auras. Architecture around the skylight is the best local-bleed example. Keep provisional.",
+  "entanglement_notes": [
+    "Halation and highlight bloom are not separated by the current prompts.",
+    "Scenes without strong practicals grow new lights instead of bleeding old ones.",
+    "Landscape high changed time of day."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_halation_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Rerun halation on a night interior that already contains lamps.",
+    "Discrimination: halation vs highlight bloom vs final bloom vs veiling glare."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0036",
+    "obs_0037",
+    "obs_0038",
+    "obs_0039",
+    "obs_0040",
+    "obs_0041",
+    "obs_0042",
+    "obs_0043",
+    "obs_0044",
+    "obs_0045",
+    "obs_0046",
+    "obs_0047",
+    "obs_0048",
+    "obs_0049",
+    "obs_0050"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of halation"
+}

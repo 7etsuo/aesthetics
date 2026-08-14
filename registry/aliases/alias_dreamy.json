@@ -1,0 +1,8 @@
+{
+  "confidence": 0.55,
+  "id": "alias_dreamy",
+  "mapping_type": "vague",
+  "notes": "Often softness plus bloom plus lifted midtones. Do not treat as atomic.",
+  "raw_phrase": "dreamy",
+  "target_id": "vec_optical_softness"
+}

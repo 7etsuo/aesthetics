@@ -1,0 +1,9 @@
+{
+  "evidence_study_ids": [],
+  "id": "int_halation__optical_softness",
+  "note": "High optical softness often drags bloom/halation along.",
+  "status": "suspected",
+  "strength": 0.64,
+  "vector_i": "vec_halation",
+  "vector_j": "vec_optical_softness"
+}

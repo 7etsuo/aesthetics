@@ -1,0 +1,7 @@
+id,vector_i,vector_j,interaction_strength,status,note
+int_halation__highlight_rolloff,vec_halation,vec_highlight_rolloff,0.62,suspected,Halation is more visible when highlight values survive a soft shoulder.
+int_halation__optical_softness,vec_halation,vec_optical_softness,0.64,suspected,High optical softness often drags bloom/halation along.
+int_key_to_fill_ratio__shadow_density,vec_key_to_fill_ratio,vec_shadow_density,0.70,suspected,Imagine may restage lighting when asked only for denser shadows.
+int_microcontrast__optical_softness,vec_microcontrast,vec_optical_softness,0.66,suspected,Softness usually lowers microcontrast. Inverse test needed.
+int_optical_softness__practical_material_feel,vec_optical_softness,vec_practical_material_feel,0.55,suspected,Often co-produce an analog fantasy impression.
+int_optical_softness__telecine_softness,vec_optical_softness,vec_telecine_softness,0.68,suspected,Easy to confuse. Needs a discrimination study.

@@ -1,0 +1,34 @@
+{
+  "aliases": [
+    "practical puppet feel",
+    "handmade material feel",
+    "physical fabrication feel"
+  ],
+  "canonical_name": "practical-material feel",
+  "confidence": 0.22,
+  "definition": "The general sense that surfaces were physically built, painted, and handled.",
+  "family_id": "fam_material_response",
+  "high_pole": "strongly fabricated materials",
+  "id": "vec_practical_material_feel",
+  "low_pole": "digital-smooth materials",
+  "nearby_ids": [
+    "vec_hand_painted_surface",
+    "vec_latex_foam_feel",
+    "vec_roughness",
+    "vec_fabric_heaviness"
+  ],
+  "not_the_same_as": {},
+  "notes": "Likely a parent/composite. Keep as a working vector until child studies exist.",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [
+    "Parent or composite? Split into roughness, paint, latex, fabric?"
+  ],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "This may be a parent of several material vectors and needs decomposition.",
+  "validation": {}
+}

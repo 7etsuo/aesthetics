@@ -1,0 +1,13 @@
+{
+  "date": "2026-08-13",
+  "human_rating": null,
+  "id": "recon_obs_0053",
+  "method": "weighted_prompt_from_W",
+  "notes": "Linear reconstruction from optical softness, shadow density, and mild halation. Softness and a dark surround landed. Halation became face bloom. Shadow mass is weaker than the isolated high pole.",
+  "observation_id": "obs_0053",
+  "reconstruction_score": 0.62,
+  "residual_vectors": [
+    "vec_highlight_bloom"
+  ],
+  "target_aesthetic_id": "aes_soft_halated_shadow"
+}

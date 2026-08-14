@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "digital cleanup",
+    "beauty cleanup"
+  ],
+  "canonical_name": "cleanup level",
+  "confidence": 0.22,
+  "definition": "How retouched, denoised, and perfected the image is.",
+  "family_id": "fam_finishing_behavior",
+  "high_pole": "heavily cleaned",
+  "id": "vec_cleanup_level",
+  "low_pole": "raw and uncleaned",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "High cleanup removes defects and also life.",
+  "validation": {}
+}

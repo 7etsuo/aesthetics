@@ -1,0 +1,76 @@
+{
+  "aliases": [
+    "murky shadows",
+    "dense shadows",
+    "inky shadows",
+    "open shadows"
+  ],
+  "canonical_name": "shadow density",
+  "confidence": 0.58,
+  "definition": "How heavy, inky, or open the shadow masses are, independent of highlight behavior.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "murky, dense, inked shadows",
+  "id": "vec_shadow_density",
+  "low_pole": "open shadows with readable detail",
+  "nearby_ids": [
+    "vec_black_level",
+    "vec_global_contrast",
+    "vec_key_to_fill_ratio",
+    "vec_dynamic_range_compression"
+  ],
+  "not_the_same_as": {
+    "vec_black_level": "Black level is the floor. Shadow density is the mass of the darks.",
+    "vec_global_contrast": "Global contrast moves lights and darks together. Shadow density targets the darks.",
+    "vec_key_to_fill_ratio": "Lighting ratio is a scene lighting change. Shadow density can be a tone-mapping change on the same lighting."
+  },
+  "notes": "",
+  "observable_effects": [
+    "shadow masses fill or open",
+    "dark clothing and recesses gain or lose interior detail",
+    "midtones may stay closer to constant than in a contrast sweep"
+  ],
+  "observation_ids": [
+    "obs_0021",
+    "obs_0022",
+    "obs_0023",
+    "obs_0024",
+    "obs_0025",
+    "obs_0026",
+    "obs_0027",
+    "obs_0028",
+    "obs_0029",
+    "obs_0030",
+    "obs_0031",
+    "obs_0032",
+    "obs_0033",
+    "obs_0034",
+    "obs_0035"
+  ],
+  "open_questions": [
+    "Can density move with lighting ratio held?",
+    "Where does black level end and shadow density begin on these anchors?"
+  ],
+  "polarity": "unipolar",
+  "prompt_phrases": {
+    "high": "heavy inky shadow density, murky recesses, compressed shadow detail",
+    "low": "open, readable shadows with visible interior detail",
+    "medium": "naturalistic shadow density"
+  },
+  "scoring_guidance": "0.00 open, 0.50 natural, 1.00 crushed murky shadow mass.",
+  "status": "provisional",
+  "study_ids": [
+    "study_shadow_density_001"
+  ],
+  "testable_claim": "Increasing shadow density darkens and fills shadow masses while subject, key direction, and highlight structure stay fixed.",
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": "pending_vs_key_to_fill",
+    "transferable": true,
+    "useful": true
+  }
+}

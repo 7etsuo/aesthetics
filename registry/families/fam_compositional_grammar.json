@@ -1,0 +1,14 @@
+{
+  "definition": "Framing and staging grammar that transfers across subjects.",
+  "id": "fam_compositional_grammar",
+  "name": "compositional grammar",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_frame_density",
+    "vec_lens_distance_feel",
+    "vec_negative_space_bias",
+    "vec_subject_scale",
+    "vec_theatrical_blocking"
+  ]
+}

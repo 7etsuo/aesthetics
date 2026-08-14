@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "negative-space bias",
+  "confidence": 0.22,
+  "definition": "How much empty field is left around the subject.",
+  "family_id": "fam_compositional_grammar",
+  "high_pole": "large negative space",
+  "id": "vec_negative_space_bias",
+  "low_pole": "tight field",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Higher bias leaves more unused field.",
+  "validation": {}
+}

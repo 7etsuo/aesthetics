@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aesthetics.local/schemas/observation.schema.json",
+  "title": "Observation",
+  "type": "object",
+  "required": ["id", "study_id", "source_type", "image_path", "prompt"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^obs_[0-9]{4,}$" },
+    "study_id": { "type": "string" },
+    "source_type": { "type": "string" },
+    "image_path": { "type": "string" },
+    "prompt": { "type": "string" },
+    "intended_vector_id": { "type": ["string", "null"] },
+    "intended_level": { "type": ["string", "null"] },
+    "anchor_id": { "type": ["string", "null"] },
+    "source_image": { "type": ["string", "null"] },
+    "seed": { "type": ["string", "null"] },
+    "aspect_ratio": { "type": "string" },
+    "model": { "type": "string" },
+    "settings": { "type": "object" },
+    "unintended_changes": { "type": "array", "items": { "type": "string" } },
+    "scores": { "type": "array" },
+    "notes": { "type": "string" },
+    "date": { "type": "string" }
+  }
+}

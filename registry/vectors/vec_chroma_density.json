@@ -1,0 +1,33 @@
+{
+  "aliases": [
+    "color density",
+    "dye density",
+    "thin digital color"
+  ],
+  "canonical_name": "chroma density",
+  "confidence": 0.22,
+  "definition": "How heavy and inky color feels, distinct from simple saturation gain.",
+  "family_id": "fam_color_response",
+  "high_pole": "thick dense chroma",
+  "id": "vec_chroma_density",
+  "low_pole": "thin digital color",
+  "nearby_ids": [
+    "vec_saturation",
+    "vec_palette_compression",
+    "vec_color_separation"
+  ],
+  "not_the_same_as": {
+    "vec_saturation": "Saturation is gain. Density is the thickness and inkiness of the colorant."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing chroma density makes colors feel thicker and more dye-like rather than just louder.",
+  "validation": {}
+}

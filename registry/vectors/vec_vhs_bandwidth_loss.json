@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "VHS softness",
+    "tape bandwidth"
+  ],
+  "canonical_name": "VHS bandwidth loss",
+  "confidence": 0.22,
+  "definition": "Chroma smear, luma blur, and lost high frequencies typical of consumer tape.",
+  "family_id": "fam_capture_and_transfer",
+  "high_pole": "heavy VHS loss",
+  "id": "vec_vhs_bandwidth_loss",
+  "low_pole": "full bandwidth",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Should degrade chroma resolution more than a lens would.",
+  "validation": {}
+}

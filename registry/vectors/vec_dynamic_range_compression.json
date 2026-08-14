@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "compressed dynamic range",
+    "print-range squeeze"
+  ],
+  "canonical_name": "dynamic range compression",
+  "confidence": 0.22,
+  "definition": "How much of the scene's luminance range is squeezed into the display range.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "heavily compressed range",
+  "id": "vec_dynamic_range_compression",
+  "low_pole": "expansive range",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Compressing range reduces extreme separation between brightest and darkest values.",
+  "validation": {}
+}

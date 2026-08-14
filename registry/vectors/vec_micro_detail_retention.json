@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "micro-detail retention",
+  "confidence": 0.22,
+  "definition": "How much of the finest texture survives.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "fine texture fully kept",
+  "id": "vec_micro_detail_retention",
+  "low_pole": "fine texture gone",
+  "nearby_ids": [
+    "vec_texture_resolution",
+    "vec_fine_detail_rolloff"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Lowering retention erases pores, fibers, and distant grit while large forms remain.",
+  "validation": {}
+}

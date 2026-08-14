@@ -1,0 +1,8 @@
+{
+  "confidence": 0.88,
+  "id": "alias_inky_shadows",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "inky shadows",
+  "target_id": "vec_shadow_density"
+}

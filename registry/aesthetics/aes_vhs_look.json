@@ -1,0 +1,47 @@
+{
+  "aliases": [
+    "VHS"
+  ],
+  "canonical_name": "VHS look",
+  "confidence": 0.28,
+  "definition": "A capture and transfer system. Decompose into bandwidth loss, analog video texture, chroma smear, and CRT bloom.",
+  "id": "aes_vhs_look",
+  "interaction_notes": [],
+  "nearest_ids": [],
+  "notes": "",
+  "observation_ids": [],
+  "reconstruction_notes": "",
+  "revision": 1,
+  "status": "system",
+  "study_ids": [],
+  "weights": [
+    {
+      "confidence": 0.4,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_vhs_bandwidth_loss",
+      "weight": 0.82
+    },
+    {
+      "confidence": 0.4,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_analog_video_texture",
+      "weight": 0.74
+    },
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_crt_bloom_feel",
+      "weight": 0.48
+    },
+    {
+      "confidence": 0.25,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_color_separation",
+      "weight": 0.3
+    }
+  ]
+}

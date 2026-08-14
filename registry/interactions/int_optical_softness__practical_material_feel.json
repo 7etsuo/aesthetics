@@ -1,0 +1,9 @@
+{
+  "evidence_study_ids": [],
+  "id": "int_optical_softness__practical_material_feel",
+  "note": "Often co-produce an analog fantasy impression.",
+  "status": "suspected",
+  "strength": 0.55,
+  "vector_i": "vec_optical_softness",
+  "vector_j": "vec_practical_material_feel"
+}

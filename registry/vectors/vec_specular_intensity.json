@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "specular intensity",
+  "confidence": 0.22,
+  "definition": "How bright the specular highlights are, apart from their width.",
+  "family_id": "fam_material_response",
+  "high_pole": "hot speculars",
+  "id": "vec_specular_intensity",
+  "low_pole": "dull speculars",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Intensity can rise while roughness stays fixed.",
+  "validation": {}
+}

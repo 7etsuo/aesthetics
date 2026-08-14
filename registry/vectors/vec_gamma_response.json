@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "gamma response",
+  "confidence": 0.22,
+  "definition": "Nonlinear tone mapping shape beyond a simple lift or contrast swing.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "lifted opened mids",
+  "id": "vec_gamma_response",
+  "low_pole": "dark receded mids",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Changing gamma redistributes midtones relative to ends without a pure contrast interpretation.",
+  "validation": {}
+}

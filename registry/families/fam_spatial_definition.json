@@ -1,0 +1,16 @@
+{
+  "definition": "How detail and edges are resolved: acutance, micro-detail, softness, frequency roll-off.",
+  "id": "fam_spatial_definition",
+  "name": "spatial definition",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_acutance",
+    "vec_clarity",
+    "vec_digital_oversharpening",
+    "vec_edge_softness",
+    "vec_fine_detail_rolloff",
+    "vec_micro_detail_retention",
+    "vec_texture_resolution"
+  ]
+}

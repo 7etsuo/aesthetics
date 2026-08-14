@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "optical-print softness",
+  "confidence": 0.22,
+  "definition": "Softness and contrast from an optical print generation, denser and more photographic than telecine smear.",
+  "family_id": "fam_capture_and_transfer",
+  "high_pole": "dupe-print softness",
+  "id": "vec_optical_print_softness",
+  "low_pole": "contact-sharp print",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Should thicken the print, not add scanlines.",
+  "validation": {}
+}

@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "canonical_name": "release-print density",
+  "confidence": 0.22,
+  "definition": "The thicker, dyed density of a theatrical print.",
+  "family_id": "fam_capture_and_transfer",
+  "high_pole": "thick print density",
+  "id": "vec_release_print_density",
+  "low_pole": "thin scan",
+  "nearby_ids": [
+    "vec_chroma_density",
+    "vec_print_density_bias",
+    "vec_shadow_density"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it should ink up the print, especially in color and shadows.",
+  "validation": {}
+}

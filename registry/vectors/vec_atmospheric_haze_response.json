@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "canonical_name": "atmospheric haze response",
+  "confidence": 0.22,
+  "definition": "How strongly aerial haze, fog, or scatter reads in depth.",
+  "family_id": "fam_lighting_response",
+  "high_pole": "heavy atmospheric veil",
+  "id": "vec_atmospheric_haze_response",
+  "low_pole": "clear air",
+  "nearby_ids": [
+    "vec_diffusion",
+    "vec_practical_fog_feel",
+    "vec_veiling_glare"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it separates planes with veiling, not with lens diffusion alone.",
+  "validation": {}
+}

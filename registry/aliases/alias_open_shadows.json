@@ -1,0 +1,8 @@
+{
+  "confidence": 0.8,
+  "id": "alias_open_shadows",
+  "mapping_type": "alias",
+  "notes": "Low pole.",
+  "raw_phrase": "open shadows",
+  "target_id": "vec_shadow_density"
+}

@@ -1,0 +1,39 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_optical_softness",
+  "date": "2026-08-13",
+  "decision": "locked",
+  "decision_reason": "Five anchors generated and reused as edit sources. Seed control remains unavailable.",
+  "entanglement_notes": [],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_anchor_set_001",
+  "levels": [
+    "baseline"
+  ],
+  "next_experiments": [],
+  "notes": "candidate_vector_id is unused; this study only locks subjects.",
+  "observation_ids": [
+    "obs_0001",
+    "obs_0002",
+    "obs_0003",
+    "obs_0004",
+    "obs_0005"
+  ],
+  "protocol": "Generate five neutral reference subjects used by later single-axis edits.",
+  "status": "complete",
+  "title": "Locked anchor set"
+}

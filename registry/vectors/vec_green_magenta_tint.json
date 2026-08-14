@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "green-magenta tint",
+  "confidence": 0.22,
+  "definition": "Tint axis orthogonal to temperature.",
+  "family_id": "fam_color_response",
+  "high_pole": "magenta tint",
+  "id": "vec_green_magenta_tint",
+  "low_pole": "green tint",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "bipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Tint can go green or magenta with temperature held.",
+  "validation": {}
+}

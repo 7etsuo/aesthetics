@@ -1,0 +1,9 @@
+{
+  "evidence_study_ids": [],
+  "id": "int_key_to_fill_ratio__shadow_density",
+  "note": "Imagine may restage lighting when asked only for denser shadows.",
+  "status": "suspected",
+  "strength": 0.7,
+  "vector_i": "vec_key_to_fill_ratio",
+  "vector_j": "vec_shadow_density"
+}

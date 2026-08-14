@@ -1,0 +1,105 @@
+{
+  "anchor_id": "anchor_landscape",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-13",
+  "id": "obs_0055",
+  "image_path": "artifacts/studies/study_reconstruction_soft_halated_shadow_001/anchor_landscape_reconstruction.jpg",
+  "intended_level": "reconstruction",
+  "intended_vector_id": null,
+  "model": "grok-imagine",
+  "notes": "Linear reconstruction from optical softness, shadow density, and mild halation. Combined darkening and melt. Residual bloom risk from the isolated high poles.",
+  "prompt": "Use the attached source image as the locked subject. Preserve subject, pose, framing, and scene content. Do not describe a movie, decade, or named genre. Apply this image-formation change: heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition. Apply this image-formation change: heavy inky shadow density, murky recesses, compressed shadow detail. Apply this image-formation change: mild halation, slight warm glow around lamps and speculars.",
+  "scores": [
+    {
+      "confidence": 0.6,
+      "method": "agent_visual",
+      "score": 0.7,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.52,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.52,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.55,
+      "vector_id": "vec_highlight_bloom"
+    },
+    {
+      "confidence": 0.6,
+      "method": "agent_visual",
+      "score": 0.64,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.4,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.22,
+      "vector_id": "vec_bokeh_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.4,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.48,
+      "method": "agent_visual",
+      "score": 0.42,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.5,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing"
+    ],
+    "job_id": "job_study_reconstruction_soft_halated_shadow_001_landscape",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_landscape.jpg",
+  "source_type": "generated",
+  "study_id": "study_reconstruction_soft_halated_shadow_001",
+  "unintended_changes": []
+}

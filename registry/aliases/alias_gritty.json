@@ -1,0 +1,8 @@
+{
+  "confidence": 0.5,
+  "id": "alias_gritty",
+  "mapping_type": "vague",
+  "notes": "Often grain plus microcontrast plus dirt plus hard light.",
+  "raw_phrase": "gritty",
+  "target_id": "vec_grain_structure"
+}

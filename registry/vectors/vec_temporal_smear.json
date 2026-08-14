@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "temporal smear",
+  "confidence": 0.22,
+  "definition": "Display or tape persistence that smears motion in time.",
+  "family_id": "fam_temporal_behavior",
+  "high_pole": "heavy temporal smear",
+  "id": "vec_temporal_smear",
+  "low_pole": "no temporal smear",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Distinct from optical defocus.",
+  "validation": {}
+}

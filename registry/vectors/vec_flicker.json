@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "flicker",
+  "confidence": 0.22,
+  "definition": "Frame-to-frame exposure pumping or lamp flicker.",
+  "family_id": "fam_temporal_behavior",
+  "high_pole": "visible flicker",
+  "id": "vec_flicker",
+  "low_pole": "stable exposure",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Video only.",
+  "validation": {}
+}

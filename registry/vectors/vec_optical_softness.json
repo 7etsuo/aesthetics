@@ -1,0 +1,82 @@
+{
+  "aliases": [
+    "vintage softness",
+    "lens softness",
+    "old-cinema softness",
+    "optical diffusion feel"
+  ],
+  "canonical_name": "optical softness",
+  "confidence": 0.63,
+  "definition": "Overall lens-like softening: reduced bite, slight highlight spread, and melted fine detail from the optical path.",
+  "family_id": "fam_optical_character",
+  "high_pole": "heavy optical diffusion",
+  "id": "vec_optical_softness",
+  "low_pole": "clinical optical crispness",
+  "nearby_ids": [
+    "vec_edge_softness",
+    "vec_diffusion",
+    "vec_halation",
+    "vec_microcontrast",
+    "vec_telecine_softness",
+    "vec_veiling_glare"
+  ],
+  "not_the_same_as": {
+    "vec_diffusion": "Diffusion is the filter or atmosphere mechanism. Optical softness is the observed image property.",
+    "vec_edge_softness": "Edge softness is contour width only. Optical softness also changes highlight cores and micro-detail.",
+    "vec_halation": "Halation is a colored or bright bleed around lights, not a global melt.",
+    "vec_telecine_softness": "Telecine softness is a transfer-path bandwidth loss, often flatter and more video-like.",
+    "vec_veiling_glare": "Veiling glare lifts contrast with a haze. Optical softness can exist with contrast intact."
+  },
+  "notes": "",
+  "observable_effects": [
+    "pores and fabric weave melt",
+    "specular cores widen slightly",
+    "edges lose bite",
+    "image feels lens-like rather than sharpened-digital"
+  ],
+  "observation_ids": [
+    "obs_0006",
+    "obs_0007",
+    "obs_0008",
+    "obs_0009",
+    "obs_0010",
+    "obs_0011",
+    "obs_0012",
+    "obs_0013",
+    "obs_0014",
+    "obs_0015",
+    "obs_0016",
+    "obs_0017",
+    "obs_0018",
+    "obs_0019",
+    "obs_0020"
+  ],
+  "open_questions": [
+    "Can high softness be produced without bloom orbs or glowing eyes?",
+    "Is the landscape high pole DOF or optical softness?",
+    "How distinct is this from diffusion and edge softness?"
+  ],
+  "polarity": "unipolar",
+  "prompt_phrases": {
+    "high": "heavy optical softness, melted fine detail, diffused highlight cores, lens-like bloom of definition",
+    "low": "clinically sharp optical path, high acutance, crisp micro-detail, tight highlight cores",
+    "medium": "moderate vintage optical softness, slight highlight spread, natural fine-detail loss"
+  },
+  "scoring_guidance": "0.00 clinical crisp, 0.50 moderate lens softness, 1.00 heavy optical melt.",
+  "status": "provisional",
+  "study_ids": [
+    "study_optical_softness_001"
+  ],
+  "testable_claim": "Increasing optical softness while holding subject, pose, framing, and key direction should melt fine detail and gently spread highlight cores without requiring a grain, color, or lighting-ratio change.",
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": "pending_vs_diffusion",
+    "transferable": true,
+    "useful": true
+  }
+}

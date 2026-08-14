@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "gamut extent",
+  "confidence": 0.22,
+  "definition": "How far colors are allowed to go toward spectral extremes.",
+  "family_id": "fam_color_response",
+  "high_pole": "narrow gamut",
+  "id": "vec_gamut_extent",
+  "low_pole": "wide gamut",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A smaller gamut pulls extrema inward.",
+  "validation": {}
+}

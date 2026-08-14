@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "hand-painted surface quality",
+  "confidence": 0.22,
+  "definition": "Visible brush, pigment, and irregular paint thickness.",
+  "family_id": "fam_material_response",
+  "high_pole": "clearly hand-painted",
+  "id": "vec_hand_painted_surface",
+  "low_pole": "factory-smooth finish",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it shows handmade paint, not a tiled material.",
+  "validation": {}
+}

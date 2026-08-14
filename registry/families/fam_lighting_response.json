@@ -1,0 +1,14 @@
+{
+  "definition": "How light is shaped on the subject: hardness, ratio, practicals, atmosphere.",
+  "id": "fam_lighting_response",
+  "name": "lighting response",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_atmospheric_haze_response",
+    "vec_key_to_fill_ratio",
+    "vec_practical_light_dominance",
+    "vec_rim_light_character",
+    "vec_source_hardness"
+  ]
+}

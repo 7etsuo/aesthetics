@@ -1,0 +1,52 @@
+{
+  "aliases": [
+    "soft shadowed glow",
+    "diffused night still"
+  ],
+  "canonical_name": "soft halated shadow",
+  "confidence": 0.56,
+  "definition": "A first-order composite built only from the three studied vectors: optical softness, shadow density, and halation.",
+  "id": "aes_soft_halated_shadow",
+  "interaction_notes": [
+    "Halation becomes more visible once highlights survive; dense shadows can hide it.",
+    "Optical softness and halation often co-move in Imagine edits."
+  ],
+  "nearest_ids": [],
+  "notes": "Milestone reconstruction target.",
+  "observation_ids": [
+    "obs_0051",
+    "obs_0052",
+    "obs_0053",
+    "obs_0054",
+    "obs_0055"
+  ],
+  "reconstruction_notes": "Preserve subject and framing. Raise optical softness and shadow density as dominant phrases. Add supporting halation. Do not mention cinematic, vintage, or analog.",
+  "revision": 1,
+  "status": "composite",
+  "study_ids": [
+    "study_reconstruction_soft_halated_shadow_001"
+  ],
+  "weights": [
+    {
+      "confidence": 0.72,
+      "hypothesized": false,
+      "source": "manual",
+      "vector_id": "vec_optical_softness",
+      "weight": 0.78
+    },
+    {
+      "confidence": 0.7,
+      "hypothesized": false,
+      "source": "manual",
+      "vector_id": "vec_shadow_density",
+      "weight": 0.7
+    },
+    {
+      "confidence": 0.66,
+      "hypothesized": false,
+      "source": "manual",
+      "vector_id": "vec_halation",
+      "weight": 0.58
+    }
+  ]
+}

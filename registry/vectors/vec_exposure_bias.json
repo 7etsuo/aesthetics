@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "exposure bias",
+  "confidence": 0.22,
+  "definition": "Overall placement of the exposure, independent of contrast shape.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "overexposed",
+  "id": "vec_exposure_bias",
+  "low_pole": "underexposed",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "bipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A global exposure shift moves the whole scale.",
+  "validation": {}
+}

@@ -1,0 +1,77 @@
+{
+  "aliases": [
+    "highlight bleed",
+    "red-edge glow",
+    "film halation"
+  ],
+  "canonical_name": "halation",
+  "confidence": 0.49,
+  "definition": "A spatial bleed of light, often warm or reddish, around bright sources into adjacent darker areas.",
+  "family_id": "fam_optical_character",
+  "high_pole": "strong highlight bleed",
+  "id": "vec_halation",
+  "low_pole": "clean unbled highlights",
+  "nearby_ids": [
+    "vec_highlight_bloom",
+    "vec_highlight_rolloff",
+    "vec_optical_softness",
+    "vec_veiling_glare",
+    "vec_final_bloom"
+  ],
+  "not_the_same_as": {
+    "vec_final_bloom": "Finishing bloom is a grade/filter layer. Halation is the optical or film-base phenomenon.",
+    "vec_highlight_bloom": "Bloom is a general glow. Halation is a more local, often reddish, bleed around speculars and lamps.",
+    "vec_optical_softness": "Softness melts the whole image. Halation can sit on an otherwise sharper picture.",
+    "vec_veiling_glare": "Glare is a global contrast-lowering haze. Halation is local to bright features."
+  },
+  "notes": "",
+  "observable_effects": [
+    "lamps and catchlights grow a halo",
+    "bright edges leak into adjacent darks",
+    "halo is often warmer than the source"
+  ],
+  "observation_ids": [
+    "obs_0036",
+    "obs_0037",
+    "obs_0038",
+    "obs_0039",
+    "obs_0040",
+    "obs_0041",
+    "obs_0042",
+    "obs_0043",
+    "obs_0044",
+    "obs_0045",
+    "obs_0046",
+    "obs_0047",
+    "obs_0048",
+    "obs_0049",
+    "obs_0050"
+  ],
+  "open_questions": [
+    "Does Imagine ever produce red-edge film bleed without inventing a new light?",
+    "Should the working definition split into local bleed vs silhouette aura?"
+  ],
+  "polarity": "unipolar",
+  "prompt_phrases": {
+    "high": "strong film-like halation, bright edges bleed into neighboring shadows, warm halo around lights",
+    "low": "clean highlights with no bleed into adjacent darks",
+    "medium": "mild halation, slight warm glow around lamps and speculars"
+  },
+  "scoring_guidance": "0.00 no bleed, 0.50 mild local glow, 1.00 strong colored or bright leak.",
+  "status": "provisional",
+  "study_ids": [
+    "study_halation_001"
+  ],
+  "testable_claim": "Increasing only halation should make bright edges glow and leak into neighboring darks without a required global softness or grade change.",
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "weak",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": "pending_vs_bloom",
+    "transferable": "partial",
+    "useful": "conditional"
+  }
+}

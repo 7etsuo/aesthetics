@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "texture resolution",
+  "confidence": 0.22,
+  "definition": "The finest spatial scale at which surface texture is still resolved.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "highly resolved texture",
+  "id": "vec_texture_resolution",
+  "low_pole": "broad unresolving texture",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Lower texture resolution makes cloth and skin read as broader masses.",
+  "validation": {}
+}

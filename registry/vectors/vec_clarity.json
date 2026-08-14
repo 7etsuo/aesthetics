@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "clarity",
+  "confidence": 0.22,
+  "definition": "Mid-frequency structure punch often used as a finishing control.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "harsh high clarity",
+  "id": "vec_clarity",
+  "low_pole": "soapy low clarity",
+  "nearby_ids": [
+    "vec_local_contrast",
+    "vec_microcontrast"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising clarity punches volumes and mid-size texture.",
+  "validation": {}
+}

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vslib"
+version = "0.1.0"
+description = "Visual basis vector library: ontology, experiments, and retrieval"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "pillow>=10.0",
+  "jsonschema>=4.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+vslib = "vslib.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+vslib = ["schemas/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

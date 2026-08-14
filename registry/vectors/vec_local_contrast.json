@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "canonical_name": "local contrast",
+  "confidence": 0.22,
+  "definition": "Contrast of mid-sized forms, larger than microcontrast and smaller than the whole frame.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "punched local volumes",
+  "id": "vec_local_contrast",
+  "low_pole": "flat local volumes",
+  "nearby_ids": [
+    "vec_microcontrast",
+    "vec_clarity",
+    "vec_global_contrast"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising local contrast pops object volumes without a full global contrast swing.",
+  "validation": {}
+}

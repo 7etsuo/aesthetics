@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "skin-tone response",
+  "confidence": 0.22,
+  "definition": "How skin hues are protected, shifted, or degraded.",
+  "family_id": "fam_color_response",
+  "high_pole": "strongly biased skin mapping",
+  "id": "vec_skin_tone_response",
+  "low_pole": "untreated skin mapping",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Skin response can change while background hues stay closer to constant.",
+  "validation": {}
+}

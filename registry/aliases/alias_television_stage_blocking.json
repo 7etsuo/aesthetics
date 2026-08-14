@@ -1,0 +1,8 @@
+{
+  "confidence": 0.84,
+  "id": "alias_television_stage_blocking",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "television-stage blocking",
+  "target_id": "vec_theatrical_blocking"
+}

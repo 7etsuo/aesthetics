@@ -1,0 +1,42 @@
+{
+  "aliases": [
+    "lifted blacks",
+    "crushed blacks",
+    "black crush"
+  ],
+  "canonical_name": "black level",
+  "confidence": 0.22,
+  "definition": "The floor of the tone scale: how close the darkest values sit to true black.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "lifted or milky blacks",
+  "id": "vec_black_level",
+  "low_pole": "true black floor",
+  "nearby_ids": [
+    "vec_shadow_density",
+    "vec_dynamic_range_compression",
+    "vec_global_contrast"
+  ],
+  "not_the_same_as": {
+    "vec_shadow_density": "Shadow density is how heavy the shadow masses feel, not only the black floor."
+  },
+  "notes": "",
+  "observable_effects": [
+    "blacks lift or crush",
+    "shadow floor fog or ink"
+  ],
+  "observation_ids": [],
+  "open_questions": [
+    "Can black lift be isolated from haze and veiling glare?"
+  ],
+  "polarity": "unipolar",
+  "prompt_phrases": {
+    "high": "lifted milky blacks, raised floor",
+    "low": "true dense black floor, no lift",
+    "medium": "natural black floor"
+  },
+  "scoring_guidance": "0 = true black floor, 1 = strongly lifted blacks.",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising black level lifts the floor without necessarily opening mid-shadows the same way.",
+  "validation": {}
+}

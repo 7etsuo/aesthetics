@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "television-stage blocking",
+    "locked-off theatrical framing"
+  ],
+  "canonical_name": "theatrical blocking",
+  "confidence": 0.22,
+  "definition": "Stage-like arrangement facing an implied audience plane.",
+  "family_id": "fam_compositional_grammar",
+  "high_pole": "stage blocking",
+  "id": "vec_theatrical_blocking",
+  "low_pole": "observational blocking",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it should look staged rather than casually observed.",
+  "validation": {}
+}

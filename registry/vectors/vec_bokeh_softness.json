@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "bokeh softness",
+  "confidence": 0.22,
+  "definition": "How smoothly out-of-focus areas dissolve.",
+  "family_id": "fam_optical_character",
+  "high_pole": "creamy soft bokeh",
+  "id": "vec_bokeh_softness",
+  "low_pole": "hard nervous bokeh",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Softer bokeh melts background disks; harder bokeh keeps busy edges.",
+  "validation": {}
+}

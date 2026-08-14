@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "mosquito noise",
+    "macroblocking"
+  ],
+  "canonical_name": "compression texture",
+  "confidence": 0.22,
+  "definition": "Block, mosquito, or ringing texture from compression.",
+  "family_id": "fam_texture_and_noise",
+  "high_pole": "heavy compression texture",
+  "id": "vec_compression_texture",
+  "low_pole": "no codec texture",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing it should add codec structure, not grain.",
+  "validation": {}
+}

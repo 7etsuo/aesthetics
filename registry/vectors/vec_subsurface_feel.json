@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "subsurface feel",
+  "confidence": 0.22,
+  "definition": "Light traveling through a volume before exiting, as in skin, wax, or silicone.",
+  "family_id": "fam_material_response",
+  "high_pole": "strong subsurface",
+  "id": "vec_subsurface_feel",
+  "low_pole": "opaque surface-only",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it makes thin forms glow internally.",
+  "validation": {}
+}

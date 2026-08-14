@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "vignetting",
+  "confidence": 0.22,
+  "definition": "Peripheral darkening from the optical path or finishing.",
+  "family_id": "fam_optical_character",
+  "high_pole": "heavy corner falloff",
+  "id": "vec_vignetting",
+  "low_pole": "even illumination",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising vignetting darkens corners with the center held.",
+  "validation": {}
+}

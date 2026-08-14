@@ -1,0 +1,25 @@
+{
+  "aliases": [
+    "color temperature of neutrals"
+  ],
+  "canonical_name": "white balance",
+  "confidence": 0.22,
+  "definition": "Neutral axis of the color system.",
+  "family_id": "fam_color_response",
+  "high_pole": "warm neutrals",
+  "id": "vec_white_balance",
+  "low_pole": "cool neutrals",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "bipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Sliding white balance warms or cools neutrals without a required saturation change.",
+  "validation": {}
+}

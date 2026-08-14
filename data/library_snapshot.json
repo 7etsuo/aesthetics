@@ -1,0 +1,66 @@
+{
+  "n_vectors": 88,
+  "n_canonical_or_provisional": 3,
+  "n_observations": 55,
+  "n_studies": 5,
+  "n_aesthetics": 7,
+  "n_aliases": 36,
+  "observation_columns": [
+    "vec_black_level",
+    "vec_bokeh_softness",
+    "vec_diffusion",
+    "vec_edge_softness",
+    "vec_halation",
+    "vec_highlight_bloom",
+    "vec_highlight_color_bias",
+    "vec_highlight_rolloff",
+    "vec_key_to_fill_ratio",
+    "vec_microcontrast",
+    "vec_optical_softness",
+    "vec_shadow_density",
+    "vec_source_hardness"
+  ],
+  "redundancy_pairs": [
+    {
+      "vector_i": "vec_black_level",
+      "vector_j": "vec_shadow_density",
+      "correlation": 0.915
+    },
+    {
+      "vector_i": "vec_diffusion",
+      "vector_j": "vec_edge_softness",
+      "correlation": 0.8656
+    },
+    {
+      "vector_i": "vec_diffusion",
+      "vector_j": "vec_highlight_bloom",
+      "correlation": 0.8597
+    },
+    {
+      "vector_i": "vec_diffusion",
+      "vector_j": "vec_optical_softness",
+      "correlation": 0.9264
+    },
+    {
+      "vector_i": "vec_edge_softness",
+      "vector_j": "vec_microcontrast",
+      "correlation": -0.9839
+    },
+    {
+      "vector_i": "vec_edge_softness",
+      "vector_j": "vec_optical_softness",
+      "correlation": 0.9694
+    },
+    {
+      "vector_i": "vec_halation",
+      "vector_j": "vec_highlight_bloom",
+      "correlation": 0.8874
+    },
+    {
+      "vector_i": "vec_microcontrast",
+      "vector_j": "vec_optical_softness",
+      "correlation": -0.9512
+    }
+  ],
+  "basis_note": "Operational basis only. Columns are not assumed orthogonal. Track correlation, redundancy, and reconstruction error."
+}

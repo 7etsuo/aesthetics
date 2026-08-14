@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "midtone bias",
+    "exposure of mids"
+  ],
+  "canonical_name": "midtone placement",
+  "confidence": 0.22,
+  "definition": "Where the average midtones sit on the scale: dark, neutral, or bright.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "bright midtones",
+  "id": "vec_midtone_placement",
+  "low_pole": "dark midtones",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "bipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Sliding midtones brightens or darkens the body of the picture with less change at the extremes than a contrast change.",
+  "validation": {}
+}

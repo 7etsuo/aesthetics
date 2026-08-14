@@ -1,0 +1,14 @@
+{
+  "date": "2026-08-13",
+  "human_rating": null,
+  "id": "recon_obs_0054",
+  "method": "weighted_prompt_from_W",
+  "notes": "Linear reconstruction from optical softness, shadow density, and mild halation. Softness overshot into defocus. Warm skylight orbs appeared.",
+  "observation_id": "obs_0054",
+  "reconstruction_score": 0.5,
+  "residual_vectors": [
+    "vec_highlight_bloom",
+    "vec_optical_softness"
+  ],
+  "target_aesthetic_id": "aes_soft_halated_shadow"
+}

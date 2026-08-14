@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "shutter-angle feel",
+  "confidence": 0.22,
+  "definition": "Motion-blur length associated with shutter opening.",
+  "family_id": "fam_temporal_behavior",
+  "high_pole": "long smeared shutter",
+  "id": "vec_shutter_angle_feel",
+  "low_pole": "crisp frozen motion",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Needs video. Stills show only residual smear.",
+  "validation": {}
+}

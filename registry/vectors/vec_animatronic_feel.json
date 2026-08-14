@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "animatronic feel",
+  "confidence": 0.22,
+  "definition": "Mechanical creature presence: seams, weight, limited articulation.",
+  "family_id": "fam_physical_production",
+  "high_pole": "strong animatronic cue",
+  "id": "vec_animatronic_feel",
+  "low_pole": "no animatronic cue",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Distinct from a digital creature or a simple puppet.",
+  "validation": {}
+}

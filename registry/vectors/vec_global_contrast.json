@@ -1,0 +1,29 @@
+{
+  "aliases": [
+    "overall contrast"
+  ],
+  "canonical_name": "global contrast",
+  "confidence": 0.22,
+  "definition": "Overall separation between lights and darks across the frame.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "hard high contrast",
+  "id": "vec_global_contrast",
+  "low_pole": "flat low contrast",
+  "nearby_ids": [
+    "vec_local_contrast",
+    "vec_microcontrast",
+    "vec_shadow_density"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising global contrast pushes lights and darks apart together.",
+  "validation": {}
+}

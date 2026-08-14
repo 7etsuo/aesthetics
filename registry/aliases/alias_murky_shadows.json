@@ -1,0 +1,8 @@
+{
+  "confidence": 0.9,
+  "id": "alias_murky_shadows",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "murky shadows",
+  "target_id": "vec_shadow_density"
+}

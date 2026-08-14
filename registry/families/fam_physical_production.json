@@ -1,0 +1,15 @@
+{
+  "definition": "What was physically built or performed in front of the camera.",
+  "id": "fam_physical_production",
+  "name": "physical production method",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_animatronic_feel",
+    "vec_matte_painting_feel",
+    "vec_miniature_set_feel",
+    "vec_optical_composite_feel",
+    "vec_practical_fog_feel",
+    "vec_puppetry_feel"
+  ]
+}

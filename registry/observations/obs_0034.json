@@ -1,0 +1,106 @@
+{
+  "anchor_id": "anchor_character",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-13",
+  "id": "obs_0034",
+  "image_path": "artifacts/studies/study_shadow_density_001/anchor_character_medium.jpg",
+  "intended_level": "medium",
+  "intended_vector_id": "vec_shadow_density",
+  "model": "grok-imagine",
+  "notes": "Intended shadow density medium.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only shadow density. Set shadow density to: naturalistic shadow density. Do not move the key light, do not change hue, do not add haze, and do not change optical sharpness.",
+  "scores": [
+    {
+      "confidence": 0.8,
+      "method": "agent_visual",
+      "score": 0.42,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.62,
+      "method": "agent_visual",
+      "score": 0.39,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.41,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.48,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.55,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.05,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.06,
+      "vector_id": "vec_highlight_bloom"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_bokeh_softness"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.32,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Do not move the key light, do not change hue, do not add haze, and do not change optical sharpness."
+    ],
+    "job_id": "job_study_shadow_density_001_character_medium",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_character.jpg",
+  "source_type": "generated",
+  "study_id": "study_shadow_density_001",
+  "unintended_changes": []
+}

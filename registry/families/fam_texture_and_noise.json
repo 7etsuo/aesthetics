@@ -1,0 +1,14 @@
+{
+  "definition": "Texture laid into the image: grain, noise, compression, analog video texture.",
+  "id": "fam_texture_and_noise",
+  "name": "texture and noise",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_analog_video_texture",
+    "vec_compression_texture",
+    "vec_grain_structure",
+    "vec_noise_character",
+    "vec_texture_uniformity"
+  ]
+}

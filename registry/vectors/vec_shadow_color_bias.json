@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "shadow color",
+    "split tone shadows"
+  ],
+  "canonical_name": "shadow color bias",
+  "confidence": 0.22,
+  "definition": "Hue and chroma lean that appears primarily in shadows.",
+  "family_id": "fam_color_response",
+  "high_pole": "strongly tinted shadows",
+  "id": "vec_shadow_color_bias",
+  "low_pole": "neutral shadows",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Shadow color can move while highlights stay nearer to neutral.",
+  "validation": {}
+}

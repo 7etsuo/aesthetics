@@ -1,0 +1,32 @@
+{
+  "aliases": [
+    "hue separation",
+    "color crosstalk"
+  ],
+  "canonical_name": "color separation",
+  "confidence": 0.22,
+  "definition": "How distinctly neighboring hues stay apart versus blending together.",
+  "family_id": "fam_color_response",
+  "high_pole": "cleanly separated hues",
+  "id": "vec_color_separation",
+  "low_pole": "blended, cross-talking color",
+  "nearby_ids": [
+    "vec_chroma_density",
+    "vec_channel_crosstalk",
+    "vec_palette_compression"
+  ],
+  "not_the_same_as": {
+    "vec_chroma_density": "Density is thickness. Separation is whether hues stay distinct."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Lowering separation blends adjacent hues; raising it keeps them cleanly distinct.",
+  "validation": {}
+}

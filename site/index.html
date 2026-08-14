@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Library · visual timbre lab</title>
+<link rel="stylesheet" href="assets/app.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=Literata:opsz,wght@7..72,460;7..72,650&display=swap" rel="stylesheet">
+<body>
+<div class="shell">
+<nav>
+  <div class="mark">Image-formation atlas</div>
+  <h1>Visual timbre lab</h1>
+  <a href="index.html" aria-current='page'>Overview</a>
+<a href="vectors.html">Vectors</a>
+<a href="families.html">Families</a>
+<a href="aesthetics.html">Aesthetics</a>
+<a href="aliases.html">Aliases</a>
+<a href="studies.html">Studies</a>
+<a href="matrices.html">Matrices</a>
+<a href="questions.html">Questions</a>
+</nav>
+<main>
+  <div class="mtf" aria-hidden="true"><i style="width:3px"></i><i style="width:5px"></i><i style="width:8px"></i><i style="width:12px"></i><i style="width:18px"></i><i style="width:26px"></i><i style="width:36px"></i><i style="width:48px"></i><i style="width:28px"></i><i style="width:16px"></i><i style="width:10px"></i><i style="width:6px"></i><i style="width:4px"></i></div>
+  <form class="search" role="search" data-prefix="">
+    <input id="q" type="search" placeholder="Search vectors, aliases, aesthetics…" autocomplete="off">
+  </form>
+  <div class="hits" id="hits"></div>
+  
+<h1 class="page">Smallest controllable visual properties</h1>
+<p class="lede">
+A navigable library of visual basis vectors: dimensions that can be isolated,
+tested with Grok Imagine, named, and recombined. Phrases such as cinematic,
+vintage, analog, or 1980s fantasy are not atoms. They are composites or vague labels.
+</p>
+<div class="meta">
+  <span class="chip count">88 vectors</span>
+  <span class="chip count">55 observations</span>
+  <span class="chip count">5 studies</span>
+  <span class="chip count">7 aesthetics</span>
+</div>
+<div class="warning">
+  Operational basis only. Correlation, redundancy, dependence, and reconstruction error are tracked.
+  A vector is canonical only after controlled tests across unrelated subjects.
+</div>
+<div class="grid-2" style="margin-top:1.2rem">
+  <div class="card">
+    <h3>Studied in this slice</h3>
+    <ul>
+      <li><a href="vectors/vec_halation.html">halation</a> · provisional · conf 0.49</li><li><a href="vectors/vec_optical_softness.html">optical softness</a> · provisional · conf 0.63</li><li><a href="vectors/vec_shadow_density.html">shadow density</a> · provisional · conf 0.58</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Agent entry points</h3>
+    <p>Use <code>vslib map "old-tv softness"</code>, <code>vslib profile aes_80s_fantasy_tv</code>,
+    <code>vslib reconstruct aes_soft_halated_shadow</code>, <code>vslib next</code>.</p>
+  </div>
+</div>
+
+  <footer>Canonical records live in registry/. Pages are generated. Basis is operational, not orthogonal.</footer>
+</main>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

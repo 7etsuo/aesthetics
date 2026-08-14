@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "miniature-set feel",
+  "confidence": 0.22,
+  "definition": "Scale cues of a crafted miniature: forced texture, depth, and lighting scale.",
+  "family_id": "fam_physical_production",
+  "high_pole": "clear miniature scale",
+  "id": "vec_miniature_set_feel",
+  "low_pole": "full-scale or CG space",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Should look small-scale and built, not like a full-size location or a CG set.",
+  "validation": {}
+}

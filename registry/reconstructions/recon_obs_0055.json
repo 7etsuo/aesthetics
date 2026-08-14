@@ -1,0 +1,13 @@
+{
+  "date": "2026-08-13",
+  "human_rating": null,
+  "id": "recon_obs_0055",
+  "method": "weighted_prompt_from_W",
+  "notes": "Linear reconstruction from optical softness, shadow density, and mild halation. Combined darkening and melt. Residual bloom risk from the isolated high poles.",
+  "observation_id": "obs_0055",
+  "reconstruction_score": 0.54,
+  "residual_vectors": [
+    "vec_highlight_bloom"
+  ],
+  "target_aesthetic_id": "aes_soft_halated_shadow"
+}

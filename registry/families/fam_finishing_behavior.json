@@ -1,0 +1,14 @@
+{
+  "definition": "Final grade, sharpening, bloom, cleanup, and intentional degradation.",
+  "id": "fam_finishing_behavior",
+  "name": "finishing behavior",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_cleanup_level",
+    "vec_final_bloom",
+    "vec_print_density_bias",
+    "vec_sharpening_intensity",
+    "vec_stylized_degradation"
+  ]
+}

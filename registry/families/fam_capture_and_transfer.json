@@ -1,0 +1,15 @@
+{
+  "definition": "Recording and reproduction path. Many items here are systems, not atomic vectors.",
+  "id": "fam_capture_and_transfer",
+  "name": "capture and transfer",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_crt_bloom_feel",
+    "vec_optical_print_softness",
+    "vec_photochemical_feel",
+    "vec_release_print_density",
+    "vec_telecine_softness",
+    "vec_vhs_bandwidth_loss"
+  ]
+}

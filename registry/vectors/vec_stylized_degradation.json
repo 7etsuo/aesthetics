@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "stylized degradation",
+  "confidence": 0.22,
+  "definition": "Intentional damage used as style: scratches, dirt, wear.",
+  "family_id": "fam_finishing_behavior",
+  "high_pole": "heavily degraded",
+  "id": "vec_stylized_degradation",
+  "low_pole": "clean",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "Likely composite. Keep only if a single axis proves useful.",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "This is a family of effects and may not stay atomic.",
+  "validation": {}
+}

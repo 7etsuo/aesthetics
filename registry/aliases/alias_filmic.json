@@ -1,0 +1,8 @@
+{
+  "confidence": 0.8,
+  "id": "alias_filmic",
+  "mapping_type": "vague",
+  "notes": "",
+  "raw_phrase": "filmic",
+  "target_id": "aes_film_emulation"
+}

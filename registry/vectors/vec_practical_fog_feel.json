@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "practical fog feel",
+  "confidence": 0.22,
+  "definition": "Physical atmosphere with volume and catchlights, not a 2D haze overlay.",
+  "family_id": "fam_physical_production",
+  "high_pole": "dense practical fog",
+  "id": "vec_practical_fog_feel",
+  "low_pole": "no practical fog",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Fog should occupy space and wrap lights.",
+  "validation": {}
+}

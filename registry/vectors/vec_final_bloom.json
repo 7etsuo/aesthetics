@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "final bloom",
+  "confidence": 0.22,
+  "definition": "A finishing glow applied in grade, not claimed as film-base halation.",
+  "family_id": "fam_finishing_behavior",
+  "high_pole": "heavy finishing bloom",
+  "id": "vec_final_bloom",
+  "low_pole": "no finishing bloom",
+  "nearby_ids": [
+    "vec_highlight_bloom",
+    "vec_halation"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Should look like a filter layer.",
+  "validation": {}
+}

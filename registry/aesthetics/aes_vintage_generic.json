@@ -1,0 +1,20 @@
+{
+  "aliases": [
+    "vintage",
+    "retro",
+    "old look"
+  ],
+  "canonical_name": "vintage (unresolved)",
+  "confidence": 0.12,
+  "definition": "Vague period label. Could mean softness, palette, grain, damage, or transfer.",
+  "id": "aes_vintage_generic",
+  "interaction_notes": [],
+  "nearest_ids": [],
+  "notes": "",
+  "observation_ids": [],
+  "reconstruction_notes": "",
+  "revision": 1,
+  "status": "vague",
+  "study_ids": [],
+  "weights": []
+}

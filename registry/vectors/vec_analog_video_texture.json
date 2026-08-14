@@ -1,0 +1,31 @@
+{
+  "aliases": [
+    "VHS texture",
+    "tape texture",
+    "tube texture"
+  ],
+  "canonical_name": "analog video texture",
+  "confidence": 0.22,
+  "definition": "The specific instability of analog video: chroma crawl, luma grain, mild banding, scan-like texture.",
+  "family_id": "fam_texture_and_noise",
+  "high_pole": "heavy analog video texture",
+  "id": "vec_analog_video_texture",
+  "low_pole": "clean digital field",
+  "nearby_ids": [
+    "vec_vhs_bandwidth_loss",
+    "vec_crt_bloom_feel",
+    "vec_grain_structure"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it should read as tape or tube texture, not as film grain.",
+  "validation": {}
+}

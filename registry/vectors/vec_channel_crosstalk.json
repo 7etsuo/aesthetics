@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "channel crosstalk",
+  "confidence": 0.22,
+  "definition": "Leakage between color channels that muddies primaries.",
+  "family_id": "fam_color_response",
+  "high_pole": "heavy crosstalk",
+  "id": "vec_channel_crosstalk",
+  "low_pole": "clean channels",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing crosstalk contaminates reds with green or blue, and so on.",
+  "validation": {}
+}

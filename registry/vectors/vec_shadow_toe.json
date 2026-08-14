@@ -1,0 +1,30 @@
+{
+  "aliases": [
+    "shadow roll-off",
+    "toe"
+  ],
+  "canonical_name": "shadow toe",
+  "confidence": 0.22,
+  "definition": "Shape of the descent into black: gradual toe versus abrupt cutoff.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "long gradual toe",
+  "id": "vec_shadow_toe",
+  "low_pole": "abrupt cutoff into black",
+  "nearby_ids": [
+    "vec_shadow_density",
+    "vec_black_level",
+    "vec_highlight_rolloff"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Changing only the toe alters how quickly values fall into black without relocating the midtones as a global contrast change would.",
+  "validation": {}
+}

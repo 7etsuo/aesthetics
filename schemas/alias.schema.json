@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aesthetics.local/schemas/alias.schema.json",
+  "title": "Alias",
+  "type": "object",
+  "required": ["id", "raw_phrase", "target_id", "mapping_type", "confidence"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^alias_[a-z][a-z0-9_]*$" },
+    "raw_phrase": { "type": "string" },
+    "target_id": { "type": "string" },
+    "mapping_type": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "notes": { "type": "string" }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "evidence_study_ids": [],
+  "id": "int_halation__highlight_rolloff",
+  "note": "Halation is more visible when highlight values survive a soft shoulder.",
+  "status": "suspected",
+  "strength": 0.62,
+  "vector_i": "vec_halation",
+  "vector_j": "vec_highlight_rolloff"
+}

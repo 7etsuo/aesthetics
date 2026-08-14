@@ -1,0 +1,25 @@
+{
+  "aliases": [
+    "surface roughness"
+  ],
+  "canonical_name": "roughness",
+  "confidence": 0.22,
+  "definition": "Micro-surface irregularity that spreads speculars.",
+  "family_id": "fam_material_response",
+  "high_pole": "very rough",
+  "id": "vec_roughness",
+  "low_pole": "optically smooth",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising roughness breaks tight speculars into broader sheen.",
+  "validation": {}
+}

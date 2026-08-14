@@ -1,0 +1,14 @@
+{
+  "definition": "Video-only dimensions: cadence, shutter, smear, weave, flicker.",
+  "id": "fam_temporal_behavior",
+  "name": "temporal behavior",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_flicker",
+    "vec_frame_cadence_feel",
+    "vec_gate_weave",
+    "vec_shutter_angle_feel",
+    "vec_temporal_smear"
+  ]
+}

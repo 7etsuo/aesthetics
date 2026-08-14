@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aesthetics.local/schemas/aesthetic.schema.json",
+  "title": "CompositeAesthetic",
+  "type": "object",
+  "required": ["id", "canonical_name", "status", "definition", "weights"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^aes_[a-z][a-z0-9_]*$" },
+    "canonical_name": { "type": "string" },
+    "status": { "type": "string" },
+    "definition": { "type": "string" },
+    "weights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["vector_id", "weight"],
+        "properties": {
+          "vector_id": { "type": "string", "pattern": "^vec_[a-z][a-z0-9_]*$" },
+          "weight": { "type": "number" },
+          "source": { "type": "string" },
+          "confidence": { "type": "number" },
+          "hypothesized": { "type": "boolean" }
+        }
+      }
+    },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "interaction_notes": { "type": "array", "items": { "type": "string" } },
+    "reconstruction_notes": { "type": "string" },
+    "observation_ids": { "type": "array", "items": { "type": "string" } },
+    "study_ids": { "type": "array", "items": { "type": "string" } },
+    "confidence": { "type": "number" },
+    "nearest_ids": { "type": "array", "items": { "type": "string" } },
+    "revision": { "type": "integer" },
+    "notes": { "type": "string" }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "confidence": 0.86,
+  "id": "alias_soft_shoulder",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "soft shoulder",
+  "target_id": "vec_highlight_rolloff"
+}

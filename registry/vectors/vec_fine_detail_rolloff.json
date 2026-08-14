@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "mtf roll-off",
+    "high-frequency roll-off"
+  ],
+  "canonical_name": "fine-detail roll-off",
+  "confidence": 0.22,
+  "definition": "How quickly high spatial frequencies die, the MTF-like slope.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "early fine-detail death",
+  "id": "vec_fine_detail_rolloff",
+  "low_pole": "extended fine detail",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A steeper roll-off keeps large forms and loses only the finest detail.",
+  "validation": {}
+}

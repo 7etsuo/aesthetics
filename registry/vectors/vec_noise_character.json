@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "noise character",
+  "confidence": 0.22,
+  "definition": "Electronic or digital noise personality, distinct from dye-cloud grain.",
+  "family_id": "fam_texture_and_noise",
+  "high_pole": "heavy electronic noise",
+  "id": "vec_noise_character",
+  "low_pole": "clean",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Noise can be luminance, chroma, or fixed-pattern without looking like film grain.",
+  "validation": {}
+}

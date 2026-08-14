@@ -1,0 +1,8 @@
+{
+  "confidence": 0.88,
+  "id": "alias_vhs",
+  "mapping_type": "system",
+  "notes": "A capture/transfer system, not a vector.",
+  "raw_phrase": "VHS",
+  "target_id": "aes_vhs_look"
+}

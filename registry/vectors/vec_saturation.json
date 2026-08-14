@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "saturation",
+  "confidence": 0.22,
+  "definition": "Global chroma gain.",
+  "family_id": "fam_color_response",
+  "high_pole": "highly saturated",
+  "id": "vec_saturation",
+  "low_pole": "desaturated",
+  "nearby_ids": [
+    "vec_chroma_density",
+    "vec_color_separation"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising saturation intensifies hues without a required change in hue angles.",
+  "validation": {}
+}

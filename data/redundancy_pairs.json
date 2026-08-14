@@ -1,0 +1,42 @@
+[
+  {
+    "vector_i": "vec_black_level",
+    "vector_j": "vec_shadow_density",
+    "correlation": 0.915
+  },
+  {
+    "vector_i": "vec_diffusion",
+    "vector_j": "vec_edge_softness",
+    "correlation": 0.8656
+  },
+  {
+    "vector_i": "vec_diffusion",
+    "vector_j": "vec_highlight_bloom",
+    "correlation": 0.8597
+  },
+  {
+    "vector_i": "vec_diffusion",
+    "vector_j": "vec_optical_softness",
+    "correlation": 0.9264
+  },
+  {
+    "vector_i": "vec_edge_softness",
+    "vector_j": "vec_microcontrast",
+    "correlation": -0.9839
+  },
+  {
+    "vector_i": "vec_edge_softness",
+    "vector_j": "vec_optical_softness",
+    "correlation": 0.9694
+  },
+  {
+    "vector_i": "vec_halation",
+    "vector_j": "vec_highlight_bloom",
+    "correlation": 0.8874
+  },
+  {
+    "vector_i": "vec_microcontrast",
+    "vector_j": "vec_optical_softness",
+    "correlation": -0.9512
+  }
+]

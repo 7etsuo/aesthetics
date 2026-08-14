@@ -1,0 +1,18 @@
+{
+  "aliases": [
+    "analog"
+  ],
+  "canonical_name": "analog (unresolved)",
+  "confidence": 0.12,
+  "definition": "Vague medium label. Could mean film, tape, print, or all three.",
+  "id": "aes_analog_generic",
+  "interaction_notes": [],
+  "nearest_ids": [],
+  "notes": "",
+  "observation_ids": [],
+  "reconstruction_notes": "",
+  "revision": 1,
+  "status": "vague",
+  "study_ids": [],
+  "weights": []
+}

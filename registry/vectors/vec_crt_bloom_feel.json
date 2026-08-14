@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "canonical_name": "CRT bloom feel",
+  "confidence": 0.22,
+  "definition": "Phosphor glow, scan bloom, and slight persistence associated with CRT display.",
+  "family_id": "fam_capture_and_transfer",
+  "high_pole": "heavy CRT bloom",
+  "id": "vec_crt_bloom_feel",
+  "low_pole": "no phosphor bloom",
+  "nearby_ids": [
+    "vec_halation",
+    "vec_highlight_bloom",
+    "vec_analog_video_texture"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Should bloom on a scan-like field, not like film halation.",
+  "validation": {}
+}

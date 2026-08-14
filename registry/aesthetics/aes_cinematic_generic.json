@@ -1,0 +1,20 @@
+{
+  "aliases": [
+    "cinematic",
+    "moody",
+    "filmic"
+  ],
+  "canonical_name": "cinematic (unresolved)",
+  "confidence": 0.15,
+  "definition": "A vague cultural label. Usually some mix of lighting ratio, shallow space, contrast, and a finishing grade. Rejected as an atom.",
+  "id": "aes_cinematic_generic",
+  "interaction_notes": [],
+  "nearest_ids": [],
+  "notes": "",
+  "observation_ids": [],
+  "reconstruction_notes": "Refuse to treat as atomic. Ask which vectors are intended.",
+  "revision": 1,
+  "status": "vague",
+  "study_ids": [],
+  "weights": []
+}

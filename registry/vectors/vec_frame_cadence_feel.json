@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "frame cadence feel",
+  "confidence": 0.22,
+  "definition": "The stepping rhythm of motion from frame rate and pulldown.",
+  "family_id": "fam_temporal_behavior",
+  "high_pole": "stepped cinematic cadence",
+  "id": "vec_frame_cadence_feel",
+  "low_pole": "smooth high-rate cadence",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Still frames can hint at 24 vs 30 vs 60 origins only weakly.",
+  "validation": {}
+}

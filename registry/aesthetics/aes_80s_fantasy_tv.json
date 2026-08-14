@@ -1,0 +1,101 @@
+{
+  "aliases": [
+    "1980s fantasy",
+    "80s fantasy TV look",
+    "80s fantasy"
+  ],
+  "canonical_name": "1980s fantasy television",
+  "confidence": 0.34,
+  "definition": "A named production look, not an atom. Hypothesized mixture of optical softness, telecine transfer, dense shadows, restrained chroma separation, practical materials, and theatrical lighting. Several weights remain untested.",
+  "id": "aes_80s_fantasy_tv",
+  "interaction_notes": [
+    "Telecine softness plus low microcontrast may read more analog than either alone.",
+    "Practical materials become more legible when optical softness is moderate, not extreme."
+  ],
+  "nearest_ids": [],
+  "notes": "Hypothesis only. Do not treat as validated.",
+  "observation_ids": [],
+  "reconstruction_notes": "Do not prompt 80s fantasy as a lump. Translate dominant hypothesized weights into tested phrases where they exist, and mark untested weights as hypotheses.",
+  "revision": 1,
+  "status": "composite",
+  "study_ids": [],
+  "weights": [
+    {
+      "confidence": 0.55,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_optical_softness",
+      "weight": 0.72
+    },
+    {
+      "confidence": 0.5,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_shadow_density",
+      "weight": 0.63
+    },
+    {
+      "confidence": 0.48,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_halation",
+      "weight": 0.41
+    },
+    {
+      "confidence": 0.36,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_telecine_softness",
+      "weight": 0.79
+    },
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_chroma_density",
+      "weight": 0.4
+    },
+    {
+      "confidence": 0.28,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_color_separation",
+      "weight": 0.35
+    },
+    {
+      "confidence": 0.34,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_practical_material_feel",
+      "weight": 0.68
+    },
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_miniature_set_feel",
+      "weight": 0.46
+    },
+    {
+      "confidence": 0.32,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_theatrical_blocking",
+      "weight": 0.52
+    },
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_key_to_fill_ratio",
+      "weight": 0.58
+    },
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_microcontrast",
+      "weight": 0.28
+    }
+  ]
+}

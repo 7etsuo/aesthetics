@@ -1,0 +1,36 @@
+{
+  "aliases": [
+    "old-tv softness",
+    "film-to-tape softness",
+    "telecine smear"
+  ],
+  "canonical_name": "telecine softness",
+  "confidence": 0.22,
+  "definition": "A flat, slightly smeared softness associated with film-to-video transfer, often with reduced fine detail and mild chroma smear.",
+  "family_id": "fam_capture_and_transfer",
+  "high_pole": "heavy telecine smear",
+  "id": "vec_telecine_softness",
+  "low_pole": "no transfer smear",
+  "nearby_ids": [
+    "vec_optical_softness",
+    "vec_vhs_bandwidth_loss",
+    "vec_fine_detail_rolloff",
+    "vec_analog_video_texture"
+  ],
+  "not_the_same_as": {
+    "vec_optical_softness": "Optical softness is lens-like. Telecine softness is flatter and more electronic."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [
+    "Needs a controlled study against optical softness and VHS bandwidth loss."
+  ],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing telecine softness should look like transfer bandwidth loss, not like a portrait diffusion filter.",
+  "validation": {}
+}

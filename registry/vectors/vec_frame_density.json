@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "frame density",
+  "confidence": 0.22,
+  "definition": "How packed the frame is with information.",
+  "family_id": "fam_compositional_grammar",
+  "high_pole": "dense",
+  "id": "vec_frame_density",
+  "low_pole": "sparse",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Dense frames fill; sparse frames breathe.",
+  "validation": {}
+}

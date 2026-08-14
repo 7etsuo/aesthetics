@@ -1,0 +1,8 @@
+{
+  "confidence": 0.64,
+  "id": "alias_glow",
+  "mapping_type": "near_alias",
+  "notes": "Glow is overloaded. Prefer bloom or halation.",
+  "raw_phrase": "glow",
+  "target_id": "vec_highlight_bloom"
+}

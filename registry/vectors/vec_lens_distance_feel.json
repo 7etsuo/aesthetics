@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "lens distance feel",
+  "confidence": 0.22,
+  "definition": "Apparent camera-to-subject distance, independent of crop.",
+  "family_id": "fam_compositional_grammar",
+  "high_pole": "close",
+  "id": "vec_lens_distance_feel",
+  "low_pole": "distant",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "bipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Closer-feel images enlarge perspective; farther-feel images flatten it.",
+  "validation": {}
+}

@@ -1,0 +1,23 @@
+{
+  "definition": "How color is mapped independent of object identity: chroma, hue bias, separation, palette.",
+  "id": "fam_color_response",
+  "name": "color response",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_channel_crosstalk",
+    "vec_chroma_density",
+    "vec_color_separation",
+    "vec_gamut_extent",
+    "vec_green_magenta_tint",
+    "vec_highlight_color_bias",
+    "vec_hue_bias",
+    "vec_midtone_color_bias",
+    "vec_palette_compression",
+    "vec_saturation",
+    "vec_shadow_color_bias",
+    "vec_skin_tone_response",
+    "vec_temperature",
+    "vec_white_balance"
+  ]
+}

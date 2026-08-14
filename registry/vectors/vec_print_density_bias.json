@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "print-density bias",
+  "confidence": 0.22,
+  "definition": "A finishing lean toward thicker or thinner print.",
+  "family_id": "fam_finishing_behavior",
+  "high_pole": "thick",
+  "id": "vec_print_density_bias",
+  "low_pole": "thin",
+  "nearby_ids": [
+    "vec_release_print_density",
+    "vec_chroma_density"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Can be applied after capture as a grade.",
+  "validation": {}
+}

@@ -1,0 +1,9 @@
+{
+  "aspect_ratio": "1:1",
+  "id": "anchor_character",
+  "image_path": "artifacts/anchors/anchor_character.jpg",
+  "kind": "character",
+  "lock_prompt": "A small standing fox creature made of painted wood and stitched fabric, large amber glass eyes, a tiny brown corduroy vest, visible seams and brush marks in the paint. Standing on a gray studio sweep. Even soft studio light from camera left. Clean contemporary character reference photograph: natural color, moderate contrast, sharp focus, no film effects, no glow, no grain, no extra stylization beyond the subject's own materials. Full body, 50mm-equivalent, camera at the creature's eye level, square 1:1 frame.",
+  "name": "stylized character or creature",
+  "notes": ""
+}

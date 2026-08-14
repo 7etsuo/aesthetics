@@ -1,0 +1,17 @@
+{
+  "definition": "How surfaces respond: roughness, gloss, subsurface, handmade irregularity.",
+  "id": "fam_material_response",
+  "name": "material response",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_fabric_heaviness",
+    "vec_gloss_response",
+    "vec_hand_painted_surface",
+    "vec_latex_foam_feel",
+    "vec_practical_material_feel",
+    "vec_roughness",
+    "vec_specular_intensity",
+    "vec_subsurface_feel"
+  ]
+}

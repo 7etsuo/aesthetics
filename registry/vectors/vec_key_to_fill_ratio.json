@@ -1,0 +1,31 @@
+{
+  "aliases": [
+    "lighting ratio",
+    "contrasty lighting"
+  ],
+  "canonical_name": "key-to-fill ratio",
+  "confidence": 0.22,
+  "definition": "The lighting contrast between key and fill, a scene-light property.",
+  "family_id": "fam_lighting_response",
+  "high_pole": "hard unfilled key",
+  "id": "vec_key_to_fill_ratio",
+  "low_pole": "flat fill",
+  "nearby_ids": [
+    "vec_shadow_density",
+    "vec_source_hardness"
+  ],
+  "not_the_same_as": {
+    "vec_shadow_density": "Ratio is how the scene is lit. Density can be a grade on the same lighting."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising the ratio deepens lighting shadows without a required tone-curve change.",
+  "validation": {}
+}

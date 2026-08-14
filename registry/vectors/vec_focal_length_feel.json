@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "focal-length feel",
+  "confidence": 0.22,
+  "definition": "Perspective and spatial compression associated with lens length, not just crop.",
+  "family_id": "fam_optical_character",
+  "high_pole": "long compressed space",
+  "id": "vec_focal_length_feel",
+  "low_pole": "wide expanded space",
+  "nearby_ids": [
+    "vec_lens_distance_feel",
+    "vec_subject_scale"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "bipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A longer-feel image compresses planes; a wider-feel image expands them.",
+  "validation": {}
+}

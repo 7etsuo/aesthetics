@@ -1,0 +1,60 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_optical_softness",
+  "date": "2026-08-13",
+  "decision": "provisional",
+  "decision_reason": "Low versus high is visible on all five anchors. The change is transferable. It is not cleanly isolated: high settings often add bloom, fake bokeh, glowing speculars, or a tilt-shift focus pattern. Medium is a weak step. Keep as provisional, not canonical.",
+  "entanglement_notes": [
+    "High optical softness co-produces highlight bloom and, on the teapot, circular orbs.",
+    "Character high turns glass eyes into lamps (halation leak).",
+    "Landscape high behaves like shallow DOF more than like a uniform optical melt.",
+    "Microcontrast falls whenever softness rises. Inverse test still needed."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_optical_softness_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Discrimination study: optical softness vs edge softness vs diffusion vs bokeh softness.",
+    "Retry high softness with an explicit ban on bokeh discs and glowing eyes.",
+    "Add a mid-high step (0.65) because medium is too close to the anchor."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0006",
+    "obs_0007",
+    "obs_0008",
+    "obs_0009",
+    "obs_0010",
+    "obs_0011",
+    "obs_0012",
+    "obs_0013",
+    "obs_0014",
+    "obs_0015",
+    "obs_0016",
+    "obs_0017",
+    "obs_0018",
+    "obs_0019",
+    "obs_0020"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of optical softness"
+}

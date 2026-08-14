@@ -1,0 +1,8 @@
+{
+  "confidence": 0.9,
+  "id": "alias_lighting_ratio",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "lighting ratio",
+  "target_id": "vec_key_to_fill_ratio"
+}

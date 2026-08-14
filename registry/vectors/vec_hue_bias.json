@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "hue bias",
+  "confidence": 0.22,
+  "definition": "A systematic shift of hues in one direction.",
+  "family_id": "fam_color_response",
+  "high_pole": "strong hue lean",
+  "id": "vec_hue_bias",
+  "low_pole": "no systematic hue lean",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "A hue bias rotates or leans the palette without a required density change.",
+  "validation": {}
+}

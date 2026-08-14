@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "subject scale",
+  "confidence": 0.22,
+  "definition": "How large the subject sits in the frame.",
+  "family_id": "fam_compositional_grammar",
+  "high_pole": "large in frame",
+  "id": "vec_subject_scale",
+  "low_pole": "small in frame",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Scale can change with lens distance held only if the crop changes; treat carefully.",
+  "validation": {}
+}

@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "photochemical feel",
+  "confidence": 0.22,
+  "definition": "A cluster of dye, grain, and tone behaviors associated with film origination. Treated as a system label until decomposed.",
+  "family_id": "fam_capture_and_transfer",
+  "high_pole": "strongly photochemical",
+  "id": "vec_photochemical_feel",
+  "low_pole": "non-photochemical",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "Decompose into grain, chroma density, roll-off, halation, print density.",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "system",
+  "study_ids": [],
+  "testable_claim": "This is a system, not a single isolatable axis.",
+  "validation": {}
+}

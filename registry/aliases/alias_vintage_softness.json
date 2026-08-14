@@ -1,0 +1,8 @@
+{
+  "confidence": 0.84,
+  "id": "alias_vintage_softness",
+  "mapping_type": "alias",
+  "notes": "Common prompt phrase. Not identical to telecine softness.",
+  "raw_phrase": "vintage softness",
+  "target_id": "vec_optical_softness"
+}

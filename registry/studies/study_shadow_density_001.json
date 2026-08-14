@@ -1,0 +1,58 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_shadow_density",
+  "date": "2026-08-13",
+  "decision": "provisional",
+  "decision_reason": "Darks do get heavier across subjects. The instrument often restages lighting to do it, especially on the teapot (new hard key and cast shadow) and the portrait (fill removed). Architecture and landscape are closer to a tone-mapping change. Not yet canonical.",
+  "entanglement_notes": [
+    "Shadow density and key-to-fill ratio move together in Imagine edits.",
+    "Object high changed source hardness, not only density.",
+    "Low pole sometimes flattens lighting instead of lifting only the toe."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_shadow_density_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.",
+    "Paired study of shadow density vs key-to-fill vs black level on the same anchors."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0021",
+    "obs_0022",
+    "obs_0023",
+    "obs_0024",
+    "obs_0025",
+    "obs_0026",
+    "obs_0027",
+    "obs_0028",
+    "obs_0029",
+    "obs_0030",
+    "obs_0031",
+    "obs_0032",
+    "obs_0033",
+    "obs_0034",
+    "obs_0035"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of shadow density"
+}

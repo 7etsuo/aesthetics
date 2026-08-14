@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "rim-light character",
+  "confidence": 0.22,
+  "definition": "Strength and quality of edge light separating subject from ground.",
+  "family_id": "fam_lighting_response",
+  "high_pole": "strong rim",
+  "id": "vec_rim_light_character",
+  "low_pole": "no rim",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Can vary without changing key-to-fill on the face.",
+  "validation": {}
+}

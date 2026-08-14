@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aesthetics.local/schemas/study.schema.json",
+  "title": "ControlledStudy",
+  "type": "object",
+  "required": ["id", "title", "candidate_vector_id", "protocol", "status"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^study_[a-z][a-z0-9_]*_[0-9]{3}$" },
+    "title": { "type": "string" },
+    "candidate_vector_id": { "type": "string" },
+    "protocol": { "type": "string" },
+    "status": { "type": "string" },
+    "anchor_ids": { "type": "array", "items": { "type": "string" } },
+    "levels": { "type": "array", "items": { "type": "string" } },
+    "hold_constant": { "type": "array", "items": { "type": "string" } },
+    "observation_ids": { "type": "array", "items": { "type": "string" } },
+    "decision": { "type": "string" },
+    "decision_reason": { "type": "string" },
+    "entanglement_notes": { "type": "array", "items": { "type": "string" } },
+    "next_experiments": { "type": "array", "items": { "type": "string" } },
+    "date": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}

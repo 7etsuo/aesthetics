@@ -1,0 +1,8 @@
+{
+  "confidence": 0.95,
+  "id": "alias_vintage",
+  "mapping_type": "vague",
+  "notes": "Not atomic. Mixes softness, palette, grain, and transfer.",
+  "raw_phrase": "vintage",
+  "target_id": "aes_vintage_generic"
+}

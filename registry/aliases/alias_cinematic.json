@@ -1,0 +1,8 @@
+{
+  "confidence": 0.95,
+  "id": "alias_cinematic",
+  "mapping_type": "vague",
+  "notes": "Not atomic. Usually lighting ratio plus contrast plus shallow space plus grade.",
+  "raw_phrase": "cinematic",
+  "target_id": "aes_cinematic_generic"
+}

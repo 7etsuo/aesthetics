@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "canonical_name": "veiling glare",
+  "confidence": 0.22,
+  "definition": "A global haze from internal lens scatter that lifts blacks and lowers contrast.",
+  "family_id": "fam_optical_character",
+  "high_pole": "heavy veiling haze",
+  "id": "vec_veiling_glare",
+  "low_pole": "clean contrasty glass",
+  "nearby_ids": [
+    "vec_diffusion",
+    "vec_black_level",
+    "vec_optical_softness"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing glare should fog the whole frame, especially against bright fields.",
+  "validation": {}
+}

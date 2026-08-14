@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "texture uniformity",
+  "confidence": 0.22,
+  "definition": "How even the texture field is across the frame.",
+  "family_id": "fam_texture_and_noise",
+  "high_pole": "uneven clumped field",
+  "id": "vec_texture_uniformity",
+  "low_pole": "even field",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Low uniformity clumps or varies the texture field.",
+  "validation": {}
+}

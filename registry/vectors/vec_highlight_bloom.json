@@ -1,0 +1,30 @@
+{
+  "aliases": [
+    "glow",
+    "highlight glow"
+  ],
+  "canonical_name": "highlight bloom",
+  "confidence": 0.22,
+  "definition": "A general glow around bright regions, broader and less colored than classic halation.",
+  "family_id": "fam_optical_character",
+  "high_pole": "broad highlight glow",
+  "id": "vec_highlight_bloom",
+  "low_pole": "tight unbloomed highlights",
+  "nearby_ids": [
+    "vec_halation",
+    "vec_final_bloom",
+    "vec_optical_softness"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Bloom enlarges bright regions softly; it need not be reddish or tightly local.",
+  "validation": {}
+}

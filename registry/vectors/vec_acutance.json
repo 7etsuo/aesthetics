@@ -1,0 +1,29 @@
+{
+  "aliases": [],
+  "canonical_name": "acutance",
+  "confidence": 0.22,
+  "definition": "Apparent edge crispness, including haloed edge contrast.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "biting edge snap",
+  "id": "vec_acutance",
+  "low_pole": "dull edges",
+  "nearby_ids": [
+    "vec_edge_softness",
+    "vec_sharpening_intensity",
+    "vec_microcontrast"
+  ],
+  "not_the_same_as": {
+    "vec_edge_softness": "Softness is edge width. Acutance is edge contrast."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising acutance makes edges snap even if true resolution is unchanged.",
+  "validation": {}
+}

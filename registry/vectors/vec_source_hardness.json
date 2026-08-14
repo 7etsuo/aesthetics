@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "source hardness",
+  "confidence": 0.22,
+  "definition": "How hard or soft the key source is, visible in shadow-edge transfer.",
+  "family_id": "fam_lighting_response",
+  "high_pole": "hard point source",
+  "id": "vec_source_hardness",
+  "low_pole": "very soft source",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Harder sources make sharper shadow edges and tighter speculars.",
+  "validation": {}
+}

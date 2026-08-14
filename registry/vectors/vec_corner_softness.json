@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "corner softness",
+  "confidence": 0.22,
+  "definition": "Definition loss toward the frame corners.",
+  "family_id": "fam_optical_character",
+  "high_pole": "heavy corner melt",
+  "id": "vec_corner_softness",
+  "low_pole": "even corner sharpness",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it softens corners while the center stays nearer to sharp.",
+  "validation": {}
+}

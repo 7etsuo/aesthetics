@@ -1,0 +1,31 @@
+{
+  "aliases": [
+    "film grain",
+    "grain size"
+  ],
+  "canonical_name": "grain structure",
+  "confidence": 0.22,
+  "definition": "The size, clump, and shape of photochemical-like grain.",
+  "family_id": "fam_texture_and_noise",
+  "high_pole": "heavy clumped grain",
+  "id": "vec_grain_structure",
+  "low_pole": "no grain",
+  "nearby_ids": [
+    "vec_noise_character",
+    "vec_analog_video_texture"
+  ],
+  "not_the_same_as": {
+    "vec_analog_video_texture": "Video texture is scan-like, often chroma-noisy and less filmlike in clump."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Changing grain structure should add or alter grain without a required softness or color change.",
+  "validation": {}
+}

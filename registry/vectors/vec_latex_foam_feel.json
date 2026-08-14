@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "latex or foam feel",
+  "confidence": 0.22,
+  "definition": "The slightly rubbery, painted-foam quality of physical creature effects.",
+  "family_id": "fam_material_response",
+  "high_pole": "strong latex/foam cue",
+  "id": "vec_latex_foam_feel",
+  "low_pole": "no latex/foam cue",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it should look fabricated, not like living skin or hard CGI plastic.",
+  "validation": {}
+}

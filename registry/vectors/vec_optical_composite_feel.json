@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "optical-composite feel",
+  "confidence": 0.22,
+  "definition": "Generation-loss, matte lines, and dupe contrast of an optical composite.",
+  "family_id": "fam_physical_production",
+  "high_pole": "optical dupe composite",
+  "id": "vec_optical_composite_feel",
+  "low_pole": "clean digital composite",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Should look printed-together, not like a clean digital key.",
+  "validation": {}
+}

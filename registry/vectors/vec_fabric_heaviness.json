@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "fabric heaviness",
+  "confidence": 0.22,
+  "definition": "How heavy, coarse, or physically present cloth reads.",
+  "family_id": "fam_material_response",
+  "high_pole": "heavy physical cloth",
+  "id": "vec_fabric_heaviness",
+  "low_pole": "thin digital cloth",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Heavier fabric hangs and catches light as real cloth, not as a shader sheet.",
+  "validation": {}
+}

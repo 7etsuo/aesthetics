@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "matte-painting feel",
+  "confidence": 0.22,
+  "definition": "Painted or composited backdrop with a graphic depth plane.",
+  "family_id": "fam_physical_production",
+  "high_pole": "painted plane",
+  "id": "vec_matte_painting_feel",
+  "low_pole": "photographed space",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Backgrounds read as painted planes rather than photographed space.",
+  "validation": {}
+}

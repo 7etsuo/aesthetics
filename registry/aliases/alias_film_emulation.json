@@ -1,0 +1,8 @@
+{
+  "confidence": 0.86,
+  "id": "alias_film_emulation",
+  "mapping_type": "composite",
+  "notes": "Usually only the finishing layer. Incomplete as a look.",
+  "raw_phrase": "film emulation",
+  "target_id": "aes_film_emulation"
+}

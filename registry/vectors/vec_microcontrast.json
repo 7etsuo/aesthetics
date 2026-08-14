@@ -1,0 +1,34 @@
+{
+  "aliases": [
+    "surface bite",
+    "micro-contrast"
+  ],
+  "canonical_name": "microcontrast",
+  "confidence": 0.22,
+  "definition": "Tiny-scale contrast that makes pores, fibers, and surface grit snap.",
+  "family_id": "fam_tonal_response",
+  "high_pole": "biting microcontrast",
+  "id": "vec_microcontrast",
+  "low_pole": "dead, soapy microcontrast",
+  "nearby_ids": [
+    "vec_clarity",
+    "vec_acutance",
+    "vec_texture_resolution",
+    "vec_optical_softness"
+  ],
+  "not_the_same_as": {
+    "vec_acutance": "Acutance is edge crispness. Microcontrast is fine tonal bite inside surfaces.",
+    "vec_optical_softness": "Optical softness can reduce microcontrast, but it also spreads highlights and defocuses."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising microcontrast increases bite in fine texture without a required change in edge width.",
+  "validation": {}
+}

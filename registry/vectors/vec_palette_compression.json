@@ -1,0 +1,26 @@
+{
+  "aliases": [
+    "limited palette",
+    "dye set"
+  ],
+  "canonical_name": "palette compression",
+  "confidence": 0.22,
+  "definition": "Reduction of the working palette toward fewer dye-like hues.",
+  "family_id": "fam_color_response",
+  "high_pole": "narrow dye palette",
+  "id": "vec_palette_compression",
+  "low_pole": "full varied palette",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Compressing the palette collapses variety toward a smaller set of colors.",
+  "validation": {}
+}

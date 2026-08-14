@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "chromatic aberration",
+  "confidence": 0.22,
+  "definition": "Color fringing at high-contrast edges.",
+  "family_id": "fam_optical_character",
+  "high_pole": "strong color fringe",
+  "id": "vec_chromatic_aberration",
+  "low_pole": "no fringe",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing it adds opposing color edges without a required softness change.",
+  "validation": {}
+}

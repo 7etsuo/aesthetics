@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "midtone color bias",
+  "confidence": 0.22,
+  "definition": "Hue lean concentrated in midtones, including skin.",
+  "family_id": "fam_color_response",
+  "high_pole": "tinted mids",
+  "id": "vec_midtone_color_bias",
+  "low_pole": "neutral mids",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Midtone color can move with ends held nearer to constant.",
+  "validation": {}
+}

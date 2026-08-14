@@ -1,0 +1,8 @@
+{
+  "confidence": 0.88,
+  "id": "alias_lens_softness",
+  "mapping_type": "alias",
+  "notes": "",
+  "raw_phrase": "lens softness",
+  "target_id": "vec_optical_softness"
+}

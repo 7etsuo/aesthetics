@@ -1,0 +1,32 @@
+{
+  "aliases": [
+    "soft edges",
+    "edge melt"
+  ],
+  "canonical_name": "edge softness",
+  "confidence": 0.22,
+  "definition": "Width and melt of edges, independent of highlight glow.",
+  "family_id": "fam_spatial_definition",
+  "high_pole": "melted wide edges",
+  "id": "vec_edge_softness",
+  "low_pole": "hard razor edges",
+  "nearby_ids": [
+    "vec_optical_softness",
+    "vec_fine_detail_rolloff",
+    "vec_acutance"
+  ],
+  "not_the_same_as": {
+    "vec_optical_softness": "Optical softness includes highlight spread and diffusion, not only edge width."
+  },
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing edge softness thickens and dissolves contours without requiring halation.",
+  "validation": {}
+}

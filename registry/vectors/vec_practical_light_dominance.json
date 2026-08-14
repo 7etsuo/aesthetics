@@ -1,0 +1,23 @@
+{
+  "aliases": [],
+  "canonical_name": "practical-light dominance",
+  "confidence": 0.22,
+  "definition": "How much visible practicals appear to author the lighting.",
+  "family_id": "fam_lighting_response",
+  "high_pole": "practicals dominate",
+  "id": "vec_practical_light_dominance",
+  "low_pole": "invisible motivated light",
+  "nearby_ids": [],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising it makes lamps in frame feel like the real sources.",
+  "validation": {}
+}

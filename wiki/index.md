@@ -1,0 +1,146 @@
+# Visual basis vector library
+
+Operational library of minimal, independently tested visual dimensions.
+These are not assumed to be a mathematically orthogonal basis.
+
+## Indexes
+
+- [Families](#families)
+- [Vectors](#vectors)
+- [Composite aesthetics](#composite-aesthetics)
+- [Aliases](aliases/alias_dictionary.md)
+- [Studies](#studies)
+- [Open questions](questions.md)
+- Searchable HTML site: `site/index.html`
+
+## Families
+
+- [capture and transfer](families/family_capture_and_transfer.md) (6 vectors)
+- [color response](families/family_color_response.md) (14 vectors)
+- [compositional grammar](families/family_compositional_grammar.md) (5 vectors)
+- [finishing behavior](families/family_finishing_behavior.md) (5 vectors)
+- [lighting response](families/family_lighting_response.md) (5 vectors)
+- [material response](families/family_material_response.md) (8 vectors)
+- [optical character](families/family_optical_character.md) (11 vectors)
+- [physical production method](families/family_physical_production.md) (6 vectors)
+- [spatial definition](families/family_spatial_definition.md) (7 vectors)
+- [temporal behavior](families/family_temporal_behavior.md) (5 vectors)
+- [texture and noise](families/family_texture_and_noise.md) (5 vectors)
+- [tonal response](families/family_tonal_response.md) (11 vectors)
+
+## Vectors
+
+- `candidate` [CRT bloom feel](vectors/vec_crt_bloom_feel.md) (vec_crt_bloom_feel, conf 0.22)
+- `candidate` [VHS bandwidth loss](vectors/vec_vhs_bandwidth_loss.md) (vec_vhs_bandwidth_loss, conf 0.22)
+- `candidate` [acutance](vectors/vec_acutance.md) (vec_acutance, conf 0.22)
+- `candidate` [analog video texture](vectors/vec_analog_video_texture.md) (vec_analog_video_texture, conf 0.22)
+- `candidate` [animatronic feel](vectors/vec_animatronic_feel.md) (vec_animatronic_feel, conf 0.22)
+- `candidate` [atmospheric haze response](vectors/vec_atmospheric_haze_response.md) (vec_atmospheric_haze_response, conf 0.22)
+- `candidate` [black level](vectors/vec_black_level.md) (vec_black_level, conf 0.22)
+- `candidate` [bokeh softness](vectors/vec_bokeh_softness.md) (vec_bokeh_softness, conf 0.22)
+- `candidate` [channel crosstalk](vectors/vec_channel_crosstalk.md) (vec_channel_crosstalk, conf 0.22)
+- `candidate` [chroma density](vectors/vec_chroma_density.md) (vec_chroma_density, conf 0.22)
+- `candidate` [chromatic aberration](vectors/vec_chromatic_aberration.md) (vec_chromatic_aberration, conf 0.22)
+- `candidate` [clarity](vectors/vec_clarity.md) (vec_clarity, conf 0.22)
+- `candidate` [cleanup level](vectors/vec_cleanup_level.md) (vec_cleanup_level, conf 0.22)
+- `candidate` [color separation](vectors/vec_color_separation.md) (vec_color_separation, conf 0.22)
+- `candidate` [compression texture](vectors/vec_compression_texture.md) (vec_compression_texture, conf 0.22)
+- `candidate` [corner softness](vectors/vec_corner_softness.md) (vec_corner_softness, conf 0.22)
+- `candidate` [diffusion](vectors/vec_diffusion.md) (vec_diffusion, conf 0.22)
+- `candidate` [digital oversharpening](vectors/vec_digital_oversharpening.md) (vec_digital_oversharpening, conf 0.22)
+- `candidate` [dynamic range compression](vectors/vec_dynamic_range_compression.md) (vec_dynamic_range_compression, conf 0.22)
+- `candidate` [edge softness](vectors/vec_edge_softness.md) (vec_edge_softness, conf 0.22)
+- `candidate` [exposure bias](vectors/vec_exposure_bias.md) (vec_exposure_bias, conf 0.22)
+- `candidate` [fabric heaviness](vectors/vec_fabric_heaviness.md) (vec_fabric_heaviness, conf 0.22)
+- `candidate` [field curvature feel](vectors/vec_field_curvature_feel.md) (vec_field_curvature_feel, conf 0.22)
+- `candidate` [final bloom](vectors/vec_final_bloom.md) (vec_final_bloom, conf 0.22)
+- `candidate` [fine-detail roll-off](vectors/vec_fine_detail_rolloff.md) (vec_fine_detail_rolloff, conf 0.22)
+- `candidate` [flicker](vectors/vec_flicker.md) (vec_flicker, conf 0.22)
+- `candidate` [focal-length feel](vectors/vec_focal_length_feel.md) (vec_focal_length_feel, conf 0.22)
+- `candidate` [frame cadence feel](vectors/vec_frame_cadence_feel.md) (vec_frame_cadence_feel, conf 0.22)
+- `candidate` [frame density](vectors/vec_frame_density.md) (vec_frame_density, conf 0.22)
+- `candidate` [gamma response](vectors/vec_gamma_response.md) (vec_gamma_response, conf 0.22)
+- `candidate` [gamut extent](vectors/vec_gamut_extent.md) (vec_gamut_extent, conf 0.22)
+- `candidate` [gate weave](vectors/vec_gate_weave.md) (vec_gate_weave, conf 0.22)
+- `candidate` [global contrast](vectors/vec_global_contrast.md) (vec_global_contrast, conf 0.22)
+- `candidate` [gloss response](vectors/vec_gloss_response.md) (vec_gloss_response, conf 0.22)
+- `candidate` [grain structure](vectors/vec_grain_structure.md) (vec_grain_structure, conf 0.22)
+- `candidate` [green-magenta tint](vectors/vec_green_magenta_tint.md) (vec_green_magenta_tint, conf 0.22)
+- `provisional` [halation](vectors/vec_halation.md) (vec_halation, conf 0.49)
+- `candidate` [hand-painted surface quality](vectors/vec_hand_painted_surface.md) (vec_hand_painted_surface, conf 0.22)
+- `candidate` [highlight bloom](vectors/vec_highlight_bloom.md) (vec_highlight_bloom, conf 0.22)
+- `candidate` [highlight color bias](vectors/vec_highlight_color_bias.md) (vec_highlight_color_bias, conf 0.22)
+- `candidate` [highlight roll-off](vectors/vec_highlight_rolloff.md) (vec_highlight_rolloff, conf 0.22)
+- `candidate` [hue bias](vectors/vec_hue_bias.md) (vec_hue_bias, conf 0.22)
+- `candidate` [key-to-fill ratio](vectors/vec_key_to_fill_ratio.md) (vec_key_to_fill_ratio, conf 0.22)
+- `candidate` [latex or foam feel](vectors/vec_latex_foam_feel.md) (vec_latex_foam_feel, conf 0.22)
+- `candidate` [lens distance feel](vectors/vec_lens_distance_feel.md) (vec_lens_distance_feel, conf 0.22)
+- `candidate` [local contrast](vectors/vec_local_contrast.md) (vec_local_contrast, conf 0.22)
+- `candidate` [matte-painting feel](vectors/vec_matte_painting_feel.md) (vec_matte_painting_feel, conf 0.22)
+- `candidate` [micro-detail retention](vectors/vec_micro_detail_retention.md) (vec_micro_detail_retention, conf 0.22)
+- `candidate` [microcontrast](vectors/vec_microcontrast.md) (vec_microcontrast, conf 0.22)
+- `candidate` [midtone color bias](vectors/vec_midtone_color_bias.md) (vec_midtone_color_bias, conf 0.22)
+- `candidate` [midtone placement](vectors/vec_midtone_placement.md) (vec_midtone_placement, conf 0.22)
+- `candidate` [miniature-set feel](vectors/vec_miniature_set_feel.md) (vec_miniature_set_feel, conf 0.22)
+- `candidate` [negative-space bias](vectors/vec_negative_space_bias.md) (vec_negative_space_bias, conf 0.22)
+- `candidate` [noise character](vectors/vec_noise_character.md) (vec_noise_character, conf 0.22)
+- `provisional` [optical softness](vectors/vec_optical_softness.md) (vec_optical_softness, conf 0.63)
+- `candidate` [optical-composite feel](vectors/vec_optical_composite_feel.md) (vec_optical_composite_feel, conf 0.22)
+- `candidate` [optical-print softness](vectors/vec_optical_print_softness.md) (vec_optical_print_softness, conf 0.22)
+- `candidate` [palette compression](vectors/vec_palette_compression.md) (vec_palette_compression, conf 0.22)
+- `system` [photochemical feel](vectors/vec_photochemical_feel.md) (vec_photochemical_feel, conf 0.22)
+- `candidate` [practical fog feel](vectors/vec_practical_fog_feel.md) (vec_practical_fog_feel, conf 0.22)
+- `candidate` [practical-light dominance](vectors/vec_practical_light_dominance.md) (vec_practical_light_dominance, conf 0.22)
+- `candidate` [practical-material feel](vectors/vec_practical_material_feel.md) (vec_practical_material_feel, conf 0.22)
+- `candidate` [print-density bias](vectors/vec_print_density_bias.md) (vec_print_density_bias, conf 0.22)
+- `candidate` [puppetry feel](vectors/vec_puppetry_feel.md) (vec_puppetry_feel, conf 0.22)
+- `candidate` [release-print density](vectors/vec_release_print_density.md) (vec_release_print_density, conf 0.22)
+- `candidate` [rim-light character](vectors/vec_rim_light_character.md) (vec_rim_light_character, conf 0.22)
+- `candidate` [roughness](vectors/vec_roughness.md) (vec_roughness, conf 0.22)
+- `candidate` [saturation](vectors/vec_saturation.md) (vec_saturation, conf 0.22)
+- `candidate` [shadow color bias](vectors/vec_shadow_color_bias.md) (vec_shadow_color_bias, conf 0.22)
+- `provisional` [shadow density](vectors/vec_shadow_density.md) (vec_shadow_density, conf 0.58)
+- `candidate` [shadow toe](vectors/vec_shadow_toe.md) (vec_shadow_toe, conf 0.22)
+- `candidate` [sharpening intensity](vectors/vec_sharpening_intensity.md) (vec_sharpening_intensity, conf 0.22)
+- `candidate` [shutter-angle feel](vectors/vec_shutter_angle_feel.md) (vec_shutter_angle_feel, conf 0.22)
+- `candidate` [skin-tone response](vectors/vec_skin_tone_response.md) (vec_skin_tone_response, conf 0.22)
+- `candidate` [source hardness](vectors/vec_source_hardness.md) (vec_source_hardness, conf 0.22)
+- `candidate` [specular intensity](vectors/vec_specular_intensity.md) (vec_specular_intensity, conf 0.22)
+- `candidate` [stylized degradation](vectors/vec_stylized_degradation.md) (vec_stylized_degradation, conf 0.22)
+- `candidate` [subject scale](vectors/vec_subject_scale.md) (vec_subject_scale, conf 0.22)
+- `candidate` [subsurface feel](vectors/vec_subsurface_feel.md) (vec_subsurface_feel, conf 0.22)
+- `candidate` [telecine softness](vectors/vec_telecine_softness.md) (vec_telecine_softness, conf 0.22)
+- `candidate` [temperature](vectors/vec_temperature.md) (vec_temperature, conf 0.22)
+- `candidate` [temporal smear](vectors/vec_temporal_smear.md) (vec_temporal_smear, conf 0.22)
+- `candidate` [texture resolution](vectors/vec_texture_resolution.md) (vec_texture_resolution, conf 0.22)
+- `candidate` [texture uniformity](vectors/vec_texture_uniformity.md) (vec_texture_uniformity, conf 0.22)
+- `candidate` [theatrical blocking](vectors/vec_theatrical_blocking.md) (vec_theatrical_blocking, conf 0.22)
+- `candidate` [veiling glare](vectors/vec_veiling_glare.md) (vec_veiling_glare, conf 0.22)
+- `candidate` [vignetting](vectors/vec_vignetting.md) (vec_vignetting, conf 0.22)
+- `candidate` [white balance](vectors/vec_white_balance.md) (vec_white_balance, conf 0.22)
+
+## Composite aesthetics
+
+- `composite` [1980s fantasy television](aesthetics/aes_80s_fantasy_tv.md)
+- `system` [VHS look](aesthetics/aes_vhs_look.md)
+- `vague` [analog (unresolved)](aesthetics/aes_analog_generic.md)
+- `vague` [cinematic (unresolved)](aesthetics/aes_cinematic_generic.md)
+- `composite` [film emulation](aesthetics/aes_film_emulation.md)
+- `composite` [soft halated shadow](aesthetics/aes_soft_halated_shadow.md)
+- `vague` [vintage (unresolved)](aesthetics/aes_vintage_generic.md)
+
+## Studies
+
+- `complete` [Locked anchor set](studies/study_anchor_set_001.md) (study_anchor_set_001)
+- `complete` [Controlled variation of halation](studies/study_halation_001.md) (study_halation_001)
+- `complete` [Controlled variation of optical softness](studies/study_optical_softness_001.md) (study_optical_softness_001)
+- `complete` [Linear reconstruction of aes_soft_halated_shadow](studies/study_reconstruction_soft_halated_shadow_001.md) (study_reconstruction_soft_halated_shadow_001)
+- `complete` [Controlled variation of shadow density](studies/study_shadow_density_001.md) (study_shadow_density_001)
+
+## Counts
+
+- vectors: 88
+- observations: 55
+- studies: 5
+- aesthetics: 7
+- aliases: 36

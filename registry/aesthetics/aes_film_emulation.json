@@ -1,0 +1,48 @@
+{
+  "aliases": [
+    "film emulation",
+    "filmic"
+  ],
+  "canonical_name": "film emulation",
+  "confidence": 0.24,
+  "definition": "Usually a finishing-layer stand-in for photochemical behavior. Incomplete unless capture and optics are specified.",
+  "id": "aes_film_emulation",
+  "interaction_notes": [],
+  "nearest_ids": [],
+  "notes": "",
+  "observation_ids": [],
+  "reconstruction_notes": "",
+  "revision": 1,
+  "status": "composite",
+  "study_ids": [],
+  "weights": [
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_grain_structure",
+      "weight": 0.55
+    },
+    {
+      "confidence": 0.3,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_highlight_rolloff",
+      "weight": 0.6
+    },
+    {
+      "confidence": 0.28,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_chroma_density",
+      "weight": 0.45
+    },
+    {
+      "confidence": 0.25,
+      "hypothesized": true,
+      "source": "manual",
+      "vector_id": "vec_halation",
+      "weight": 0.3
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "definition": "How brightness is mapped: blacks, shadows, midtones, highlights, contrast, and range.",
+  "id": "fam_tonal_response",
+  "name": "tonal response",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_black_level",
+    "vec_dynamic_range_compression",
+    "vec_exposure_bias",
+    "vec_gamma_response",
+    "vec_global_contrast",
+    "vec_highlight_rolloff",
+    "vec_local_contrast",
+    "vec_microcontrast",
+    "vec_midtone_placement",
+    "vec_shadow_density",
+    "vec_shadow_toe"
+  ]
+}

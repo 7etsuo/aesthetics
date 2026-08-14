@@ -1,0 +1,9 @@
+{
+  "evidence_study_ids": [],
+  "id": "int_optical_softness__telecine_softness",
+  "note": "Easy to confuse. Needs a discrimination study.",
+  "status": "suspected",
+  "strength": 0.68,
+  "vector_i": "vec_optical_softness",
+  "vector_j": "vec_telecine_softness"
+}

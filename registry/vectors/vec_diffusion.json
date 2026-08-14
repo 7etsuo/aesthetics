@@ -1,0 +1,27 @@
+{
+  "aliases": [],
+  "canonical_name": "diffusion",
+  "confidence": 0.22,
+  "definition": "A scattering layer that veils the image, often from filters or atmosphere.",
+  "family_id": "fam_optical_character",
+  "high_pole": "heavy diffusion veil",
+  "id": "vec_diffusion",
+  "low_pole": "no diffusion veil",
+  "nearby_ids": [
+    "vec_optical_softness",
+    "vec_veiling_glare",
+    "vec_atmospheric_haze_response"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Increasing diffusion adds a veil and spreads lights more than a pure edge-softness change.",
+  "validation": {}
+}

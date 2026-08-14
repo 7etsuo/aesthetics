@@ -1,0 +1,20 @@
+{
+  "definition": "Lens and optical-path behavior: diffusion, halation, glare, bokeh, field curvature.",
+  "id": "fam_optical_character",
+  "name": "optical character",
+  "notes": "",
+  "provisional": true,
+  "vector_ids": [
+    "vec_bokeh_softness",
+    "vec_chromatic_aberration",
+    "vec_corner_softness",
+    "vec_diffusion",
+    "vec_field_curvature_feel",
+    "vec_focal_length_feel",
+    "vec_halation",
+    "vec_highlight_bloom",
+    "vec_optical_softness",
+    "vec_veiling_glare",
+    "vec_vignetting"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "confidence": 0.72,
+  "id": "alias_crushed_blacks",
+  "mapping_type": "near_alias",
+  "notes": "Sometimes means black floor, sometimes shadow density.",
+  "raw_phrase": "crushed blacks",
+  "target_id": "vec_black_level"
+}

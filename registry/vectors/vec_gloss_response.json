@@ -1,0 +1,26 @@
+{
+  "aliases": [],
+  "canonical_name": "gloss response",
+  "confidence": 0.22,
+  "definition": "Strength and tightness of specular response on surfaces.",
+  "family_id": "fam_material_response",
+  "high_pole": "high gloss",
+  "id": "vec_gloss_response",
+  "low_pole": "matte",
+  "nearby_ids": [
+    "vec_roughness",
+    "vec_specular_intensity"
+  ],
+  "not_the_same_as": {},
+  "notes": "",
+  "observable_effects": [],
+  "observation_ids": [],
+  "open_questions": [],
+  "polarity": "unipolar",
+  "prompt_phrases": {},
+  "scoring_guidance": "",
+  "status": "candidate",
+  "study_ids": [],
+  "testable_claim": "Raising gloss tightens and brightens speculars without a required roughness map inversion if isolated poorly; test carefully.",
+  "validation": {}
+}
