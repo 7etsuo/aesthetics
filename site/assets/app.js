@@ -85,5 +85,88 @@ function bootField() {
   frame();
 }
 
+function bootLight() {
+  const hero = document.querySelector("[data-hero]");
+  const light = document.getElementById("heroLight");
+  if (!hero || !light) return;
+  hero.addEventListener("pointermove", (e) => {
+    const r = hero.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width) * 100;
+    const y = ((e.clientY - r.top) / r.height) * 100;
+    light.style.setProperty("--mx", x + "%");
+    light.style.setProperty("--my", y + "%");
+  });
+}
+
+function bootHeroSwap() {
+  const photo = document.getElementById("heroPhoto");
+  if (!photo) return;
+  const fallback = photo.dataset.default || photo.src;
+  document.querySelectorAll(".fader[data-src]").forEach((el) => {
+    const src = el.getAttribute("data-src");
+    if (!src) return;
+    const show = () => { photo.src = src; };
+    const reset = () => { photo.src = fallback; };
+    el.addEventListener("pointerenter", show);
+    el.addEventListener("focus", show);
+    el.addEventListener("pointerleave", reset);
+    el.addEventListener("blur", reset);
+  });
+}
+
+function bootCompare() {
+  document.querySelectorAll("[data-compare]").forEach((stage) => {
+    const pane = stage.querySelector(".compare-b");
+    const range = stage.querySelector(".compare-range");
+    if (!pane || !range) return;
+    const set = (pct) => {
+      const v = Math.max(4, Math.min(96, Number(pct)));
+      pane.style.width = v + "%";
+      range.value = String(v);
+    };
+    range.addEventListener("input", () => set(range.value));
+    const fromEvent = (e) => {
+      const r = stage.getBoundingClientRect();
+      const x = ("touches" in e ? e.touches[0].clientX : e.clientX) - r.left;
+      set((x / r.width) * 100);
+    };
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.target === range) return;
+      stage.setPointerCapture(e.pointerId);
+      fromEvent(e);
+    });
+    stage.addEventListener("pointermove", (e) => {
+      if (!stage.hasPointerCapture(e.pointerId)) return;
+      fromEvent(e);
+    });
+  });
+}
+
+function bootRail() {
+  const rail = document.querySelector("[data-rail]");
+  if (!rail) return;
+  rail.addEventListener("wheel", (e) => {
+    if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    rail.scrollLeft += e.deltaY;
+    e.preventDefault();
+  }, { passive: false });
+}
+
+function bootReveal() {
+  const nodes = document.querySelectorAll(".reveal");
+  if (!nodes.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add("on");
+    });
+  }, { threshold: 0.12 });
+  nodes.forEach((n) => io.observe(n));
+}
+
 bootSearch();
 bootField();
+bootLight();
+bootHeroSwap();
+bootCompare();
+bootRail();
+bootReveal();

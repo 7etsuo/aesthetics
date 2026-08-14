@@ -82,6 +82,11 @@ nav.float a[aria-current="page"], nav.float a:hover { color: var(--white); }
   position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(9,9,11,0.18) 0%, rgba(9,9,11,0.08) 42%, rgba(9,9,11,0.62) 100%);
 }
+.hero-light {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle 28vmax at var(--mx, 68%) var(--my, 42%), rgba(255,186,120,0.28), transparent 62%);
+  mix-blend-mode: soft-light;
+}
 .hero-hud {
   position: relative; z-index: 2;
   padding: 6.5rem 4.5vw 2.2rem;
@@ -110,7 +115,11 @@ h1.display {
 .rack {
   display: flex; gap: 1.1rem; align-items: flex-end; flex-wrap: wrap;
 }
-.fader { width: 56px; text-align: center; }
+.fader {
+  width: 56px; text-align: center; cursor: pointer;
+  background: none; border: 0; color: inherit; padding: 0; font: inherit;
+}
+.fader:hover .n { color: var(--white); }
 .fader-col {
   height: 160px; width: 10px; margin: 0 auto 0.45rem;
   background: rgba(255,255,255,0.08);
@@ -165,7 +174,7 @@ h2 {
 .rail::-webkit-scrollbar { height: 6px; }
 .rail::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 99px; }
 .plate {
-  flex: 0 0 min(78vw, 360px); scroll-snap-align: start;
+  flex: 0 0 min(82vw, 520px); scroll-snap-align: start;
   position: relative; overflow: hidden; border-radius: 14px;
   background: #111;
   box-shadow: 0 30px 80px rgba(0,0,0,0.45);
@@ -173,7 +182,45 @@ h2 {
   transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
 }
 .plate:hover { transform: translateY(-6px) scale(1.015); }
-.plate img { width: 100%; height: 420px; object-fit: cover; display: block; }
+.plate img { width: 100%; height: min(62vh, 560px); object-fit: cover; display: block; }
+.compare {
+  position: relative;
+  margin: 0 4.5vw 2.5rem;
+}
+.compare-stage {
+  position: relative; overflow: hidden; border-radius: 18px;
+  height: min(78vh, 760px); background: #111; cursor: ew-resize;
+  user-select: none;
+  container-type: size;
+}
+.compare-stage > img,
+.compare-b img {
+  position: absolute; top: 0; left: 0;
+  width: 100cqw; height: 100cqh; max-width: none;
+  object-fit: cover; object-position: 68% 42%;
+}
+.compare-b {
+  position: absolute; inset: 0 auto 0 0; width: 54%; overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 8px 0 40px rgba(0,0,0,0.35);
+}
+.compare-range {
+  position: absolute; left: 0; right: 0; bottom: 1rem; width: min(420px, 80%);
+  margin: 0 auto; display: block; accent-color: #ff6a3d;
+}
+.compare-label {
+  position: absolute; left: 1rem; top: 1rem; z-index: 2;
+  font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff;
+}
+.compare-poles {
+  position: absolute; left: 1rem; right: 1rem; bottom: 2.6rem;
+  display: flex; justify-content: space-between;
+  font-family: "JetBrains Mono", monospace; font-size: 0.72rem; color: #fff;
+  pointer-events: none;
+}
+.reveal { opacity: 0; transform: translate3d(0, 22px, 0); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.reveal.on { opacity: 1; transform: none; }
 .plate .cap {
   position: absolute; left: 0; right: 0; bottom: 0;
   padding: 2.2rem 0.8rem 0.7rem;
@@ -239,7 +286,8 @@ footer { margin-top: 3rem; color: #6b6b72; font-size: 0.78rem; }
   .fader { width: 48px; }
   .fader-col { height: 110px; }
   .plate { flex-basis: min(84vw, 320px); }
-  .plate img { height: 260px; }
+  .plate img { height: min(52vh, 320px); }
+  .compare-stage { height: min(62vh, 480px); }
   .grid-2 { grid-template-columns: 1fr; }
   .anchor-row { grid-template-columns: 1fr 1fr 1fr; }
   .anchor-row .an { grid-column: 1 / -1; padding-top: 0.8rem; }
@@ -413,6 +461,13 @@ def _equation(lib: Library, aesthetic_id: str, href_prefix: str = "") -> str:
     return f'<p class="eq-live">{"".join(terms)}</p>'
 
 
+def _obs_path(lib: Library, vector_id: str, level: str, anchor: str = "anchor_portrait") -> str:
+    for obs in lib.observations.values():
+        if obs.intended_vector_id == vector_id and obs.intended_level == level and obs.anchor_id == anchor:
+            return obs.image_path
+    return ""
+
+
 def _faders(lib: Library, aesthetic_id: str) -> str:
     aes = lib.aesthetics.get(aesthetic_id)
     if not aes:
@@ -421,11 +476,34 @@ def _faders(lib: Library, aesthetic_id: str) -> str:
     for item in sorted(aes.weights, key=lambda w: abs(w.weight), reverse=True)[:6]:
         name = lib.vectors[item.vector_id].canonical_name if item.vector_id in lib.vectors else item.vector_id
         pct = max(4, min(100, abs(item.weight) * 100))
+        src = _obs_path(lib, item.vector_id, "high")
         bits.append(
-            f'<div class="fader"><div class="fader-col"><div class="fill" style="height:{pct:.0f}%"></div></div>'
-            f'<div class="w">{item.weight:.2f}</div><div class="n">{_esc(name)}</div></div>'
+            f'<button type="button" class="fader" data-src="{_esc(src)}">'
+            f'<div class="fader-col"><div class="fill" style="height:{pct:.0f}%"></div></div>'
+            f'<div class="w">{item.weight:.2f}</div><div class="n">{_esc(name)}</div></button>'
         )
     return f'<div class="rack">{"".join(bits)}</div>'
+
+
+def _compare(lib: Library, vector_id: str, prefix: str = "") -> str:
+    low = _obs_path(lib, vector_id, "low")
+    high = _obs_path(lib, vector_id, "high")
+    if not low or not high:
+        return ""
+    name = lib.vectors[vector_id].canonical_name if vector_id in lib.vectors else vector_id
+    return f"""
+<section class="compare reveal">
+  <div class="compare-stage" data-compare>
+    <img src="{prefix}{high}" alt="high {name}">
+    <div class="compare-b" style="width:54%">
+      <img src="{prefix}{low}" alt="low {name}">
+    </div>
+    <div class="compare-label">Ride { _esc(name) }</div>
+    <div class="compare-poles"><span>low</span><span>high</span></div>
+    <input class="compare-range" type="range" min="4" max="96" value="54" aria-label="wipe {name}">
+  </div>
+</section>
+"""
 
 
 def _field_payload(lib: Library, aesthetic_id: str) -> str:
@@ -467,9 +545,10 @@ def _home(lib: Library) -> str:
             f'<div class="caption">{vec.status} · {vec.confidence:.2f}</div></a>'
         )
     return f"""
-<section class="hero">
+<section class="hero" data-hero>
   <div class="hero-media">
-    <img class="hero-photo" src="{_esc(hero)}" alt="">
+    <img class="hero-photo" id="heroPhoto" src="{_esc(hero)}" alt="" data-default="{_esc(hero)}">
+    <div class="hero-light" id="heroLight"></div>
     <div class="hero-shade"></div>
   </div>
   <div class="hero-hud">
@@ -479,19 +558,20 @@ def _home(lib: Library) -> str:
     {_faders(lib, featured)}
   </div>
 </section>
+{_compare(lib, "vec_optical_softness")}
 <div class="sheet">
   <form class="search" role="search" data-prefix="">
     <input id="q" type="search" placeholder="Map a phrase. cinematic, analog, 80s fantasy…" autocomplete="off">
   </form>
   <div class="hits" id="hits"></div>
-  <h2>The look, reconstructed</h2>
-  <p class="lede">Soft-halated shadow is a coordinate, not a mood. These plates are the same five subjects after the weighted sum.</p>
-  <div class="rail">{''.join(plates)}</div>
-  <h2>The basis in motion</h2>
-  <p class="lede">Each studied axis is a node. Distance from the core is its weight in the current look.</p>
-  <div class="field-wrap"><canvas id="field" data-field='{_esc(_field_payload(lib, featured))}'></canvas></div>
-  <h2>Tested axes</h2>
-  <div class="grid-axes">{''.join(cards)}</div>
+  <h2 class="reveal">The look, reconstructed</h2>
+  <p class="lede reveal">The same five subjects after the weighted sum. Scroll sideways.</p>
+  <div class="rail" data-rail>{''.join(plates)}</div>
+  <h2 class="reveal">The basis</h2>
+  <p class="lede reveal">Each studied axis is a node. Distance from the core is its weight in this look.</p>
+  <div class="field-wrap reveal"><canvas id="field" data-field='{_esc(_field_payload(lib, featured))}'></canvas></div>
+  <h2 class="reveal">Tested axes</h2>
+  <div class="grid-axes reveal">{''.join(cards)}</div>
   <footer>{len(lib.vectors)} vectors · {len(lib.observations)} observations · operational basis, not orthogonal</footer>
 </div>
 """
@@ -925,6 +1005,89 @@ function bootField() {
   frame();
 }
 
+function bootLight() {
+  const hero = document.querySelector("[data-hero]");
+  const light = document.getElementById("heroLight");
+  if (!hero || !light) return;
+  hero.addEventListener("pointermove", (e) => {
+    const r = hero.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width) * 100;
+    const y = ((e.clientY - r.top) / r.height) * 100;
+    light.style.setProperty("--mx", x + "%");
+    light.style.setProperty("--my", y + "%");
+  });
+}
+
+function bootHeroSwap() {
+  const photo = document.getElementById("heroPhoto");
+  if (!photo) return;
+  const fallback = photo.dataset.default || photo.src;
+  document.querySelectorAll(".fader[data-src]").forEach((el) => {
+    const src = el.getAttribute("data-src");
+    if (!src) return;
+    const show = () => { photo.src = src; };
+    const reset = () => { photo.src = fallback; };
+    el.addEventListener("pointerenter", show);
+    el.addEventListener("focus", show);
+    el.addEventListener("pointerleave", reset);
+    el.addEventListener("blur", reset);
+  });
+}
+
+function bootCompare() {
+  document.querySelectorAll("[data-compare]").forEach((stage) => {
+    const pane = stage.querySelector(".compare-b");
+    const range = stage.querySelector(".compare-range");
+    if (!pane || !range) return;
+    const set = (pct) => {
+      const v = Math.max(4, Math.min(96, Number(pct)));
+      pane.style.width = v + "%";
+      range.value = String(v);
+    };
+    range.addEventListener("input", () => set(range.value));
+    const fromEvent = (e) => {
+      const r = stage.getBoundingClientRect();
+      const x = ("touches" in e ? e.touches[0].clientX : e.clientX) - r.left;
+      set((x / r.width) * 100);
+    };
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.target === range) return;
+      stage.setPointerCapture(e.pointerId);
+      fromEvent(e);
+    });
+    stage.addEventListener("pointermove", (e) => {
+      if (!stage.hasPointerCapture(e.pointerId)) return;
+      fromEvent(e);
+    });
+  });
+}
+
+function bootRail() {
+  const rail = document.querySelector("[data-rail]");
+  if (!rail) return;
+  rail.addEventListener("wheel", (e) => {
+    if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    rail.scrollLeft += e.deltaY;
+    e.preventDefault();
+  }, { passive: false });
+}
+
+function bootReveal() {
+  const nodes = document.querySelectorAll(".reveal");
+  if (!nodes.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add("on");
+    });
+  }, { threshold: 0.12 });
+  nodes.forEach((n) => io.observe(n));
+}
+
 bootSearch();
 bootField();
+bootLight();
+bootHeroSwap();
+bootCompare();
+bootRail();
+bootReveal();
 """
