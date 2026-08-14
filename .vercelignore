@@ -1,0 +1,12 @@
+/src
+/tests
+/registry
+/data
+/wiki
+/reports
+/scripts
+/artifacts
+*.egg-info
+.pytest_cache
+.venv
+.git
