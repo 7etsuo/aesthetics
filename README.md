@@ -1,4 +1,4 @@
-# Visual timbre lab
+# Visual Basis Atlas
 
 A research library of **visual basis vectors**: the smallest visual properties that can be isolated, tested with Grok Imagine, named, and recombined.
 
@@ -34,7 +34,8 @@ python -m vslib next
 python -m vslib serve --port 8765
 ```
 
-Open `site/index.html`, http://127.0.0.1:8765/, or https://atlas.agenc.ag/.
+After starting the server, open http://127.0.0.1:8765/ or https://atlas.agenc.ag/.
+Opening `site/index.html` directly shows the static fallback, but interactive evidence and search require HTTP so the browser can load the generated JSON assets.
 
 ## Experiment rule
 

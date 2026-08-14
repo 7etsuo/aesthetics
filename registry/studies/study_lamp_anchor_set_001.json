@@ -1,0 +1,31 @@
+{
+  "anchor_ids": [
+    "anchor_lamp_portrait",
+    "anchor_lamp_object",
+    "anchor_lamp_architecture",
+    "anchor_lamp_landscape",
+    "anchor_lamp_character"
+  ],
+  "candidate_vector_id": "vec_halation",
+  "date": "2026-08-14",
+  "decision": "locked",
+  "decision_reason": "Five night stills with visible practicals. Used only by honest-halation studies.",
+  "entanglement_notes": [],
+  "hold_constant": [],
+  "id": "study_lamp_anchor_set_001",
+  "levels": [
+    "baseline"
+  ],
+  "next_experiments": [],
+  "notes": "candidate_vector_id unused. Do not replace the daylight anchor set.",
+  "observation_ids": [
+    "obs_0146",
+    "obs_0147",
+    "obs_0148",
+    "obs_0149",
+    "obs_0150"
+  ],
+  "protocol": "Night stills that already contain practical lamps. Used only by honest-halation studies.",
+  "status": "complete",
+  "title": "Lamp-present locked anchors"
+}

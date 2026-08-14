@@ -1,0 +1,55 @@
+{
+  "anchor_ids": [
+    "anchor_lamp_architecture",
+    "anchor_lamp_character",
+    "anchor_lamp_landscape",
+    "anchor_lamp_object",
+    "anchor_lamp_portrait"
+  ],
+  "candidate_vector_id": "vec_highlight_bloom",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "High is a pale, broader glow around existing bright regions. Not a red lamp-lip. Same practicals. Distinct from honest halation on portrait, landscape, and bar.",
+  "entanglement_notes": [
+    "Bar bloom can read as atmospheric haze between pendants."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_highlight_bloom_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Bloom versus final bloom versus veiling glare if a finishing layer is needed."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0166",
+    "obs_0167",
+    "obs_0168",
+    "obs_0169",
+    "obs_0170",
+    "obs_0171",
+    "obs_0172",
+    "obs_0173",
+    "obs_0174",
+    "obs_0175",
+    "obs_0176",
+    "obs_0177",
+    "obs_0178",
+    "obs_0179",
+    "obs_0180"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of highlight bloom"
+}

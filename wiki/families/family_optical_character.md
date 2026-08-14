@@ -16,7 +16,7 @@ Lens and optical-path behavior: diffusion, halation, glare, bokeh, field curvatu
 - [field curvature feel](../vectors/vec_field_curvature_feel.md) `candidate`
 - [focal-length feel](../vectors/vec_focal_length_feel.md) `candidate`
 - [halation](../vectors/vec_halation.md) `provisional`
-- [highlight bloom](../vectors/vec_highlight_bloom.md) `candidate`
+- [highlight bloom](../vectors/vec_highlight_bloom.md) `provisional`
 - [optical softness](../vectors/vec_optical_softness.md) `provisional`
 - [veiling glare](../vectors/vec_veiling_glare.md) `candidate`
 - [vignetting](../vectors/vec_vignetting.md) `candidate`

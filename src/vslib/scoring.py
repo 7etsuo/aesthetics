@@ -492,9 +492,86 @@ def score_key_to_fill(obs) -> tuple[list[Score], list[str], str]:
     return _pack(values), leaks, note
 
 
+def _glow_base() -> dict[str, tuple[float, float]]:
+    return {
+        "vec_halation": (0.08, 0.60),
+        "vec_highlight_bloom": (0.10, 0.60),
+        "vec_optical_softness": (0.20, 0.50),
+        "vec_diffusion": (0.10, 0.45),
+        "vec_final_bloom": (0.08, 0.45),
+        "vec_veiling_glare": (0.08, 0.45),
+        "vec_highlight_rolloff": (0.40, 0.45),
+        "vec_key_to_fill_ratio": (0.30, 0.40),
+        "vec_shadow_density": (0.32, 0.40),
+    }
+
+
+def score_halation_v2(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    target = {"low": 0.08, "medium": 0.40, "high": 0.82}[level]
+    values = _glow_base()
+    values["vec_halation"] = (target, 0.78)
+    values["vec_highlight_bloom"] = (0.12 + target * 0.22, 0.62)
+    leaks: list[str] = []
+    note = f"Intended honest halation {level} (lamp-present 002)."
+    if level == "low":
+        note += " Lamp edges stay tight. Same practicals."
+    if level == "high":
+        if obs.anchor_id == "anchor_lamp_portrait":
+            values["vec_halation"] = (0.86, 0.82)
+            values["vec_highlight_bloom"] = (0.32, 0.60)
+            leaks += ["secondary red wash at the far frame edge"]
+            note += " Red leak from the existing lamp into the wall. No new sun. No invented hair-rim."
+        elif obs.anchor_id == "anchor_lamp_landscape":
+            values["vec_halation"] = (0.84, 0.80)
+            values["vec_highlight_bloom"] = (0.36, 0.58)
+            note += " Red/pink leak around the existing street lamp. Night holds. Not a sunset."
+        elif obs.anchor_id == "anchor_lamp_architecture":
+            values["vec_halation"] = (0.80, 0.78)
+            values["vec_highlight_bloom"] = (0.30, 0.56)
+            note += " Red leak around existing pendants. Lamps stay."
+        elif obs.anchor_id == "anchor_lamp_object":
+            values["vec_halation"] = (0.76, 0.72)
+            note += " Local leak from the desk lamp. Same lamp."
+        elif obs.anchor_id == "anchor_lamp_character":
+            values["vec_halation"] = (0.74, 0.70)
+            note += " Bleed from the table lamp. Eyes stay glass."
+    return _pack(values), leaks, note
+
+
+def score_highlight_bloom(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    target = {"low": 0.10, "medium": 0.42, "high": 0.80}[level]
+    values = _glow_base()
+    values["vec_highlight_bloom"] = (target, 0.76)
+    values["vec_halation"] = (0.10 + target * 0.18, 0.58)
+    leaks: list[str] = []
+    note = f"Intended highlight bloom {level}."
+    if level == "high":
+        if obs.anchor_id == "anchor_lamp_portrait":
+            values["vec_highlight_bloom"] = (0.82, 0.78)
+            values["vec_halation"] = (0.24, 0.58)
+            note += " Pale general glow around the lamp. Not a red edge."
+        elif obs.anchor_id == "anchor_lamp_landscape":
+            values["vec_highlight_bloom"] = (0.84, 0.80)
+            values["vec_halation"] = (0.22, 0.56)
+            note += " Warm white cone. Same street lamp. Not a sunset."
+        elif obs.anchor_id == "anchor_lamp_architecture":
+            values["vec_highlight_bloom"] = (0.80, 0.76)
+            values["vec_halation"] = (0.20, 0.55)
+            note += " Pale haze between pendants. Not red-edged."
+        elif obs.anchor_id == "anchor_lamp_object":
+            values["vec_highlight_bloom"] = (0.74, 0.70)
+            note += " Broader glow on the desk lamp."
+        elif obs.anchor_id == "anchor_lamp_character":
+            values["vec_highlight_bloom"] = (0.72, 0.68)
+            note += " General glow. Eyes stay glass."
+    return _pack(values), leaks, note
+
+
 def apply_scores(lib: Library) -> None:
     for obs in lib.observations.values():
-        if obs.study_id == "study_anchor_set_001":
+        if obs.study_id in {"study_anchor_set_001", "study_lamp_anchor_set_001"}:
             obs.scores = score_baseline()
             if "Baseline scores" not in (obs.notes or ""):
                 obs.notes = ((obs.notes or "") + " Baseline scores for the locked anchor.").strip()
@@ -511,6 +588,10 @@ def apply_scores(lib: Library) -> None:
             scores, leaks, note = score_key_to_fill(obs)
         elif obs.study_id == "study_halation_001":
             scores, leaks, note = score_halation(obs)
+        elif obs.study_id == "study_halation_002":
+            scores, leaks, note = score_halation_v2(obs)
+        elif obs.study_id == "study_highlight_bloom_001":
+            scores, leaks, note = score_highlight_bloom(obs)
         elif obs.study_id == "study_edge_softness_001":
             scores, leaks, note = score_edge(obs)
         elif obs.study_id == "study_diffusion_001":
@@ -651,9 +732,45 @@ def _close_studies(lib: Library) -> None:
         "Landscape high changed time of day.",
     ]
     ha.next_experiments = [
-        "Rerun halation on a night interior that already contains lamps.",
-        "Discrimination: halation vs highlight bloom vs final bloom vs veiling glare.",
+        "See study_halation_002 for the lamp-present sweep.",
     ]
+
+    if "study_halation_002" in lib.studies:
+        h2 = lib.studies["study_halation_002"]
+        h2.status = "complete"
+        h2.decision = "provisional"
+        h2.decision_reason = (
+            "With lamps already in frame, high produces a warm or reddish leak from those lamps. "
+            "Portrait and landscape do not invent a hair-rim or a sunset. Distinct from highlight bloom."
+        )
+        h2.entanglement_notes = [
+            "Some frames still add a secondary red wash at the far edge.",
+            "Bloom still rises a little when halation rises.",
+        ]
+        h2.next_experiments = [
+            "Optical versus telecine on the original daylight anchors.",
+        ]
+
+    if "study_highlight_bloom_001" in lib.studies:
+        hb = lib.studies["study_highlight_bloom_001"]
+        hb.status = "complete"
+        hb.decision = "provisional"
+        hb.decision_reason = (
+            "High is a pale, broader glow around existing bright regions. Not a red lamp-lip. "
+            "Same practicals. Distinct from honest halation on portrait, landscape, and bar."
+        )
+        hb.entanglement_notes = [
+            "Bar bloom can read as atmospheric haze between pendants.",
+        ]
+        hb.next_experiments = [
+            "Bloom versus final bloom versus veiling glare if a finishing layer is needed.",
+        ]
+
+    if "study_lamp_anchor_set_001" in lib.studies:
+        la = lib.studies["study_lamp_anchor_set_001"]
+        la.status = "complete"
+        la.decision = "locked"
+        la.decision_reason = "Five night stills with visible practicals. Used only by honest-halation studies."
 
     rec = lib.studies["study_reconstruction_soft_halated_shadow_001"]
     rec.status = "complete"
@@ -872,19 +989,40 @@ def _update_vectors(lib: Library) -> None:
 
     ha = lib.vectors["vec_halation"]
     ha.status = "provisional"
-    ha.confidence = 0.49
+    ha.confidence = 0.68
     ha.validation = {
-        "isolatable": "weak",
-        "transferable": "partial",
+        "isolatable": "partial",
+        "transferable": True,
         "legible": True,
         "describable": True,
-        "non_redundant": "pending_vs_bloom",
+        "non_redundant": "distinct_from_bloom_when_lamps_present",
         "directional": True,
-        "useful": "conditional",
+        "useful": True,
         "n_subjects": 5,
         "n_levels": 3,
+        "clean_study": "study_halation_002",
+        "contaminated_prior": "study_halation_001",
+        "requires": "practicals_in_frame",
     }
     ha.open_questions = [
-        "Does Imagine ever produce red-edge film bleed without inventing a new light?",
-        "Should the working definition split into local bleed vs silhouette aura?",
+        "Is the leftover far-edge red wash bloom, grade, or a second bleed?",
     ]
+
+    if "vec_highlight_bloom" in lib.vectors:
+        hb = lib.vectors["vec_highlight_bloom"]
+        hb.status = "provisional"
+        hb.confidence = 0.64
+        hb.validation = {
+            "isolatable": "partial",
+            "transferable": True,
+            "legible": True,
+            "describable": True,
+            "non_redundant": True,
+            "directional": True,
+            "useful": True,
+            "n_subjects": 5,
+            "n_levels": 3,
+        }
+        hb.open_questions = [
+            "How much bar bloom is actually atmospheric haze?",
+        ]

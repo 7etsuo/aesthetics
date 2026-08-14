@@ -70,8 +70,15 @@ def ensure_anchor_study(lib: Library) -> Study:
     return lib.studies[study_id]
 
 
-def plan_vector_study(lib: Library, vector_id: str, study_id: str) -> list[GenerationJob]:
+def plan_vector_study(
+    lib: Library,
+    vector_id: str,
+    study_id: str,
+    *,
+    anchor_ids: list[str] | None = None,
+) -> list[GenerationJob]:
     vec = lib.vectors[vector_id]
+    selected = sorted(anchor_ids) if anchor_ids is not None else sorted(lib.anchors)
     if study_id not in lib.studies:
         lib.studies[study_id] = Study(
             id=study_id,
@@ -82,7 +89,7 @@ def plan_vector_study(lib: Library, vector_id: str, study_id: str) -> list[Gener
                 "medium, and high of one candidate. Do not change other dimensions on purpose."
             ),
             status="planned",
-            anchor_ids=sorted(lib.anchors),
+            anchor_ids=selected,
             levels=["low", "medium", "high"],
             hold_constant=list(HOLD_CONSTANT),
             date=str(date.today()),
@@ -91,7 +98,10 @@ def plan_vector_study(lib: Library, vector_id: str, study_id: str) -> list[Gener
         vec.study_ids.append(study_id)
 
     jobs = []
-    for anchor in lib.anchors.values():
+    for aid in selected:
+        if aid not in lib.anchors:
+            raise KeyError(aid)
+        anchor = lib.anchors[aid]
         source = anchor.image_path
         for level in ("low", "medium", "high"):
             prompt = level_edit_prompt(lib, vector_id, level)
@@ -177,7 +187,11 @@ def ingest_job(
     date_str: str | None = None,
 ) -> Observation:
     dest_dir = lib.root / "artifacts" / "studies" / job.study_id
-    if job.intended_level == "baseline" or job.study_id == "study_anchor_set_001":
+    is_anchor_study = job.intended_level == "baseline" or job.study_id in {
+        "study_anchor_set_001",
+        "study_lamp_anchor_set_001",
+    }
+    if is_anchor_study:
         dest_dir = lib.root / "artifacts" / "anchors"
         dest = dest_dir / f"{job.anchor_id}{Path(image_path).suffix}"
     else:
@@ -186,7 +200,7 @@ def ingest_job(
     stored = copy_artifact(image_path, dest)
     rel = stored.relative_to(lib.root).as_posix()
 
-    if job.anchor_id and job.anchor_id in lib.anchors and job.study_id == "study_anchor_set_001":
+    if job.anchor_id and job.anchor_id in lib.anchors and is_anchor_study:
         lib.anchors[job.anchor_id].image_path = rel
 
     obs_id = lib.next_obs_id()

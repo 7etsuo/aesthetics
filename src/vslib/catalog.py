@@ -372,9 +372,9 @@ def vector_records() -> list[dict]:
            effects=["lamps and catchlights grow a halo", "bright edges leak into adjacent darks",
                     "halo is often warmer than the source"],
            phrases={
-               "low": "clean highlights with no bleed into adjacent darks",
-               "medium": "mild halation, slight warm glow around lamps and speculars",
-               "high": "strong film-like halation, bright edges bleed into neighboring shadows, warm halo around lights",
+               "low": "clean existing lamp edges, no bleed into adjacent darks, no new lights",
+               "medium": "mild warm local bleed around existing lamps only, lamps stay in place",
+               "high": "strong film-like halation, warm or reddish leak from existing lamps into neighboring darks only, no new lamps",
            },
            scoring="0.00 no bleed, 0.50 mild local glow, 1.00 strong colored or bright leak.",
            questions=["Does Imagine produce true local bleed or only global bloom and softness?"],
@@ -428,7 +428,19 @@ def vector_records() -> list[dict]:
            "Bloom enlarges bright regions softly; it need not be reddish or tightly local.",
            "tight unbloomed highlights", "broad highlight glow",
            aliases=["glow", "highlight glow"],
-           nearby=["halation", "final_bloom", "optical_softness"]),
+           nearby=["halation", "final_bloom", "optical_softness"],
+           not_same={
+               "halation": "Halation is a local, often reddish, bleed at the lamp lip. Bloom is a broader glow.",
+           },
+           effects=["bright regions enlarge softly", "glow can be white or pale", "need not hug the lamp edge"],
+           phrases={
+               "low": "tight unbloomed highlights on the existing lamps, no extra glow",
+               "medium": "mild general highlight glow around existing bright regions",
+               "high": "broad highlight glow around existing bright regions, not required to be red-edged, no new lamps",
+           },
+           scoring="0.00 tight highlights, 0.50 mild glow, 1.00 broad bloom.",
+           questions=["Can bloom stay general without becoming a rim light or sunset?"],
+           confidence=0.28),
 
         # --- texture ---
         _v("grain_structure", "grain structure", "texture_and_noise",
@@ -956,6 +968,68 @@ def anchor_records() -> list[Anchor]:
                 "Full body, 50mm-equivalent, camera at the creature's eye level, square 1:1 frame."
             ),
         ),
+        Anchor(
+            id="anchor_lamp_portrait",
+            kind="portrait",
+            name="night portrait with practical",
+            lock_prompt=(
+                "A 34-year-old woman with medium-brown skin, a narrow gold nose ring, "
+                "shoulder-length black hair parted off-center, and a calm closed-mouth expression. "
+                "Three-quarter pose, body turned slightly left, eyes to lens, charcoal knit sweater. "
+                "Night interior. One warm practical table lamp sits in frame to camera left, visible shade and warm bulb glow, "
+                "and that lamp is the key light. Dark plaster wall behind. No other lamps. "
+                "Clean contemporary photograph: natural night color, moderate contrast, sharp focus on the near eye, "
+                "no film effects, no extra glow, no grain, no stylization. Medium close-up, 85mm-equivalent, "
+                "eye-level, square 1:1 frame."
+            ),
+        ),
+        Anchor(
+            id="anchor_lamp_object",
+            kind="object",
+            name="night still life with desk lamp",
+            lock_prompt=(
+                "A glazed stoneware teapot with a warm gray-green glaze, unglazed clay handle and lid knob, "
+                "on a raw pale oak table. A linen napkin to the right. "
+                "Night. One metal desk lamp in frame at camera left, visible shade, lighting the pot. Dark plaster wall. "
+                "Clean contemporary still-life: natural night color, moderate contrast, sharp focus on the spout, "
+                "no film effects, no extra glow, no grain. Three-quarter view, 50mm-equivalent, square 1:1 frame."
+            ),
+        ),
+        Anchor(
+            id="anchor_lamp_architecture",
+            kind="architecture",
+            name="night interior with practicals",
+            lock_prompt=(
+                "A small empty night bar interior: dark wood bar, two stools, no people. "
+                "Two warm pendant lamps already on above the bar, and one wall sconce, all visible in frame. "
+                "Those practicals light the room. No daylight. "
+                "Clean contemporary architectural photograph: natural night color, moderate contrast, deep focus, "
+                "no film effects, no extra glow, no grain. 24mm-equivalent, eye-level, square 1:1 frame."
+            ),
+        ),
+        Anchor(
+            id="anchor_lamp_landscape",
+            kind="landscape",
+            name="night path with street lamp",
+            lock_prompt=(
+                "A night coastal path along a grassy cliff, dark sea beyond, no people. "
+                "One tall street lamp already in frame beside the path, its warm bulb visible, lighting the near grass. "
+                "Clear night air. Clean contemporary landscape: natural night color, moderate contrast, sharp focus, "
+                "no film effects, no extra glow, no added haze, no grain. 35mm-equivalent, eye-level, square 1:1 frame."
+            ),
+        ),
+        Anchor(
+            id="anchor_lamp_character",
+            kind="character",
+            name="night creature with practical",
+            lock_prompt=(
+                "A small standing fox creature of painted wood and stitched fabric, large amber glass eyes that are not light sources, "
+                "tiny brown corduroy vest. Standing on a wooden table at night. "
+                "One warm table lamp in frame at camera left, visible shade, lighting the creature. "
+                "Clean contemporary character photograph: natural night color, moderate contrast, sharp focus, "
+                "no film effects, no extra glow, no grain. Eyes stay glass. Full body, 50mm-equivalent, square 1:1 frame."
+            ),
+        ),
     ]
 
 
@@ -997,8 +1071,14 @@ def extra_hold_for(vector_id: str) -> str:
             "Do not add lamps, rims, or glowing eyes. Do not add grain, softness, hue, time of day, or a genre."
         ),
         "vec_halation": (
-            "Do not globally soften the image, do not add grain, do not crush the whole tone scale, "
-            "and do not change the subject's materials."
+            "Bleed only lamps and speculars already in the source image. "
+            "Do not add lamps, rims, suns, or glowing eyes. Do not globally soften. "
+            "Do not change time of day. Do not move the key. Do not add grain or a genre."
+        ),
+        "vec_highlight_bloom": (
+            "Glow only existing bright regions. Do not add lamps, rims, suns, or glowing eyes. "
+            "Do not turn the scene into a sunset. Do not globally soften the whole frame. "
+            "Do not add grain, hue shift, or a genre."
         ),
         "vec_edge_softness": (
             "Change only edge width. Do not add a diffusion veil, do not spread highlight cores, "

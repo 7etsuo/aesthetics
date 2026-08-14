@@ -66,9 +66,9 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [gloss response](vectors/vec_gloss_response.md) (vec_gloss_response, conf 0.22)
 - `candidate` [grain structure](vectors/vec_grain_structure.md) (vec_grain_structure, conf 0.22)
 - `candidate` [green-magenta tint](vectors/vec_green_magenta_tint.md) (vec_green_magenta_tint, conf 0.22)
-- `provisional` [halation](vectors/vec_halation.md) (vec_halation, conf 0.49)
+- `provisional` [halation](vectors/vec_halation.md) (vec_halation, conf 0.68)
 - `candidate` [hand-painted surface quality](vectors/vec_hand_painted_surface.md) (vec_hand_painted_surface, conf 0.22)
-- `candidate` [highlight bloom](vectors/vec_highlight_bloom.md) (vec_highlight_bloom, conf 0.22)
+- `provisional` [highlight bloom](vectors/vec_highlight_bloom.md) (vec_highlight_bloom, conf 0.64)
 - `candidate` [highlight color bias](vectors/vec_highlight_color_bias.md) (vec_highlight_color_bias, conf 0.22)
 - `candidate` [highlight roll-off](vectors/vec_highlight_rolloff.md) (vec_highlight_rolloff, conf 0.22)
 - `candidate` [hue bias](vectors/vec_hue_bias.md) (vec_hue_bias, conf 0.22)
@@ -137,7 +137,10 @@ These are not assumed to be a mathematically orthogonal basis.
 - `complete` [Controlled variation of diffusion](studies/study_diffusion_001.md) (study_diffusion_001)
 - `complete` [Controlled variation of edge softness](studies/study_edge_softness_001.md) (study_edge_softness_001)
 - `complete` [Controlled variation of halation](studies/study_halation_001.md) (study_halation_001)
+- `complete` [Controlled variation of halation](studies/study_halation_002.md) (study_halation_002)
+- `complete` [Controlled variation of highlight bloom](studies/study_highlight_bloom_001.md) (study_highlight_bloom_001)
 - `complete` [Controlled variation of key-to-fill ratio](studies/study_key_to_fill_ratio_001.md) (study_key_to_fill_ratio_001)
+- `complete` [Lamp-present locked anchors](studies/study_lamp_anchor_set_001.md) (study_lamp_anchor_set_001)
 - `complete` [Controlled variation of optical softness](studies/study_optical_softness_001.md) (study_optical_softness_001)
 - `complete` [Linear reconstruction of aes_soft_halated_shadow](studies/study_reconstruction_soft_halated_shadow_001.md) (study_reconstruction_soft_halated_shadow_001)
 - `complete` [Controlled variation of shadow density](studies/study_shadow_density_001.md) (study_shadow_density_001)
@@ -146,7 +149,7 @@ These are not assumed to be a mathematically orthogonal basis.
 ## Counts
 
 - vectors: 88
-- observations: 145
-- studies: 11
+- observations: 180
+- studies: 14
 - aesthetics: 7
 - aliases: 36

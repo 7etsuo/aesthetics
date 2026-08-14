@@ -2,26 +2,16 @@
   {
     "vector_i": "vec_edge_softness",
     "vector_j": "vec_optical_softness",
-    "correlation": 0.8863
+    "correlation": 0.872
   },
   {
     "vector_i": "vec_exposure_bias",
     "vector_j": "vec_global_contrast",
-    "correlation": 0.9949
+    "correlation": 0.9953
   },
   {
-    "vector_i": "vec_exposure_bias",
-    "vector_j": "vec_microcontrast",
-    "correlation": -0.9193
-  },
-  {
-    "vector_i": "vec_global_contrast",
-    "vector_j": "vec_microcontrast",
-    "correlation": -0.9241
-  },
-  {
-    "vector_i": "vec_halation",
-    "vector_j": "vec_highlight_bloom",
-    "correlation": 0.8946
+    "vector_i": "vec_final_bloom",
+    "vector_j": "vec_source_hardness",
+    "correlation": -0.9237
   }
 ]

@@ -1,0 +1,88 @@
+{
+  "anchor_id": "anchor_lamp_character",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0178",
+  "image_path": "artifacts/studies/study_highlight_bloom_001/anchor_lamp_character_low.jpg",
+  "intended_level": "low",
+  "intended_vector_id": "vec_highlight_bloom",
+  "model": "grok-imagine",
+  "notes": "Intended highlight bloom low.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only highlight bloom. Set highlight bloom to: tight unbloomed highlights on the existing lamps, no extra glow. Glow only existing bright regions. Do not add lamps, rims, suns, or glowing eyes. Do not turn the scene into a sunset. Do not globally soften the whole frame. Do not add grain, hue shift, or a genre.",
+  "scores": [
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.12,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.76,
+      "method": "agent_visual",
+      "score": 0.1,
+      "vector_id": "vec_highlight_bloom"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.2,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.1,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_final_bloom"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_veiling_glare"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.4,
+      "vector_id": "vec_highlight_rolloff"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.32,
+      "vector_id": "vec_shadow_density"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Glow only existing bright regions. Do not add lamps, rims, suns, or glowing eyes. Do not turn the scene into a sunset. Do not globally soften the whole frame. Do not add grain, hue shift, or a genre."
+    ],
+    "job_id": "job_study_highlight_bloom_001_character_low",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_lamp_character.jpg",
+  "source_type": "generated",
+  "study_id": "study_highlight_bloom_001",
+  "unintended_changes": []
+}

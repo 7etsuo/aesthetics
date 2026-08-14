@@ -1,0 +1,95 @@
+{
+  "instrument": {
+    "name": "grok-imagine",
+    "tools": [
+      "image_gen",
+      "image_edit"
+    ],
+    "seed_control": "unavailable",
+    "aspect_ratio_control": true,
+    "source_image_lock": true,
+    "notes": "image_gen and image_edit do not accept a seed. Hold subject by generating a locked anchor, then image_edit that file while asking for a single change."
+  },
+  "jobs": [
+    {
+      "id": "job_lamp_portrait",
+      "study_id": "study_lamp_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A 34-year-old woman with medium-brown skin, a narrow gold nose ring, shoulder-length black hair parted off-center, and a calm closed-mouth expression. Three-quarter pose, body turned slightly left, eyes to lens, charcoal knit sweater. Night interior. One warm practical table lamp sits in frame to camera left, visible shade and warm bulb glow, and that lamp is the key light. Dark plaster wall behind. No other lamps. Clean contemporary photograph: natural night color, moderate contrast, sharp focus on the near eye, no film effects, no extra glow, no grain, no stylization. Medium close-up, 85mm-equivalent, eye-level, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_lamp_portrait",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_lamp_portrait.jpg",
+      "observation_id": "obs_0146",
+      "notes": ""
+    },
+    {
+      "id": "job_lamp_character",
+      "study_id": "study_lamp_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A small standing fox creature of painted wood and stitched fabric, large amber glass eyes that are not light sources, tiny brown corduroy vest. Standing on a wooden table at night. One warm table lamp in frame at camera left, visible shade, lighting the creature. Clean contemporary character photograph: natural night color, moderate contrast, sharp focus, no film effects, no extra glow, no grain. Eyes stay glass. Full body, 50mm-equivalent, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_lamp_character",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_lamp_character.jpg",
+      "observation_id": "obs_0147",
+      "notes": ""
+    },
+    {
+      "id": "job_lamp_landscape",
+      "study_id": "study_lamp_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A night coastal path along a grassy cliff, dark sea beyond, no people. One tall street lamp already in frame beside the path, its warm bulb visible, lighting the near grass. Clear night air. Clean contemporary landscape: natural night color, moderate contrast, sharp focus, no film effects, no extra glow, no added haze, no grain. 35mm-equivalent, eye-level, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_lamp_landscape",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_lamp_landscape.jpg",
+      "observation_id": "obs_0148",
+      "notes": ""
+    },
+    {
+      "id": "job_lamp_object",
+      "study_id": "study_lamp_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A glazed stoneware teapot with a warm gray-green glaze, unglazed clay handle and lid knob, on a raw pale oak table. A linen napkin to the right. Night. One metal desk lamp in frame at camera left, visible shade, lighting the pot. Dark plaster wall. Clean contemporary still-life: natural night color, moderate contrast, sharp focus on the spout, no film effects, no extra glow, no grain. Three-quarter view, 50mm-equivalent, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_lamp_object",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_lamp_object.jpg",
+      "observation_id": "obs_0149",
+      "notes": ""
+    },
+    {
+      "id": "job_lamp_architecture",
+      "study_id": "study_lamp_anchor_set_001",
+      "kind": "image_gen",
+      "prompt": "A small empty night bar interior: dark wood bar, two stools, no people. Two warm pendant lamps already on above the bar, and one wall sconce, all visible in frame. Those practicals light the room. No daylight. Clean contemporary architectural photograph: natural night color, moderate contrast, deep focus, no film effects, no extra glow, no grain. 24mm-equivalent, eye-level, square 1:1 frame.",
+      "intended_vector_id": null,
+      "intended_level": "baseline",
+      "anchor_id": "anchor_lamp_architecture",
+      "source_image": null,
+      "aspect_ratio": "1:1",
+      "hold_constant": [],
+      "status": "ingested",
+      "output_path": "artifacts/anchors/anchor_lamp_architecture.jpg",
+      "observation_id": "obs_0150",
+      "notes": ""
+    }
+  ]
+}

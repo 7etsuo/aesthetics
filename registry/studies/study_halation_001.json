@@ -31,8 +31,7 @@
     "high"
   ],
   "next_experiments": [
-    "Rerun halation on a night interior that already contains lamps.",
-    "Discrimination: halation vs highlight bloom vs final bloom vs veiling glare."
+    "See study_halation_002 for the lamp-present sweep."
   ],
   "notes": "",
   "observation_ids": [

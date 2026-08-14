@@ -48,7 +48,6 @@ A glow appears at the high pole, but it is rarely film-base bleed around existin
 - Landscape high changed time of day.
 
 ## Next experiments
-- Rerun halation on a night interior that already contains lamps.
-- Discrimination: halation vs highlight bloom vs final bloom vs veiling glare.
+- See study_halation_002 for the lamp-present sweep.
 
 ## Notes

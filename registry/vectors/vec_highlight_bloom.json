@@ -4,7 +4,7 @@
     "highlight glow"
   ],
   "canonical_name": "highlight bloom",
-  "confidence": 0.22,
+  "confidence": 0.64,
   "definition": "A general glow around bright regions, broader and less colored than classic halation.",
   "family_id": "fam_optical_character",
   "high_pole": "broad highlight glow",
@@ -15,16 +15,56 @@
     "vec_final_bloom",
     "vec_optical_softness"
   ],
-  "not_the_same_as": {},
+  "not_the_same_as": {
+    "vec_halation": "Halation is a local, often reddish, bleed at the lamp lip. Bloom is a broader glow."
+  },
   "notes": "",
-  "observable_effects": [],
-  "observation_ids": [],
-  "open_questions": [],
+  "observable_effects": [
+    "bright regions enlarge softly",
+    "glow can be white or pale",
+    "need not hug the lamp edge"
+  ],
+  "observation_ids": [
+    "obs_0166",
+    "obs_0167",
+    "obs_0168",
+    "obs_0169",
+    "obs_0170",
+    "obs_0171",
+    "obs_0172",
+    "obs_0173",
+    "obs_0174",
+    "obs_0175",
+    "obs_0176",
+    "obs_0177",
+    "obs_0178",
+    "obs_0179",
+    "obs_0180"
+  ],
+  "open_questions": [
+    "How much bar bloom is actually atmospheric haze?"
+  ],
   "polarity": "unipolar",
-  "prompt_phrases": {},
-  "scoring_guidance": "",
-  "status": "candidate",
-  "study_ids": [],
+  "prompt_phrases": {
+    "high": "broad highlight glow around existing bright regions, not required to be red-edged, no new lamps",
+    "low": "tight unbloomed highlights on the existing lamps, no extra glow",
+    "medium": "mild general highlight glow around existing bright regions"
+  },
+  "scoring_guidance": "0.00 tight highlights, 0.50 mild glow, 1.00 broad bloom.",
+  "status": "provisional",
+  "study_ids": [
+    "study_highlight_bloom_001"
+  ],
   "testable_claim": "Bloom enlarges bright regions softly; it need not be reddish or tightly local.",
-  "validation": {}
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": true,
+    "transferable": true,
+    "useful": true
+  }
 }

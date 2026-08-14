@@ -60,6 +60,14 @@ def test_all_controlled_studies_have_paired_response_deltas(payload: dict):
     assert "vec_atmospheric_haze_response" not in diffusion
 
 
+def test_new_glow_studies_do_not_enter_the_explorer_contract(payload: dict):
+    responses = {response["study_id"] for response in payload["responses"]}
+    assert "study_halation_002" not in responses
+    assert "study_highlight_bloom_001" not in responses
+    assert payload["stats"]["controlled_vector_studies"] == 6
+    assert all(row["n"] == 100 for row in payload["correlations"])
+
+
 def test_correlations_only_use_scores_present_in_all_observations(payload: dict):
     library = Library(default_root()).load()
     support = score_support(library, study_ids=CORRELATION_STUDY_IDS)

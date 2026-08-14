@@ -13,8 +13,10 @@
 - Is there any prompt that thickens contours without defocusing the subject?
 
 ## halation (`vec_halation`)
-- Does Imagine ever produce red-edge film bleed without inventing a new light?
-- Should the working definition split into local bleed vs silhouette aura?
+- Is the leftover far-edge red wash bloom, grade, or a second bleed?
+
+## highlight bloom (`vec_highlight_bloom`)
+- How much bar bloom is actually atmospheric haze?
 
 ## key-to-fill ratio (`vec_key_to_fill_ratio`)
 - Can ratio rise on the teapot without a new hard window?
@@ -47,8 +49,13 @@
 - If kept, test a weaker high phrase: thicken outlines only, keep pores and glaze texture.
 
 ## From study_halation_001
-- Rerun halation on a night interior that already contains lamps.
-- Discrimination: halation vs highlight bloom vs final bloom vs veiling glare.
+- See study_halation_002 for the lamp-present sweep.
+
+## From study_halation_002
+- Optical versus telecine on the original daylight anchors.
+
+## From study_highlight_bloom_001
+- Bloom versus final bloom versus veiling glare if a finishing layer is needed.
 
 ## From study_key_to_fill_ratio_001
 - Key-to-fill vs source hardness on the teapot only, with an explicit hold against new window edges.

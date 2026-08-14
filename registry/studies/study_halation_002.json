@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_lamp_architecture",
+    "anchor_lamp_character",
+    "anchor_lamp_landscape",
+    "anchor_lamp_object",
+    "anchor_lamp_portrait"
+  ],
+  "candidate_vector_id": "vec_halation",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "With lamps already in frame, high produces a warm or reddish leak from those lamps. Portrait and landscape do not invent a hair-rim or a sunset. Distinct from highlight bloom.",
+  "entanglement_notes": [
+    "Some frames still add a secondary red wash at the far edge.",
+    "Bloom still rises a little when halation rises."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_halation_002",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Optical versus telecine on the original daylight anchors."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0151",
+    "obs_0152",
+    "obs_0153",
+    "obs_0154",
+    "obs_0155",
+    "obs_0156",
+    "obs_0157",
+    "obs_0158",
+    "obs_0159",
+    "obs_0160",
+    "obs_0161",
+    "obs_0162",
+    "obs_0163",
+    "obs_0164",
+    "obs_0165"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of halation"
+}

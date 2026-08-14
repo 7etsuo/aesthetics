@@ -5,7 +5,7 @@
     "film halation"
   ],
   "canonical_name": "halation",
-  "confidence": 0.49,
+  "confidence": 0.68,
   "definition": "A spatial bleed of light, often warm or reddish, around bright sources into adjacent darker areas.",
   "family_id": "fam_optical_character",
   "high_pole": "strong highlight bleed",
@@ -45,33 +45,51 @@
     "obs_0047",
     "obs_0048",
     "obs_0049",
-    "obs_0050"
+    "obs_0050",
+    "obs_0151",
+    "obs_0152",
+    "obs_0153",
+    "obs_0154",
+    "obs_0155",
+    "obs_0156",
+    "obs_0157",
+    "obs_0158",
+    "obs_0159",
+    "obs_0160",
+    "obs_0161",
+    "obs_0162",
+    "obs_0163",
+    "obs_0164",
+    "obs_0165"
   ],
   "open_questions": [
-    "Does Imagine ever produce red-edge film bleed without inventing a new light?",
-    "Should the working definition split into local bleed vs silhouette aura?"
+    "Is the leftover far-edge red wash bloom, grade, or a second bleed?"
   ],
   "polarity": "unipolar",
   "prompt_phrases": {
-    "high": "strong film-like halation, bright edges bleed into neighboring shadows, warm halo around lights",
-    "low": "clean highlights with no bleed into adjacent darks",
-    "medium": "mild halation, slight warm glow around lamps and speculars"
+    "high": "strong film-like halation, warm or reddish leak from existing lamps into neighboring darks only, no new lamps",
+    "low": "clean existing lamp edges, no bleed into adjacent darks, no new lights",
+    "medium": "mild warm local bleed around existing lamps only, lamps stay in place"
   },
   "scoring_guidance": "0.00 no bleed, 0.50 mild local glow, 1.00 strong colored or bright leak.",
   "status": "provisional",
   "study_ids": [
-    "study_halation_001"
+    "study_halation_001",
+    "study_halation_002"
   ],
   "testable_claim": "Increasing only halation should make bright edges glow and leak into neighboring darks without a required global softness or grade change.",
   "validation": {
+    "clean_study": "study_halation_002",
+    "contaminated_prior": "study_halation_001",
     "describable": true,
     "directional": true,
-    "isolatable": "weak",
+    "isolatable": "partial",
     "legible": true,
     "n_levels": 3,
     "n_subjects": 5,
-    "non_redundant": "pending_vs_bloom",
-    "transferable": "partial",
-    "useful": "conditional"
+    "non_redundant": "distinct_from_bloom_when_lamps_present",
+    "requires": "practicals_in_frame",
+    "transferable": true,
+    "useful": true
   }
 }

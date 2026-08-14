@@ -1,0 +1,97 @@
+{
+  "anchor_id": "anchor_lamp_portrait",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0146",
+  "image_path": "artifacts/anchors/anchor_lamp_portrait.jpg",
+  "intended_level": "baseline",
+  "intended_vector_id": null,
+  "model": "grok-imagine",
+  "notes": "Lamp-present lock. Visible practical confirmed. Baseline scores for the locked anchor.",
+  "prompt": "A 34-year-old woman with medium-brown skin, a narrow gold nose ring, shoulder-length black hair parted off-center, and a calm closed-mouth expression. Three-quarter pose, body turned slightly left, eyes to lens, charcoal knit sweater. Night interior. One warm practical table lamp sits in frame to camera left, visible shade and warm bulb glow, and that lamp is the key light. Dark plaster wall behind. No other lamps. Clean contemporary photograph: natural night color, moderate contrast, sharp focus on the near eye, no film effects, no extra glow, no grain, no stylization. Medium close-up, 85mm-equivalent, eye-level, square 1:1 frame.",
+  "scores": [
+    {
+      "confidence": 0.72,
+      "method": "agent_visual",
+      "score": 0.18,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.68,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.7,
+      "method": "agent_visual",
+      "score": 0.64,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.6,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.7,
+      "method": "agent_visual",
+      "score": 0.04,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.66,
+      "method": "agent_visual",
+      "score": 0.06,
+      "vector_id": "vec_highlight_bloom"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.1,
+      "vector_id": "vec_bokeh_softness"
+    },
+    {
+      "confidence": 0.68,
+      "method": "agent_visual",
+      "score": 0.3,
+      "vector_id": "vec_shadow_density"
+    },
+    {
+      "confidence": 0.6,
+      "method": "agent_visual",
+      "score": 0.22,
+      "vector_id": "vec_black_level"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_key_to_fill_ratio"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.32,
+      "vector_id": "vec_source_hardness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.35,
+      "vector_id": "vec_highlight_rolloff"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [],
+    "job_id": "job_lamp_portrait",
+    "seed_control": "unavailable",
+    "tool": "image_gen"
+  },
+  "source_image": null,
+  "source_type": "generated",
+  "study_id": "study_lamp_anchor_set_001",
+  "unintended_changes": []
+}
