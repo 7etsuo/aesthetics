@@ -22,7 +22,7 @@ CSS = """
 * { box-sizing: border-box; }
 html {
   margin: 0; padding: 0;
-  overflow-x: clip;
+  overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -31,10 +31,10 @@ body {
   background: var(--bg); color: var(--white);
   font: 16px/1.5 "Outfit", "Helvetica Neue", sans-serif;
   letter-spacing: -0.011em;
-  overflow-x: clip;
+  overflow-x: hidden;
   max-width: 100%;
 }
-img, video, svg { max-width: 100%; }
+img, video, svg { max-width: 100%; display: block; }
 .field-wrap canvas { width: 100%; height: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--ice); }
@@ -68,23 +68,20 @@ nav.float a[aria-current="page"], nav.float a:hover { color: var(--white); }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  overflow: clip;
+  overflow: hidden;
 }
 .hero-media {
   position: absolute; inset: 0; overflow: hidden;
 }
 .hero-photo {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
-  transform: scale(1.04);
-  animation: drift 28s ease-in-out infinite alternate;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; max-width: none;
+  object-fit: cover; object-position: 68% 42%;
 }
 .hero-shade {
   position: absolute; inset: 0;
-  background:
-    linear-gradient(180deg, rgba(9,9,11,0.15) 0%, rgba(9,9,11,0.12) 40%, rgba(9,9,11,0.88) 100%),
-    radial-gradient(80% 60% at 70% 30%, transparent, rgba(9,9,11,0.45));
+  background: linear-gradient(180deg, rgba(9,9,11,0.18) 0%, rgba(9,9,11,0.08) 42%, rgba(9,9,11,0.62) 100%);
 }
-@keyframes drift { from { transform: scale(1.06) translate3d(0,0,0); } to { transform: scale(1.12) translate3d(-1.5%, -1%, 0); } }
 .hero-hud {
   position: relative; z-index: 2;
   padding: 6.5rem 4.5vw 2.2rem;
@@ -220,7 +217,7 @@ footer { margin-top: 3rem; color: #6b6b72; font-size: 0.78rem; }
   position: relative; height: 42vh; min-height: 260px; overflow: hidden;
   border-radius: 0 0 22px 22px; margin-bottom: 1.4rem;
 }
-.mast img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05); }
+.mast img { width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 60% 40%; display: block; }
 .mast .shade {
   position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(9,9,11,0.15), rgba(9,9,11,0.82));
