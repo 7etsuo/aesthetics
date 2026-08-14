@@ -5,61 +5,46 @@
 <title>diffusion · atlas</title>
 <link rel="stylesheet" href="../assets/app.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans+Condensed:wght@500&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <body>
-<div class="shell">
-<nav class="top">
-  <a class="mark" href="../index.html">AT<i></i><em>LAS</em></a>
+<div class="grain" aria-hidden="true"></div>
+<nav class="float">
+  <a class="mark" href="../index.html">ATLAS</a>
   <a href="../index.html">Atlas</a>
 <a href="../vectors.html" aria-current="page">Vectors</a>
-<a href="../aesthetics.html">Aesthetics</a>
+<a href="../aesthetics.html">Looks</a>
 <a href="../studies.html">Studies</a>
-<a href="../families.html">Families</a>
 <a href="../aliases.html">Aliases</a>
-<a href="../matrices.html">Matrices</a>
-<a href="../questions.html">Questions</a>
+<a href="../families.html">Families</a>
+<a href="../questions.html">Open</a>
 </nav>
-<main>
-  <form class="search" role="search" data-prefix="../">
-    <input id="q" type="search" placeholder="Map a phrase to a vector or a look…" autocomplete="off">
-  </form>
-  <div class="hits" id="hits"></div>
-  
-<p class="eq-block"><span class="sum">v</span> = <span class="v">v<sub>diffusion</sub></span></p>
-<h1 class="page">diffusion</h1>
+<div class="sheet">
+<div class="mast"><img src="../artifacts/studies/study_diffusion_001/anchor_portrait_high.jpg" alt=""><div class="shade"></div><div class="in"><p class="kicker">v<sub>diffusion</sub> · high</p><h1 class="page">diffusion</h1></div></div>
 <div class="meta">
   <span class="chip provisional">provisional</span>
   <span class="chip mono">vec_diffusion</span>
   <span class="chip">conf 0.67</span>
   <span class="chip"><a href="../families/fam_optical_character.html">optical character</a></span>
 </div>
-<div class="axis">
-  <div class="pole">no diffusion veil</div>
-  <div class="track"><i style="left:67%"></i></div>
-  <div class="pole hi">heavy diffusion veil</div>
-</div>
 <p class="lede">A scattering layer that veils the image, often from filters or atmosphere.</p>
+<p class="eq-live"><span class="w">no diffusion veil</span> → <span class="v">heavy diffusion veil</span></p>
 <div class="grid-2">
   <div class="card"><h3>What it changes</h3><p>Increasing diffusion adds a veil and lifts contrast slightly while edge width stays closer to the source than in an optical-softness sweep.</p><ul><li>whites and midtones gain a veil</li><li>contrast lowers slightly</li><li>lights spread into a mist</li></ul></div>
   <div class="card"><h3>Aliases</h3><p>none</p></div>
 </div>
 <h2>Controlled examples</h2>
-<div class="strip">
+<div>
 <div class='anchor-row'><div></div><div class='caption'>low</div><div class='caption'>medium</div><div class='caption'>high</div></div>
-<div class='anchor-row'><div class='an'>human portrait</div><div class='thumb'><a href='../observations/obs_0071.html'><img src='../artifacts/studies/study_diffusion_001/anchor_portrait_low.jpg' alt='obs_0071'></a><div class='caption'>obs_0071</div></div><div class='thumb'><a href='../observations/obs_0072.html'><img src='../artifacts/studies/study_diffusion_001/anchor_portrait_medium.jpg' alt='obs_0072'></a><div class='caption'>obs_0072</div></div><div class='thumb'><a href='../observations/obs_0073.html'><img src='../artifacts/studies/study_diffusion_001/anchor_portrait_high.jpg' alt='obs_0073'></a><div class='caption'>obs_0073</div></div></div>
-<div class='anchor-row'><div class='an'>ordinary physical object</div><div class='thumb'><a href='../observations/obs_0074.html'><img src='../artifacts/studies/study_diffusion_001/anchor_object_low.jpg' alt='obs_0074'></a><div class='caption'>obs_0074</div></div><div class='thumb'><a href='../observations/obs_0075.html'><img src='../artifacts/studies/study_diffusion_001/anchor_object_medium.jpg' alt='obs_0075'></a><div class='caption'>obs_0075</div></div><div class='thumb'><a href='../observations/obs_0076.html'><img src='../artifacts/studies/study_diffusion_001/anchor_object_high.jpg' alt='obs_0076'></a><div class='caption'>obs_0076</div></div></div>
-<div class='anchor-row'><div class='an'>architecture or interior</div><div class='thumb'><a href='../observations/obs_0077.html'><img src='../artifacts/studies/study_diffusion_001/anchor_architecture_low.jpg' alt='obs_0077'></a><div class='caption'>obs_0077</div></div><div class='thumb'><a href='../observations/obs_0078.html'><img src='../artifacts/studies/study_diffusion_001/anchor_architecture_medium.jpg' alt='obs_0078'></a><div class='caption'>obs_0078</div></div><div class='thumb'><a href='../observations/obs_0079.html'><img src='../artifacts/studies/study_diffusion_001/anchor_architecture_high.jpg' alt='obs_0079'></a><div class='caption'>obs_0079</div></div></div>
-<div class='anchor-row'><div class='an'>landscape</div><div class='thumb'><a href='../observations/obs_0080.html'><img src='../artifacts/studies/study_diffusion_001/anchor_landscape_low.jpg' alt='obs_0080'></a><div class='caption'>obs_0080</div></div><div class='thumb'><a href='../observations/obs_0081.html'><img src='../artifacts/studies/study_diffusion_001/anchor_landscape_medium.jpg' alt='obs_0081'></a><div class='caption'>obs_0081</div></div><div class='thumb'><a href='../observations/obs_0082.html'><img src='../artifacts/studies/study_diffusion_001/anchor_landscape_high.jpg' alt='obs_0082'></a><div class='caption'>obs_0082</div></div></div>
-<div class='anchor-row'><div class='an'>stylized character or creature</div><div class='thumb'><a href='../observations/obs_0083.html'><img src='../artifacts/studies/study_diffusion_001/anchor_character_low.jpg' alt='obs_0083'></a><div class='caption'>obs_0083</div></div><div class='thumb'><a href='../observations/obs_0084.html'><img src='../artifacts/studies/study_diffusion_001/anchor_character_medium.jpg' alt='obs_0084'></a><div class='caption'>obs_0084</div></div><div class='thumb'><a href='../observations/obs_0085.html'><img src='../artifacts/studies/study_diffusion_001/anchor_character_high.jpg' alt='obs_0085'></a><div class='caption'>obs_0085</div></div></div>
+<div class='anchor-row'><div class='an'>human portrait</div><div class='thumb'><a href='../observations/obs_0071.html'><img src='../artifacts/studies/study_diffusion_001/anchor_portrait_low.jpg' alt='obs_0071'></a></div><div class='thumb'><a href='../observations/obs_0072.html'><img src='../artifacts/studies/study_diffusion_001/anchor_portrait_medium.jpg' alt='obs_0072'></a></div><div class='thumb'><a href='../observations/obs_0073.html'><img src='../artifacts/studies/study_diffusion_001/anchor_portrait_high.jpg' alt='obs_0073'></a></div></div>
+<div class='anchor-row'><div class='an'>ordinary physical object</div><div class='thumb'><a href='../observations/obs_0074.html'><img src='../artifacts/studies/study_diffusion_001/anchor_object_low.jpg' alt='obs_0074'></a></div><div class='thumb'><a href='../observations/obs_0075.html'><img src='../artifacts/studies/study_diffusion_001/anchor_object_medium.jpg' alt='obs_0075'></a></div><div class='thumb'><a href='../observations/obs_0076.html'><img src='../artifacts/studies/study_diffusion_001/anchor_object_high.jpg' alt='obs_0076'></a></div></div>
+<div class='anchor-row'><div class='an'>architecture or interior</div><div class='thumb'><a href='../observations/obs_0077.html'><img src='../artifacts/studies/study_diffusion_001/anchor_architecture_low.jpg' alt='obs_0077'></a></div><div class='thumb'><a href='../observations/obs_0078.html'><img src='../artifacts/studies/study_diffusion_001/anchor_architecture_medium.jpg' alt='obs_0078'></a></div><div class='thumb'><a href='../observations/obs_0079.html'><img src='../artifacts/studies/study_diffusion_001/anchor_architecture_high.jpg' alt='obs_0079'></a></div></div>
+<div class='anchor-row'><div class='an'>landscape</div><div class='thumb'><a href='../observations/obs_0080.html'><img src='../artifacts/studies/study_diffusion_001/anchor_landscape_low.jpg' alt='obs_0080'></a></div><div class='thumb'><a href='../observations/obs_0081.html'><img src='../artifacts/studies/study_diffusion_001/anchor_landscape_medium.jpg' alt='obs_0081'></a></div><div class='thumb'><a href='../observations/obs_0082.html'><img src='../artifacts/studies/study_diffusion_001/anchor_landscape_high.jpg' alt='obs_0082'></a></div></div>
+<div class='anchor-row'><div class='an'>stylized character or creature</div><div class='thumb'><a href='../observations/obs_0083.html'><img src='../artifacts/studies/study_diffusion_001/anchor_character_low.jpg' alt='obs_0083'></a></div><div class='thumb'><a href='../observations/obs_0084.html'><img src='../artifacts/studies/study_diffusion_001/anchor_character_medium.jpg' alt='obs_0084'></a></div><div class='thumb'><a href='../observations/obs_0085.html'><img src='../artifacts/studies/study_diffusion_001/anchor_character_high.jpg' alt='obs_0085'></a></div></div>
 </div>
 <h2>Nearby</h2><ul><li><a href='vec_optical_softness.html'>optical softness</a></li><li><a href='vec_veiling_glare.html'>veiling glare</a></li><li><a href='vec_atmospheric_haze_response.html'>atmospheric haze response</a></li><li><a href='vec_edge_softness.html'>edge softness</a></li></ul>
 <h2>Commonly confused with</h2><ul><li><a href='vec_edge_softness.html'>vec_edge_softness</a>: Edge softness is contour width. Diffusion is a field veil.</li><li><a href='vec_optical_softness.html'>vec_optical_softness</a>: Optical softness melts definition. Diffusion is a scattering veil that can sit on still-edged forms.</li><li><a href='vec_veiling_glare.html'>vec_veiling_glare</a>: Veiling glare is internal lens scatter that fogs blacks. Diffusion is a filter or atmosphere layer.</li></ul>
 <h2>Studies</h2><ul><li><a href='../studies/study_diffusion_001.html'>study_diffusion_001</a></li></ul>
-<h2>Scoring</h2><p>0.00 no veil, 0.50 mild filter, 1.00 heavy scattering veil.</p>
 <h2>Open questions</h2><ul><li>How much of the high pole is atmospheric haze rather than a filter veil?</li></ul>
-
-  <footer>Operational basis. Not assumed orthogonal. Records in registry/. Live combination a = sum w_i v_i.</footer>
-</main>
 </div>
 <script src="../assets/app.js"></script>
 </body>

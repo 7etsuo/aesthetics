@@ -5,26 +5,20 @@
 <title>Questions · atlas</title>
 <link rel="stylesheet" href="assets/app.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans+Condensed:wght@500&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <body>
-<div class="shell">
-<nav class="top">
-  <a class="mark" href="index.html">AT<i></i><em>LAS</em></a>
+<div class="grain" aria-hidden="true"></div>
+<nav class="float">
+  <a class="mark" href="index.html">ATLAS</a>
   <a href="index.html">Atlas</a>
 <a href="vectors.html">Vectors</a>
-<a href="aesthetics.html">Aesthetics</a>
+<a href="aesthetics.html">Looks</a>
 <a href="studies.html">Studies</a>
-<a href="families.html">Families</a>
 <a href="aliases.html">Aliases</a>
-<a href="matrices.html">Matrices</a>
-<a href="questions.html" aria-current="page">Questions</a>
+<a href="families.html">Families</a>
+<a href="questions.html" aria-current="page">Open</a>
 </nav>
-<main>
-  <form class="search" role="search" data-prefix="">
-    <input id="q" type="search" placeholder="Map a phrase to a vector or a look…" autocomplete="off">
-  </form>
-  <div class="hits" id="hits"></div>
-  <h1 class='page'>Unresolved questions</h1>
+<div class="sheet"><h1 class='page'>Open questions</h1>
 <h2><a href='vectors/vec_black_level.html'>black level</a></h2><ul><li>Can black lift be isolated from haze and veiling glare?</li></ul>
 <h2><a href='vectors/vec_bokeh_softness.html'>bokeh softness</a></h2><ul><li>Should architecture be excluded from bokeh tests, or is failure itself evidence?</li></ul>
 <h2><a href='vectors/vec_diffusion.html'>diffusion</a></h2><ul><li>How much of the high pole is atmospheric haze rather than a filter veil?</li></ul>
@@ -40,10 +34,7 @@
 <h2><a href='studies/study_halation_001.html'>study_halation_001</a></h2><ul><li>Rerun halation on a night interior that already contains lamps.</li><li>Discrimination: halation vs highlight bloom vs final bloom vs veiling glare.</li></ul>
 <h2><a href='studies/study_optical_softness_001.html'>study_optical_softness_001</a></h2><ul><li>Treat optical softness as a parent cluster: edge melt plus some bloom. Do not merge it with diffusion or bokeh.</li><li>Add a mid-high step (0.65) because medium is too close to the anchor.</li></ul>
 <h2><a href='studies/study_reconstruction_soft_halated_shadow_001.html'>study_reconstruction_soft_halated_shadow_001</a></h2><ul><li>Raise only shadow density after a soft reconstruction (sequential, not simultaneous).</li><li>Fit weights by comparing reconstruction scores to isolated high poles.</li></ul>
-<h2><a href='studies/study_shadow_density_001.html'>study_shadow_density_001</a></h2><ul><li>Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.</li><li>Paired study of shadow density vs key-to-fill vs black level on the same anchors.</li></ul>
-  <footer>Operational basis. Not assumed orthogonal. Records in registry/. Live combination a = sum w_i v_i.</footer>
-</main>
-</div>
+<h2><a href='studies/study_shadow_density_001.html'>study_shadow_density_001</a></h2><ul><li>Hold lighting by prompting: keep the same key and fill, change only the tone curve of the darks.</li><li>Paired study of shadow density vs key-to-fill vs black level on the same anchors.</li></ul></div>
 <script src="assets/app.js"></script>
 </body>
 </html>
