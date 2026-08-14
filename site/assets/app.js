@@ -81,6 +81,7 @@ function bootField() {
   }
   resize();
   window.addEventListener("resize", resize);
+  if (window.visualViewport) visualViewport.addEventListener("resize", resize);
   frame();
 }
 

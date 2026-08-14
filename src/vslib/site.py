@@ -20,11 +20,22 @@ CSS = """
   --ok: #8fdbb0;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: var(--bg); color: var(--white); }
+html {
+  margin: 0; padding: 0;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--white);
   font: 16px/1.5 "Outfit", "Helvetica Neue", sans-serif;
   letter-spacing: -0.011em;
+  overflow-x: clip;
+  max-width: 100%;
 }
+img, video, svg { max-width: 100%; }
+.field-wrap canvas { width: 100%; height: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--ice); }
 code, .mono, input, kbd {
@@ -36,9 +47,9 @@ code, .mono, input, kbd {
 }
 nav.float {
   position: fixed; top: 0; left: 0; right: 0; z-index: 30;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem 1rem;
-  padding: 0.85rem 1.2rem;
-  background: linear-gradient(to bottom, rgba(9,9,11,0.72), rgba(9,9,11,0));
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem 0.85rem;
+  padding: 0.75rem 4.5vw;
+  background: linear-gradient(to bottom, rgba(9,9,11,0.78), rgba(9,9,11,0));
   backdrop-filter: blur(10px);
 }
 nav.float .mark {
@@ -51,12 +62,20 @@ nav.float a {
 }
 nav.float a[aria-current="page"], nav.float a:hover { color: var(--white); }
 .hero {
-  position: relative; min-height: 100svh; overflow: hidden;
-  display: grid; place-items: end stretch;
+  position: relative;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: clip;
+}
+.hero-media {
+  position: absolute; inset: 0; overflow: hidden;
 }
 .hero-photo {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  transform: scale(1.06);
+  width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
+  transform: scale(1.04);
   animation: drift 28s ease-in-out infinite alternate;
 }
 .hero-shade {
@@ -67,7 +86,8 @@ nav.float a[aria-current="page"], nav.float a:hover { color: var(--white); }
 }
 @keyframes drift { from { transform: scale(1.06) translate3d(0,0,0); } to { transform: scale(1.12) translate3d(-1.5%, -1%, 0); } }
 .hero-hud {
-  position: relative; z-index: 2; padding: 6.5rem 1.4rem 2.2rem;
+  position: relative; z-index: 2;
+  padding: 6.5rem 4.5vw 2.2rem;
   max-width: 1240px; width: 100%; margin: 0 auto;
 }
 .kicker {
@@ -76,16 +96,18 @@ nav.float a[aria-current="page"], nav.float a:hover { color: var(--white); }
 }
 h1.display {
   font-family: "Syne", sans-serif; font-weight: 750;
-  font-size: clamp(2.6rem, 8vw, 6.4rem); line-height: 0.9;
+  font-size: clamp(2.1rem, 7vw, 6.4rem); line-height: 0.92;
   letter-spacing: -0.045em; margin: 0 0 0.7rem; max-width: 16ch;
 }
 .eq-live {
   font-family: "JetBrains Mono", monospace;
-  font-size: clamp(0.78rem, 1.6vw, 1.02rem);
-  line-height: 1.7; color: rgba(244,241,236,0.88);
+  font-size: clamp(0.72rem, 1.5vw, 1.02rem);
+  line-height: 1.75; color: rgba(244,241,236,0.88);
   margin: 0 0 1.3rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
-.eq-live a { border-bottom: 1px solid rgba(159,212,255,0.35); }
+.eq-live a { border-bottom: 1px solid rgba(159,212,255,0.35); display: inline; }
 .eq-live .w { color: var(--hot); }
 .eq-live .v { color: var(--ice); }
 .rack {
@@ -107,8 +129,9 @@ h1.display {
 .fader .n { font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fog); }
 .fader .w { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; color: var(--hot); }
 @keyframes rise { from { height: 0; } }
-.sheet { max-width: 1240px; margin: 0 auto; padding: 5.2rem 1.4rem 5rem; }
+.sheet { max-width: 1240px; margin: 0 auto; padding: 5.2rem 4.5vw 5rem; }
 .hero + .sheet { padding-top: 2rem; }
+.table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .search input {
   width: 100%; background: #111114; color: var(--white);
   border: 1px solid var(--line); padding: 0.85rem 1rem; font-size: 1rem;
@@ -202,15 +225,37 @@ footer { margin-top: 3rem; color: #6b6b72; font-size: 0.78rem; }
   position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(9,9,11,0.15), rgba(9,9,11,0.82));
 }
-.mast .in { position: absolute; left: 1.3rem; right: 1.3rem; bottom: 1.1rem; }
+.mast .in { position: absolute; left: 4.5vw; right: 4.5vw; bottom: 1.1rem; }
+.mast .in .page { font-size: clamp(1.6rem, 6vw, 3.2rem); }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo { animation: none; }
+  .hero-photo { animation: none; transform: none; }
   .fader-col .fill { animation: none; }
 }
+@media (max-width: 1100px) {
+  .grid-axes { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+}
 @media (max-width: 860px) {
-  .grid-2, .anchor-row, .strip.levels, .axis-film { grid-template-columns: 1fr; }
-  .plate img { height: 280px; }
-  .hero-hud { padding-top: 5.5rem; }
+  nav.float a:not(.mark) { font-size: 0.64rem; letter-spacing: 0.08em; }
+  .hero { min-height: 100svh; }
+  .hero-hud { padding-top: 5.2rem; }
+  h1.display { font-size: clamp(1.9rem, 11vw, 3.4rem); }
+  .fader { width: 48px; }
+  .fader-col { height: 110px; }
+  .plate { flex-basis: min(84vw, 320px); }
+  .plate img { height: 260px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .anchor-row { grid-template-columns: 1fr 1fr 1fr; }
+  .anchor-row .an { grid-column: 1 / -1; padding-top: 0.8rem; }
+  .field-wrap { height: min(52vh, 420px); }
+  .mast { height: 38vh; min-height: 200px; }
+}
+@media (max-width: 560px) {
+  nav.float { gap: 0.35rem 0.65rem; }
+  nav.float a.nav-more { display: none; }
+  .rack { gap: 0.7rem; }
+  .fader { width: 44px; }
+  .eq-live { font-size: 0.74rem; }
+  .strip.levels { grid-template-columns: 1fr; }
 }
 """
 
@@ -286,7 +331,7 @@ def _page(path: Path, title: str, body: str, nav: str, hero: bool = False) -> No
     html = f"""<!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{_esc(title)} · atlas</title>
 <link rel="stylesheet" href="{prefix}assets/app.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -308,18 +353,19 @@ def _page(path: Path, title: str, body: str, nav: str, hero: bool = False) -> No
 
 def _nav(active: str, prefix: str) -> str:
     links = [
-        ("home", "index.html", "Atlas"),
-        ("vectors", "vectors.html", "Vectors"),
-        ("aesthetics", "aesthetics.html", "Looks"),
-        ("studies", "studies.html", "Studies"),
-        ("aliases", "aliases.html", "Aliases"),
-        ("families", "families.html", "Families"),
-        ("questions", "questions.html", "Open"),
+        ("home", "index.html", "Atlas", False),
+        ("vectors", "vectors.html", "Vectors", False),
+        ("aesthetics", "aesthetics.html", "Looks", False),
+        ("studies", "studies.html", "Studies", False),
+        ("aliases", "aliases.html", "Aliases", True),
+        ("families", "families.html", "Families", True),
+        ("questions", "questions.html", "Open", True),
     ]
     out = []
-    for key, href, label in links:
+    for key, href, label, more in links:
         mark = ' aria-current="page"' if key == active else ""
-        out.append(f'<a href="{prefix}{href}"{mark}>{label}</a>')
+        extra = ' class="nav-more"' if more else ""
+        out.append(f'<a href="{prefix}{href}"{extra}{mark}>{label}</a>')
     return "\n".join(out)
 
 
@@ -425,8 +471,10 @@ def _home(lib: Library) -> str:
         )
     return f"""
 <section class="hero">
-  <img class="hero-photo" src="{_esc(hero)}" alt="">
-  <div class="hero-shade"></div>
+  <div class="hero-media">
+    <img class="hero-photo" src="{_esc(hero)}" alt="">
+    <div class="hero-shade"></div>
+  </div>
   <div class="hero-hud">
     <p class="kicker">visual basis atlas</p>
     <h1 class="display">a = Σ wᵢ vᵢ</h1>
@@ -492,8 +540,8 @@ def _vector_index(lib: Library) -> str:
 <p class="lede">Tested axes first. The rest of the basis is still candidate.</p>
 <div class="grid-axes">{''.join(cards)}</div>
 <h2>Full catalog</h2>
-<table><thead><tr><th>name</th><th>id</th><th>status</th><th>family</th><th>conf</th></tr></thead>
-<tbody>{''.join(rows)}</tbody></table>
+<div class="table-wrap"><table><thead><tr><th>name</th><th>id</th><th>status</th><th>family</th><th>conf</th></tr></thead>
+<tbody>{''.join(rows)}</tbody></table></div>
 """
 
 
@@ -551,8 +599,8 @@ def _alias_index(lib: Library) -> str:
     return f"""
 <h1 class="page">Aliases</h1>
 <p class="lede">Map a raw phrase onto the basis.</p>
-<table><thead><tr><th>phrase</th><th>target</th><th>mapping</th><th>conf</th><th>notes</th></tr></thead>
-<tbody>{''.join(rows)}</tbody></table>
+<div class="table-wrap"><table><thead><tr><th>phrase</th><th>target</th><th>mapping</th><th>conf</th><th>notes</th></tr></thead>
+<tbody>{''.join(rows)}</tbody></table></div>
 """
 
 
@@ -777,7 +825,7 @@ def _obs_page(lib: Library, observation_id: str) -> str:
 <h2>Prompt</h2>
 <p class="mono" style="white-space:pre-wrap;font-size:0.8rem">{_esc(obs.prompt)}</p>
 <h2>Scores</h2>
-<table><thead><tr><th>vector</th><th>score</th><th>conf</th></tr></thead><tbody>{scores}</tbody></table>
+<div class="table-wrap"><table><thead><tr><th>vector</th><th>score</th><th>conf</th></tr></thead><tbody>{scores}</tbody></table></div>
 <h2>Unintended</h2><ul>{unintended}</ul>
 <p>{_esc(obs.notes)}</p>
 """
@@ -876,6 +924,7 @@ function bootField() {
   }
   resize();
   window.addEventListener("resize", resize);
+  if (window.visualViewport) visualViewport.addEventListener("resize", resize);
   frame();
 }
 
