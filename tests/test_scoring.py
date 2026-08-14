@@ -12,11 +12,11 @@ from vslib.site_explorer import CONTROLLED_STUDY_IDS, CORRELATION_STUDY_IDS
 from vslib.store import Library
 
 
-def test_explorer_stays_on_the_original_hundred():
-    assert "study_halation_002" not in CONTROLLED_STUDY_IDS
-    assert "study_highlight_bloom_001" not in CONTROLLED_STUDY_IDS
-    assert "study_telecine_softness_001" not in CONTROLLED_STUDY_IDS
-    assert "study_analog_video_texture_001" not in CONTROLLED_STUDY_IDS
+def test_explorer_uses_current_controlled_studies_and_original_correlation_cohort():
+    assert "study_halation_002" in CONTROLLED_STUDY_IDS
+    assert "study_highlight_bloom_001" in CONTROLLED_STUDY_IDS
+    assert "study_telecine_softness_001" in CONTROLLED_STUDY_IDS
+    assert "study_analog_video_texture_001" in CONTROLLED_STUDY_IDS
     assert "study_lamp_anchor_set_001" not in CORRELATION_STUDY_IDS
     assert "study_halation_002" not in CORRELATION_STUDY_IDS
     assert "study_highlight_bloom_001" not in CORRELATION_STUDY_IDS

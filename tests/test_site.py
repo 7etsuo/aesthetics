@@ -25,7 +25,7 @@ def test_page_shell_has_social_metadata_and_semantics(tmp_path: Path):
     assert '<main id="main"' in html
     assert 'class="skip-link"' in html
     assert '<link rel="canonical" href="https://atlas.agenc.ag/">' in html
-    assert '<meta property="og:image" content="https://atlas.agenc.ag/assets/social-card-v2.jpg">' in html
+    assert '<meta property="og:image" content="https://atlas.agenc.ag/assets/social-card-v3.jpg">' in html
     assert '<meta name="twitter:card" content="summary_large_image">' in html
     assert '<meta property="og:image:width" content="1200">' in html
     assert '<meta property="og:image:height" content="630">' in html
@@ -69,7 +69,7 @@ def test_generated_pages_have_unique_absolute_canonicals():
 
 
 def test_social_card_is_share_card_size():
-    card = default_root() / "assets" / "social-card-v2.jpg"
+    card = default_root() / "assets" / "social-card-v3.jpg"
     assert card.exists()
     with Image.open(card) as image:
         assert image.size == (1200, 630)
@@ -80,10 +80,14 @@ def test_homepage_uses_nonhuman_evidence_and_real_discrete_states():
     html = (default_root() / "site" / "index.html").read_text(encoding="utf-8")
 
     assert "Hold the room" in html
-    assert "obs_0077" in html
-    assert "obs_0078" in html
-    assert "obs_0079" in html
+    assert "Move the light" in html
+    assert "obs_0157" in html
+    assert "obs_0158" in html
+    assert "obs_0159" in html
     assert 'type="radio"' in html
+    assert "Register 3 outputs" in html
+    assert "0 interpolated frames" in html
+    assert "Association geometry" in html
     assert "anchor_portrait" not in html
     assert "anchor_character" not in html
     assert "<canvas" not in html
@@ -93,9 +97,17 @@ def test_homepage_uses_nonhuman_evidence_and_real_discrete_states():
 def test_explorer_and_presentation_assets_are_generated():
     root = default_root() / "site" / "assets"
     assert (root / "atlas-explorer.json").exists()
-    for observation_id in ("obs_0077", "obs_0078", "obs_0079"):
+    for observation_id in ("obs_0157", "obs_0158", "obs_0159", "obs_0174"):
         assert (root / "studies" / f"{observation_id}-640.webp").exists()
         assert (root / "studies" / f"{observation_id}-1024.webp").exists()
+
+
+def test_homepage_distinguishes_total_observations_from_correlation_cohort():
+    html = (default_root() / "site" / "index.html").read_text(encoding="utf-8")
+    assert "210</dt><dd>registry observations" in html
+    assert "100</dt><dd>complete-score cohort" in html
+    assert "11</dt><dd>controlled axes" in html
+    assert "not Grok latent space" in html
 
 
 def test_homepage_correlation_table_is_complete_for_default_axis():

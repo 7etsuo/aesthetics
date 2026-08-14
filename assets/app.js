@@ -164,6 +164,268 @@
     if (status) status.textContent = message;
   }
 
+  function motionComplete(duration = MOTION.slow) {
+    if (motionQuery.matches) return Promise.resolve();
+    return new Promise((resolve) => window.setTimeout(resolve, duration));
+  }
+
+  function createHeroScanner({ root, layers, controls, activeState, applyLayerState }) {
+    const stage = root.querySelector("[data-hero-stage]");
+    const scanStage = root.querySelector("[data-hero-scan-stage]") || stage;
+    const toggle = root.querySelector("[data-hero-scan-toggle]");
+    const scanControl = root.querySelector("[data-hero-scan-control]");
+    const scan = root.querySelector("[data-hero-scan]");
+    const output = root.querySelector("[data-hero-scan-output]");
+    const toggleLabel = root.querySelector("[data-hero-scan-toggle-label]");
+    const requiredStates = ["low", "medium", "high"];
+    const layerFor = (state) => layers.find((layer) => sameKey(hookValue(layer, "data-hero-layer"), state));
+    const available = stage && scanStage && toggle && scan && requiredStates.every(layerFor);
+    if (!available) {
+      return {
+        exit: () => Promise.resolve(),
+        isActive: () => false,
+      };
+    }
+
+    const compareLabel = toggleLabel?.dataset.compareLabel
+      || toggleLabel?.textContent.trim()
+      || "Register 3 outputs";
+    const isolateLabel = toggleLabel?.dataset.isolateLabel || "Isolate output";
+    let comparisonActive = false;
+    let comparisonPending = false;
+    let transitionRevision = 0;
+    let gesture = null;
+
+    const stateLabel = (state) => {
+      const control = controls.find((item) => sameKey(hookValue(item, "data-hero-state"), state));
+      return control?.dataset.label
+        || control?.closest("label")?.querySelector(".state-name, [data-state-name]")?.textContent.trim()
+        || control?.closest("label")?.textContent.trim()
+        || control?.textContent.trim()
+        || state;
+    };
+
+    const observationId = (state) => layerFor(state)?.dataset.observationId || "";
+
+    const setToggleState = (active) => {
+      toggle.setAttribute("aria-pressed", String(active));
+      toggle.setAttribute(
+        "aria-label",
+        active ? `Isolate ${stateLabel(activeState())}` : "Compare all three registered outputs",
+      );
+      if (toggleLabel) toggleLabel.textContent = active ? isolateLabel : compareLabel;
+      if (scanControl) scanControl.hidden = !active;
+      scan.hidden = !active;
+      scan.disabled = !active;
+    };
+
+    const scanHalf = () => {
+      const explicit = Number(scan.dataset.scanHalf);
+      if (Number.isFinite(explicit) && explicit > 0) return explicit;
+      const width = stage.getBoundingClientRect().width;
+      if (!width) return 8;
+      const pixels = Math.max(28, Math.min(44, width * 0.04));
+      return (pixels / width) * 100;
+    };
+
+    const clampScan = (value) => {
+      const minimum = Number(scan.min) || 12;
+      const maximum = Number(scan.max) || 88;
+      return Math.max(minimum, Math.min(maximum, Number(value)));
+    };
+
+    const setGates = (left, right) => {
+      stage.style.setProperty("--gate-a", `${left}%`);
+      stage.style.setProperty("--gate-b", `${right}%`);
+    };
+
+    const isolatedGates = (state) => {
+      if (sameKey(state, "low")) return [100, 100];
+      if (sameKey(state, "medium")) return [0, 100];
+      return [0, 0];
+    };
+
+    const updateScan = (value) => {
+      const position = clampScan(value);
+      const half = scanHalf();
+      setGates(Math.max(0, position - half), Math.min(100, position + half));
+      scan.value = String(position);
+      const rounded = Math.round(position);
+      if (output) output.textContent = `${rounded}%`;
+      scan.setAttribute(
+        "aria-valuetext",
+        `Comparison centered at ${rounded} percent. Left ${stateLabel("low")}; center ${stateLabel("medium")}; right ${stateLabel("high")}.`,
+      );
+    };
+
+    const finishComparison = (state) => {
+      comparisonActive = false;
+      root.dataset.heroView = "isolate";
+      stage.dataset.heroView = "isolate";
+      root.classList.remove("is-scan-entering", "is-scan-exiting", "is-scan-dragging");
+      setToggleState(false);
+      applyLayerState(state);
+    };
+
+    const exit = async ({ state = activeState(), focus = false } = {}) => {
+      const ticket = ++transitionRevision;
+      if (comparisonPending && !comparisonActive) {
+        comparisonPending = false;
+        toggle.disabled = false;
+        root.classList.remove("is-loading", "is-scan-entering", "is-scan-exiting", "is-scan-dragging");
+        root.removeAttribute("aria-busy");
+        setToggleState(false);
+        instrumentStatus(root, `${stateLabel(state)} selected.`);
+        return;
+      }
+      if (!comparisonActive) {
+        setToggleState(false);
+        return;
+      }
+      toggle.disabled = true;
+      root.classList.remove("is-scan-entering", "is-scan-dragging");
+      root.classList.add("is-scan-exiting");
+      setGates(...isolatedGates(state));
+      instrumentStatus(root, `Returning to ${stateLabel(state)}.`);
+      await motionComplete(MOTION.slow);
+      if (ticket !== transitionRevision) return;
+      finishComparison(state);
+      toggle.disabled = false;
+      instrumentStatus(root, `${stateLabel(state)} isolated.`);
+      if (focus) toggle.focus({ preventScroll: true });
+    };
+
+    const enter = async () => {
+      if (comparisonActive) return;
+      const ticket = ++transitionRevision;
+      comparisonPending = true;
+      toggle.disabled = true;
+      root.classList.remove("has-error", "is-scan-exiting");
+      root.classList.add("is-loading");
+      root.setAttribute("aria-busy", "true");
+      instrumentStatus(root, "Preparing the registered comparison.");
+      try {
+        await Promise.all(requiredStates.map((state) => decodeImage(layerFor(state))));
+        if (ticket !== transitionRevision) return;
+        comparisonPending = false;
+        comparisonActive = true;
+        setGates(...isolatedGates(activeState()));
+        root.dataset.heroView = "compare";
+        stage.dataset.heroView = "compare";
+        root.classList.add("is-scan-entering");
+        setToggleState(true);
+        // The next frame separates a state change from the CSS gate transition;
+        // there is no JavaScript tween and no synthesized image state.
+        await new Promise((resolve) => window.requestAnimationFrame(resolve));
+        if (ticket !== transitionRevision) return;
+        updateScan(scan.value || 50);
+        finishState(root, "is-scan-entering", MOTION.slow);
+        const ids = requiredStates.map(observationId).filter(Boolean);
+        instrumentStatus(
+          root,
+          `Registered comparison shown${ids.length ? `: ${ids.join(", ")}` : ""}. Three actual outputs; zero interpolated frames.`,
+        );
+      } catch {
+        if (ticket !== transitionRevision) return;
+        comparisonPending = false;
+        finishComparison(activeState());
+        root.classList.add("has-error");
+        instrumentStatus(root, "The registered comparison could not be loaded. The selected output is still shown.");
+      } finally {
+        if (ticket === transitionRevision) {
+          toggle.disabled = false;
+          root.classList.remove("is-loading");
+          root.removeAttribute("aria-busy");
+        }
+      }
+    };
+
+    const updateFromPointer = (event) => {
+      const bounds = scanStage.getBoundingClientRect();
+      if (!bounds.width) return;
+      updateScan(((event.clientX - bounds.left) / bounds.width) * 100);
+    };
+
+    const endGesture = (event) => {
+      if (!gesture || (event.pointerId !== undefined && event.pointerId !== gesture.id)) return;
+      if (scanStage.hasPointerCapture?.(gesture.id)) scanStage.releasePointerCapture(gesture.id);
+      gesture = null;
+      root.classList.remove("is-scan-dragging");
+    };
+
+    toggle.hidden = false;
+    scan.min = scan.min || "12";
+    scan.max = scan.max || "88";
+    scan.step = scan.step || "1";
+    scan.value = scan.value || "50";
+    setToggleState(false);
+    setGates(...isolatedGates(activeState()));
+
+    toggle.addEventListener("click", () => {
+      if (comparisonActive) void exit();
+      else void enter();
+    });
+    controls.forEach((control) => {
+      control.addEventListener("click", () => {
+        const requested = hookValue(control, "data-hero-state");
+        if (comparisonActive && sameKey(requested, activeState())) void exit({ state: requested });
+      });
+    });
+    scan.addEventListener("input", () => updateScan(scan.value));
+    scan.addEventListener("change", () => {
+      instrumentStatus(root, `Registered comparison centered at ${Math.round(Number(scan.value))} percent.`);
+    });
+    scan.addEventListener("pointerdown", () => root.classList.add("is-scan-dragging"));
+    scan.addEventListener("pointerup", () => root.classList.remove("is-scan-dragging"));
+    scan.addEventListener("pointercancel", () => root.classList.remove("is-scan-dragging"));
+
+    scanStage.addEventListener("pointerdown", (event) => {
+      if (!comparisonActive || event.button !== 0 || event.target.closest("button, input, label, a, figcaption")) return;
+      gesture = {
+        id: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        active: event.pointerType !== "touch",
+      };
+      if (gesture.active) {
+        scanStage.setPointerCapture(event.pointerId);
+        root.classList.add("is-scan-dragging");
+        updateFromPointer(event);
+      }
+    });
+    scanStage.addEventListener("pointermove", (event) => {
+      if (!comparisonActive || !gesture || event.pointerId !== gesture.id) return;
+      if (!gesture.active) {
+        const deltaX = Math.abs(event.clientX - gesture.startX);
+        const deltaY = Math.abs(event.clientY - gesture.startY);
+        if (deltaX < 8 || deltaX <= deltaY * 1.2) return;
+        gesture.active = true;
+        scanStage.setPointerCapture(event.pointerId);
+        root.classList.add("is-scan-dragging");
+      }
+      event.preventDefault();
+      updateFromPointer(event);
+    });
+    scanStage.addEventListener("pointerup", endGesture);
+    scanStage.addEventListener("pointercancel", endGesture);
+    root.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !comparisonActive || event.isComposing) return;
+      event.preventDefault();
+      event.stopPropagation();
+      void exit({ focus: true });
+    }, { capture: true });
+
+    const observer = typeof ResizeObserver === "function"
+      ? new ResizeObserver(() => { if (comparisonActive) updateScan(scan.value); })
+      : null;
+    observer?.observe(stage);
+
+    return {
+      exit: (state) => exit({ state }),
+      isActive: () => comparisonActive || comparisonPending,
+    };
+  }
+
   function bootHeroInstruments() {
     all("[data-hero-instrument]").forEach((root) => {
       const controls = all("[data-hero-state]", root);
@@ -185,7 +447,7 @@
         root.dataset.activeState = state;
       };
 
-      const updateScores = (level) => {
+      const updateScores = (level, heroData = null) => {
         const scoreRoot = root.querySelector("[data-hero-score]");
         if (!scoreRoot || !level) return;
         all("[data-score], [data-vector-id], [data-hero-score-value]", scoreRoot).forEach((node) => {
@@ -194,6 +456,8 @@
             sameKey(item.vector_id, key) || sameKey(item.name, key)
           ));
           node.textContent = score ? formatDecimal(score.value, 2) : "—";
+          const metric = node.closest("[data-hero-metric], .hero-metric");
+          if (metric) metric.style.setProperty("--score", score ? String(score.value) : "0");
         });
         all("[data-hero-observation]", root).forEach((node) => {
           node.textContent = level.observation_id || level.id || "—";
@@ -203,11 +467,7 @@
         });
         const notes = Array.isArray(level.notes) ? level.notes : (level.notes ? [level.notes] : []);
         const changes = Array.isArray(level.unintended_changes) ? level.unintended_changes : [];
-        const haze = (level.scores || []).find((item) => sameKey(item.vector_id, "vec_atmospheric_haze_response"));
-        const highOnly = haze
-          ? [`atmospheric haze ${formatDecimal(haze.value, 2)}`, ...changes.map((change) => `“${change}”`)]
-          : [];
-        const noteText = (highOnly.length ? highOnly : [...notes, ...changes]).filter(Boolean).join(" · ");
+        const noteText = [...notes, ...changes.map((change) => `“${change}”`)].filter(Boolean).join(" · ");
         all("[data-hero-note]", root).forEach((node) => {
           const label = node.querySelector("span");
           const message = noteText || "No additional field note recorded.";
@@ -215,20 +475,41 @@
             node.textContent = message;
             return;
           }
-          label.textContent = highOnly.length ? "High-only annotation" : "Protocol note";
+          label.textContent = changes.length ? "Observed spillover" : "Protocol note";
           Array.from(node.childNodes).forEach((child) => {
             if (child !== label) child.remove();
           });
           node.append(document.createTextNode(` ${message}`));
         });
+
+        if (heroData) {
+          const low = (heroData.levels || []).find((item) => sameKey(item.requested_level || item.level, "low"));
+          all("[data-hero-delta]", root).forEach((node) => {
+            const vectorId = node.dataset.heroDelta || heroData.vector_id;
+            const lowScore = (low?.scores || []).find((item) => sameKey(item.vector_id, vectorId));
+            const activeScore = (level.scores || []).find((item) => sameKey(item.vector_id, vectorId));
+            node.textContent = lowScore && activeScore
+              ? `Δ ${formatSigned(Number(activeScore.value) - Number(lowScore.value), 2)}`
+              : "Δ —";
+          });
+        }
       };
 
       applyLayerState(active);
+      const scanner = createHeroScanner({
+        root,
+        layers,
+        controls,
+        activeState: () => active,
+        applyLayerState,
+      });
       root.classList.add("is-enhanced", "is-ready");
 
       controls.forEach((control) => bindChoice(control, async () => {
         const requested = hookValue(control, "data-hero-state");
-        if (!requested || sameKey(requested, active)) return;
+        if (!requested) return;
+        if (scanner.isActive()) await scanner.exit(requested);
+        if (sameKey(requested, active)) return;
         const destination = layers.find((layer) => sameKey(hookValue(layer, "data-hero-layer"), requested));
         if (!destination) return;
 
@@ -276,7 +557,7 @@
         const level = (data.hero?.levels || []).find((item) => (
           sameKey(item.requested_level || item.level, requested)
         ));
-        updateScores(level);
+        updateScores(level, data.hero);
       }));
     });
   }
@@ -287,7 +568,7 @@
     const row = document.createElement("li");
     row.className = "response-row";
     row.dataset.sign = sign;
-    row.style.setProperty("--magnitude", `${Math.min(100, Math.abs(value) * 100)}%`);
+    row.style.setProperty("--magnitude", `${Math.min(50, Math.abs(value) * 50)}%`);
 
     const name = document.createElement("span");
     name.className = "response-name";
@@ -449,6 +730,240 @@
       .sort((left, right) => Math.abs(Number(right.r)) - Math.abs(Number(left.r)));
   }
 
+  function svgElement(name, attributes = {}) {
+    const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+    return node;
+  }
+
+  function fanLabelLayout() {
+    if (window.matchMedia("(max-width: 390px)").matches) {
+      return {
+        spacing: 112,
+        minimumY: 58,
+        maximumY: 578,
+        leftX: 450,
+        rightX: 550,
+        valueDy: 46,
+      };
+    }
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      return {
+        spacing: 74,
+        minimumY: 54,
+        maximumY: 586,
+        leftX: 430,
+        rightX: 570,
+        valueDy: 34,
+      };
+    }
+    return {
+      spacing: 46,
+      minimumY: 54,
+      maximumY: 594,
+      leftX: null,
+      rightX: null,
+      valueDy: 18,
+    };
+  }
+
+  function resolveFanLabels(geometry, layout) {
+    const {
+      spacing,
+      minimumY,
+      maximumY,
+    } = layout;
+    const positions = new Map();
+
+    ["left", "right"].forEach((side) => {
+      const entries = geometry
+        .filter((item) => item.side === side)
+        .map((item) => ({
+          ...item,
+          desiredY: Math.max(minimumY, Math.min(maximumY, item.endY - 10)),
+        }))
+        .sort((a, b) => a.desiredY - b.desiredY
+          || String(a.item.other || a.item.other_name || "").localeCompare(String(b.item.other || b.item.other_name || ""))
+          || a.index - b.index);
+      if (!entries.length) return;
+
+      const pack = (items) => {
+        const center = items.reduce((sum, item) => sum + item.desiredY, 0) / items.length;
+        const span = spacing * (items.length - 1);
+        const start = Math.max(minimumY, Math.min(maximumY - span, center - span / 2));
+        return { items, start, end: start + span };
+      };
+
+      let clusters = entries.map((entry) => pack([entry]));
+      let merged = true;
+      while (merged && clusters.length > 1) {
+        merged = false;
+        const next = [];
+        for (let index = 0; index < clusters.length; index += 1) {
+          const current = clusters[index];
+          const following = clusters[index + 1];
+          if (following && current.end + spacing > following.start) {
+            next.push(pack([...current.items, ...following.items]));
+            index += 1;
+            merged = true;
+          } else {
+            next.push(current);
+          }
+        }
+        clusters = next;
+      }
+
+      clusters.forEach((cluster) => {
+        cluster.items.forEach((entry, index) => {
+          positions.set(entry.index, cluster.start + index * spacing);
+        });
+      });
+    });
+
+    return positions;
+  }
+
+  function renderBasisFan(target, correlations, axisName) {
+    if (!target) return;
+    const rays = correlations.slice(0, 6);
+    const origin = { x: 500, y: 570 };
+    const length = 400;
+    const titleId = `basis-fan-title-${++generatedId}`;
+    const descriptionId = `basis-fan-description-${generatedId}`;
+    const svg = svgElement("svg", {
+      class: "basis-fan-svg",
+      viewBox: "0 0 1000 640",
+      role: "img",
+      "aria-labelledby": `${titleId} ${descriptionId}`,
+      focusable: "false",
+      preserveAspectRatio: "xMidYMid meet",
+    });
+    svg.dataset.axis = axisName || "";
+
+    const title = svgElement("title", { id: titleId });
+    title.textContent = `${axisName || "Selected dimension"}: six strongest observed correlations`;
+    const description = svgElement("desc", { id: descriptionId });
+    description.textContent = [
+      "All rays have equal length. Each ray angle is the arccosine of its Pearson r value.",
+      ...rays.map((item) => `${item.other_name || item.other}: r ${formatSigned(item.r, 4)}.`),
+      "The complete values are available in the adjacent table.",
+    ].join(" ");
+    svg.append(title, description);
+
+    const reference = svgElement("g", { class: "basis-fan-reference", "aria-hidden": "true" });
+    reference.append(
+      svgElement("path", {
+        class: "basis-fan-arc",
+        d: `M ${origin.x - length} ${origin.y} A ${length} ${length} 0 0 1 ${origin.x + length} ${origin.y}`,
+      }),
+      svgElement("line", {
+        class: "basis-fan-baseline",
+        x1: origin.x - length,
+        y1: origin.y,
+        x2: origin.x + length,
+        y2: origin.y,
+      }),
+    );
+    svg.append(reference);
+
+    const geometry = rays.map((item, index) => {
+      const coefficient = Math.max(-1, Math.min(1, Number(item.r)));
+      const theta = Math.acos(coefficient);
+      const degrees = theta * (180 / Math.PI);
+      const endX = origin.x + length * Math.cos(theta);
+      const endY = origin.y - length * Math.sin(theta);
+      return {
+        item,
+        index,
+        coefficient,
+        theta,
+        degrees,
+        endX,
+        endY,
+        side: endX < origin.x ? "left" : "right",
+      };
+    });
+    const labelLayout = fanLabelLayout();
+    const labelPositions = resolveFanLabels(geometry, labelLayout);
+
+    geometry.forEach(({ item, index, coefficient, degrees, endX, endY, side }) => {
+      const sign = coefficient > 0 ? "positive" : coefficient < 0 ? "negative" : "neutral";
+      const group = svgElement("g", {
+        class: "basis-fan-ray",
+        "data-sign": sign,
+        "data-label-side": side,
+        "data-r": coefficient.toFixed(6),
+        "data-theta-degrees": degrees.toFixed(4),
+      });
+      group.style.setProperty("--fan-index", String(index));
+      group.style.setProperty("--fan-delay", `${Math.floor(index / 2) * MOTION.quick}ms`);
+
+      const line = svgElement("line", {
+        class: "basis-fan-line",
+        x1: origin.x,
+        y1: origin.y,
+        x2: endX.toFixed(3),
+        y2: endY.toFixed(3),
+        pathLength: "1",
+      });
+      const endpoint = svgElement("circle", {
+        class: "basis-fan-endpoint",
+        cx: endX.toFixed(3),
+        cy: endY.toFixed(3),
+        r: "5",
+      });
+
+      const pointsLeft = side === "left";
+      const labelX = pointsLeft
+        ? labelLayout.leftX ?? Math.max(210, Math.min(470, endX - 16))
+        : labelLayout.rightX ?? Math.min(790, Math.max(530, endX + 16));
+      const labelY = labelPositions.get(index)
+        ?? Math.max(labelLayout.minimumY, Math.min(labelLayout.maximumY, endY - 10));
+      const leaderTargetX = labelX + (pointsLeft ? 7 : -7);
+      const leaderTargetY = labelY - 5;
+      const leader = svgElement("path", {
+        class: "basis-fan-label-leader",
+        d: `M ${endX.toFixed(3)} ${endY.toFixed(3)} L ${leaderTargetX.toFixed(3)} ${leaderTargetY.toFixed(3)}`,
+        "aria-hidden": "true",
+      });
+      const label = svgElement("text", {
+        class: "basis-fan-label",
+        x: labelX.toFixed(3),
+        y: labelY.toFixed(3),
+        "text-anchor": pointsLeft ? "end" : "start",
+        "data-label-y": labelY.toFixed(3),
+      });
+      const name = svgElement("tspan", {
+        class: "basis-fan-label-name",
+        x: labelX.toFixed(3),
+        dy: "0",
+      });
+      name.textContent = item.other_name || item.other || "Unnamed dimension";
+      const value = svgElement("tspan", {
+        class: "basis-fan-label-value",
+        x: labelX.toFixed(3),
+        dy: String(labelLayout.valueDy),
+      });
+      value.textContent = `r ${formatSigned(coefficient, 4)}`;
+      label.append(name, value);
+      group.append(line, endpoint, leader, label);
+      svg.append(group);
+    });
+
+    const originMark = svgElement("circle", {
+      class: "basis-fan-origin",
+      cx: origin.x,
+      cy: origin.y,
+      r: "7",
+      "aria-hidden": "true",
+    });
+    svg.append(originMark);
+    target.replaceChildren(svg);
+    target.dataset.axis = axisName || "";
+    if (motionQuery.matches) svg.classList.add("is-drawn");
+    else window.requestAnimationFrame(() => svg.classList.add("is-drawn"));
+  }
+
   function renderCorrelationRuler(ruler, correlations, axisName) {
     const list = document.createElement("ol");
     list.className = "correlation-list";
@@ -515,6 +1030,7 @@
       const controls = all("[data-correlation-axis]", root);
       const ruler = root.querySelector("[data-correlation-ruler]");
       const table = root.querySelector("[data-correlation-table]");
+      const fan = root.querySelector("[data-basis-fan]");
       if (!controls.length || !ruler) return;
       let revision = 0;
       let active = root.dataset.activeAxis
@@ -522,9 +1038,43 @@
       if (active) updateControls(controls, active, "data-correlation-axis");
       root.classList.add("is-enhanced", "is-ready");
 
+      if (fan && typeof IntersectionObserver === "function") {
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          const requested = active;
+          const ticket = revision;
+          if (!requested) return;
+
+          void loadExplorer(root)
+            .then((data) => {
+              // A deliberate axis change owns the fan if it began while the
+              // quiet fallback upgrade was loading.
+              if (ticket !== revision || !sameKey(requested, active)) return;
+              const correlations = correlationsForAxis(data, requested);
+              if (!correlations.length) return;
+              const control = controls.find((item) => (
+                sameKey(hookValue(item, "data-correlation-axis"), requested)
+              ));
+              const label = control?.dataset.label
+                || control?.textContent.trim()
+                || requested;
+              renderBasisFan(fan, correlations, label);
+            })
+            .catch(() => {
+              // Keep the complete server-rendered fallback unchanged.
+            });
+        }, {
+          rootMargin: "320px 0px",
+          threshold: 0,
+        });
+        observer.observe(fan);
+      }
+
       controls.forEach((control) => bindChoice(control, async () => {
         const requested = hookValue(control, "data-correlation-axis");
-        if (!requested || sameKey(requested, active)) return;
+        const fanNeedsContent = fan && !fan.querySelector("svg");
+        if (!requested || (sameKey(requested, active) && !fanNeedsContent)) return;
         const previous = active;
         const ticket = ++revision;
         updateControls(controls, requested, "data-correlation-axis");
@@ -539,6 +1089,7 @@
           if (!correlations.length) throw new Error("No complete correlations for this axis");
           const label = control.dataset.label || control.textContent.trim() || requested;
           renderCorrelationRuler(ruler, correlations, label);
+          if (fan) renderBasisFan(fan, correlations, label);
           if (table) renderCorrelationTable(table, correlations, label);
           active = requested;
           root.dataset.activeAxis = active;
@@ -623,7 +1174,10 @@
     const name = document.createElement("span");
     name.className = "search-name";
     name.textContent = row.name || row.id || "Untitled record";
-    link.append(kind, name);
+    const meta = document.createElement("span");
+    meta.className = "search-meta";
+    meta.textContent = row.id || row.status || "";
+    link.append(kind, name, meta);
 
     if (!listContainer) return link;
     const item = document.createElement("li");
@@ -655,7 +1209,6 @@
 
       if (!results.id) results.id = `atlas-search-results-${formIndex + 1}-${++generatedId}`;
       input.setAttribute("aria-controls", results.id);
-      input.setAttribute("aria-expanded", "false");
       input.setAttribute("autocomplete", "off");
       results.setAttribute("role", "region");
       results.setAttribute("aria-label", "Search results");
@@ -672,7 +1225,6 @@
         results.hidden = true;
         results.classList.remove("is-open");
         results.style.removeProperty("display");
-        input.setAttribute("aria-expanded", "false");
       };
 
       const show = (fragment) => {
@@ -680,7 +1232,6 @@
         results.hidden = false;
         results.classList.add("is-open");
         results.style.display = "block";
-        input.setAttribute("aria-expanded", "true");
       };
 
       const ensureRows = async () => {
@@ -890,7 +1441,7 @@
       const set = (percent) => {
         const value = Math.max(Number(range.min) || 4, Math.min(Number(range.max) || 96, Number(percent)));
         stage.style.setProperty("--split", `${value}%`);
-        if (pane) pane.style.width = `${value}%`;
+        if (pane && !stage.hasAttribute("data-compare-clip")) pane.style.width = `${value}%`;
         range.value = String(value);
         const output = stage.querySelector("[data-compare-value]");
         if (output) output.textContent = `${Math.round(value)}%`;
