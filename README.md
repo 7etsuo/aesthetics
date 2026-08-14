@@ -34,7 +34,7 @@ python -m vslib next
 python -m vslib serve --port 8765
 ```
 
-Open `site/index.html`, http://127.0.0.1:8765/, or https://aesthetics.agenc.ag/.
+Open `site/index.html`, http://127.0.0.1:8765/, or https://atlas.agenc.ag/.
 
 ## Experiment rule
 
