@@ -11,29 +11,29 @@ def payload() -> dict:
     return build_explorer_payload(library)
 
 
-def test_explorer_contract_and_fixed_architecture_hero(payload: dict):
+def test_explorer_contract_and_fixed_lamp_architecture_hero(payload: dict):
     assert payload["schema"] == "visual-basis-atlas/explorer-v1"
     assert payload["model_label"] == "Grok Imagine"
     assert payload["score_method"] == "agent_visual"
     assert payload["observed_at"] == "2026-08-14"
 
     hero = payload["hero"]
-    assert hero["study_id"] == "study_diffusion_001"
-    assert hero["vector_id"] == "vec_diffusion"
-    assert hero["anchor_id"] == "anchor_architecture"
+    assert hero["study_id"] == "study_halation_002"
+    assert hero["vector_id"] == "vec_halation"
+    assert hero["anchor_id"] == "anchor_lamp_architecture"
     assert [level["observation_id"] for level in hero["levels"]] == [
-        "obs_0077",
-        "obs_0078",
-        "obs_0079",
+        "obs_0157",
+        "obs_0158",
+        "obs_0159",
     ]
     assert [level["requested_level"] for level in hero["levels"]] == ["low", "medium", "high"]
-    assert all(level["anchor_id"] == "anchor_architecture" for level in hero["levels"])
+    assert all(level["anchor_id"] == "anchor_lamp_architecture" for level in hero["levels"])
 
-    diffusion_scores = [
-        next(score["value"] for score in level["scores"] if score["vector_id"] == "vec_diffusion")
+    halation_scores = [
+        next(score["value"] for score in level["scores"] if score["vector_id"] == "vec_halation")
         for level in hero["levels"]
     ]
-    assert diffusion_scores == [0.08, 0.42, 0.88]
+    assert halation_scores == [0.08, 0.4, 0.8]
 
 
 def test_all_controlled_studies_have_paired_response_deltas(payload: dict):
@@ -41,10 +41,15 @@ def test_all_controlled_studies_have_paired_response_deltas(payload: dict):
     assert set(responses) == {
         "vec_diffusion",
         "vec_halation",
+        "vec_highlight_bloom",
         "vec_optical_softness",
         "vec_shadow_density",
+        "vec_black_level",
+        "vec_key_to_fill_ratio",
         "vec_bokeh_softness",
         "vec_edge_softness",
+        "vec_telecine_softness",
+        "vec_analog_video_texture",
     }
     assert all(response["n_pairs"] == 5 for response in responses.values())
     assert all(len(response["architecture_levels"]) == 3 for response in responses.values())
@@ -60,13 +65,14 @@ def test_all_controlled_studies_have_paired_response_deltas(payload: dict):
     assert "vec_atmospheric_haze_response" not in diffusion
 
 
-def test_new_glow_studies_do_not_enter_the_explorer_contract(payload: dict):
+def test_latest_controlled_studies_enter_response_but_not_correlation_cohort(payload: dict):
     responses = {response["study_id"] for response in payload["responses"]}
-    assert "study_halation_002" not in responses
-    assert "study_highlight_bloom_001" not in responses
-    assert "study_telecine_softness_001" not in responses
-    assert "study_analog_video_texture_001" not in responses
-    assert payload["stats"]["controlled_vector_studies"] == 6
+    assert "study_halation_002" in responses
+    assert "study_highlight_bloom_001" in responses
+    assert "study_telecine_softness_001" in responses
+    assert "study_analog_video_texture_001" in responses
+    assert payload["stats"]["controlled_vector_studies"] == 11
+    assert payload["stats"]["observations"] == 210
     assert all(row["n"] == 100 for row in payload["correlations"])
 
 

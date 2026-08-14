@@ -827,7 +827,7 @@ body.is-home {
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border: 1px solid var(--line-strong);
-  background: var(--black-raised) url("studies/obs_0079-640.webp") center / cover no-repeat;
+  background: var(--black-raised) url("studies/obs_0159-640.webp") center / cover no-repeat;
   isolation: isolate;
 }
 
@@ -3455,6 +3455,10 @@ kbd {
   .search-trigger {
     padding-inline: 0.4rem;
     font-size: 0.52rem;
+  }
+
+  .site-footer-ledger strong {
+    font-size: 0.82rem;
   }
 
   .hero-state-controls {

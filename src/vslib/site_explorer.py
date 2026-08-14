@@ -21,20 +21,31 @@ MODEL_LABEL = "Grok Imagine"
 
 CONTROLLED_STUDY_IDS = (
     "study_diffusion_001",
+    "study_halation_002",
+    "study_highlight_bloom_001",
+    "study_optical_softness_001",
+    "study_shadow_density_002",
+    "study_black_level_001",
+    "study_key_to_fill_ratio_001",
+    "study_bokeh_softness_001",
+    "study_edge_softness_001",
+    "study_telecine_softness_001",
+    "study_analog_video_texture_001",
+)
+CORRELATION_STUDY_IDS = (
+    "study_diffusion_001",
     "study_halation_001",
     "study_optical_softness_001",
     "study_shadow_density_001",
     "study_bokeh_softness_001",
     "study_edge_softness_001",
-)
-CORRELATION_STUDY_IDS = CONTROLLED_STUDY_IDS + (
     "study_anchor_set_001",
     "study_reconstruction_soft_halated_shadow_001",
 )
-HERO_STUDY_ID = "study_diffusion_001"
-HERO_VECTOR_ID = "vec_diffusion"
-HERO_ANCHOR_ID = "anchor_architecture"
-HERO_OBSERVATION_IDS = ("obs_0077", "obs_0078", "obs_0079")
+HERO_STUDY_ID = "study_halation_002"
+HERO_VECTOR_ID = "vec_halation"
+HERO_ANCHOR_ID = "anchor_lamp_architecture"
+HERO_OBSERVATION_IDS = ("obs_0157", "obs_0158", "obs_0159")
 LEVEL_ORDER = ("low", "medium", "high")
 
 RECONSTRUCTION_STUDY_ID = "study_reconstruction_soft_halated_shadow_001"
@@ -191,7 +202,8 @@ def _hero_payload(lib: Library) -> dict[str, Any]:
 
 def _response_payload(lib: Library, study: Study) -> dict[str, Any]:
     vector = lib.vectors[study.candidate_vector_id]
-    architecture = _observations_by_anchor_and_level(lib, study).get(HERO_ANCHOR_ID, {})
+    by_anchor = _observations_by_anchor_and_level(lib, study)
+    architecture = by_anchor.get(HERO_ANCHOR_ID) or by_anchor.get("anchor_architecture", {})
     architecture_levels = [
         _observation_payload(lib, architecture[level])
         for level in LEVEL_ORDER
@@ -199,7 +211,7 @@ def _response_payload(lib: Library, study: Study) -> dict[str, Any]:
     ]
     paired_anchors = [
         anchor_id
-        for anchor_id, levels in _observations_by_anchor_and_level(lib, study).items()
+        for anchor_id, levels in by_anchor.items()
         if "low" in levels and "high" in levels
     ]
     return {
@@ -365,7 +377,11 @@ def _vector_name(lib: Library, vector_id: str) -> str:
 
 
 def _require_records(lib: Library) -> None:
-    required_studies = {*CONTROLLED_STUDY_IDS, RECONSTRUCTION_STUDY_ID}
+    required_studies = {
+        *CONTROLLED_STUDY_IDS,
+        *CORRELATION_STUDY_IDS,
+        RECONSTRUCTION_STUDY_ID,
+    }
     missing_studies = sorted(required_studies - lib.studies.keys())
     missing_observations = sorted(set(HERO_OBSERVATION_IDS) - lib.observations.keys())
     if missing_studies or missing_observations:
