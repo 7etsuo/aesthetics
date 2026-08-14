@@ -1,0 +1,102 @@
+{
+  "anchor_id": "anchor_object",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0184",
+  "image_path": "artifacts/studies/study_telecine_softness_001/anchor_object_high.jpg",
+  "intended_level": "high",
+  "intended_vector_id": "vec_telecine_softness",
+  "model": "grok-imagine",
+  "notes": "Intended telecine softness high. Teapot almost unchanged. Weak high.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only telecine softness. Set telecine softness to: heavy telecine transfer smear, flat electronic softness, fine detail lost to bandwidth, mild chroma smear across edges, still a photograph. Change only transfer-path smear. Do not add scanlines, tracking bars, a CRT bezel, or a television set. Do not add film grain. Do not melt like a portrait lens. Do not add a diffusion veil. Do not change lighting, time of day, hue, or restyle into a decade or genre.",
+  "scores": [
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.42,
+      "vector_id": "vec_telecine_softness"
+    },
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_analog_video_texture"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_vhs_bandwidth_loss"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.42,
+      "vector_id": "vec_fine_detail_rolloff"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_grain_structure"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.6,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.06,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_highlight_bloom"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only transfer-path smear. Do not add scanlines, tracking bars, a CRT bezel, or a television set. Do not add film grain. Do not melt like a portrait lens. Do not add a diffusion veil. Do not change lighting, time of day, hue, or restyle into a decade or genre."
+    ],
+    "job_id": "job_study_telecine_softness_001_object_high",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_object.jpg",
+  "source_type": "generated",
+  "study_id": "study_telecine_softness_001",
+  "unintended_changes": [
+    "high pole barely moved"
+  ]
+}

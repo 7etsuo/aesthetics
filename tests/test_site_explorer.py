@@ -64,6 +64,8 @@ def test_new_glow_studies_do_not_enter_the_explorer_contract(payload: dict):
     responses = {response["study_id"] for response in payload["responses"]}
     assert "study_halation_002" not in responses
     assert "study_highlight_bloom_001" not in responses
+    assert "study_telecine_softness_001" not in responses
+    assert "study_analog_video_texture_001" not in responses
     assert payload["stats"]["controlled_vector_studies"] == 6
     assert all(row["n"] == 100 for row in payload["correlations"])
 

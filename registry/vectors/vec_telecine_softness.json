@@ -5,7 +5,7 @@
     "telecine smear"
   ],
   "canonical_name": "telecine softness",
-  "confidence": 0.22,
+  "confidence": 0.56,
   "definition": "A flat, slightly smeared softness associated with film-to-video transfer, often with reduced fine detail and mild chroma smear.",
   "family_id": "fam_capture_and_transfer",
   "high_pole": "heavy telecine smear",
@@ -18,19 +18,60 @@
     "vec_analog_video_texture"
   ],
   "not_the_same_as": {
-    "vec_optical_softness": "Optical softness is lens-like. Telecine softness is flatter and more electronic."
+    "vec_analog_video_texture": "Texture is scan grain and chroma crawl. Telecine is bandwidth loss without a required texture field.",
+    "vec_optical_softness": "Optical softness is lens-like melt of pores and highlight cores. Telecine is flatter, more electronic smear.",
+    "vec_vhs_bandwidth_loss": "VHS loss is consumer-tape chroma collapse. Telecine is a film-to-tape transfer smear."
   },
   "notes": "",
-  "observable_effects": [],
-  "observation_ids": [],
+  "observable_effects": [
+    "fine detail smears flat",
+    "edges lose bandwidth not bite",
+    "mild chroma smear",
+    "image reads transferred, not lens-diffused"
+  ],
+  "observation_ids": [
+    "obs_0181",
+    "obs_0182",
+    "obs_0183",
+    "obs_0184",
+    "obs_0185",
+    "obs_0191",
+    "obs_0192",
+    "obs_0193",
+    "obs_0194",
+    "obs_0195",
+    "obs_0201",
+    "obs_0202",
+    "obs_0203",
+    "obs_0204",
+    "obs_0205"
+  ],
   "open_questions": [
-    "Needs a controlled study against optical softness and VHS bandwidth loss."
+    "Can object high be raised without becoming optical melt?",
+    "How much of the gallery chroma fringe is VHS bandwidth rather than telecine?"
   ],
   "polarity": "unipolar",
-  "prompt_phrases": {},
-  "scoring_guidance": "",
-  "status": "candidate",
-  "study_ids": [],
+  "prompt_phrases": {
+    "high": "heavy telecine transfer smear, flat electronic softness, fine detail lost to bandwidth, mild chroma smear across edges, still a photograph",
+    "low": "full transfer bandwidth, no film-to-tape smear, fine detail intact, no chroma smear",
+    "medium": "mild film-to-tape transfer smear, slightly reduced fine detail, slight chroma softness"
+  },
+  "scoring_guidance": "0.00 full bandwidth, 0.50 mild transfer smear, 1.00 heavy flat telecine smear.",
+  "status": "provisional",
+  "study_ids": [
+    "study_telecine_softness_001"
+  ],
   "testable_claim": "Increasing telecine softness should look like transfer bandwidth loss, not like a portrait diffusion filter.",
-  "validation": {}
+  "validation": {
+    "clean_study": "study_telecine_softness_001",
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": "distinct_from_optical_melt",
+    "transferable": true,
+    "useful": true
+  }
 }

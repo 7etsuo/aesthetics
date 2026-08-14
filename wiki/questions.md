@@ -1,5 +1,8 @@
 # Unresolved research questions
 
+## analog video texture (`vec_analog_video_texture`)
+- Can texture land on the fox without a letterbox?
+
 ## black level (`vec_black_level`)
 - Is the still-life high too weak to keep this as a working axis?
 
@@ -34,7 +37,11 @@
 - How much fill drop is allowed before this is key-to-fill?
 
 ## telecine softness (`vec_telecine_softness`)
-- Needs a controlled study against optical softness and VHS bandwidth loss.
+- Can object high be raised without becoming optical melt?
+- How much of the gallery chroma fringe is VHS bandwidth rather than telecine?
+
+## From study_analog_video_texture_001
+- VHS bandwidth loss versus this texture if a tape-only look is needed.
 
 ## From study_black_level_001
 - Black level vs veiling glare on the gallery only.
@@ -73,3 +80,6 @@
 
 ## From study_shadow_density_002
 - Retry object high with an explicit hold: keep the napkin the same linen color.
+
+## From study_telecine_softness_001
+- Sequential reconstruction using vectors that earned a coefficient.

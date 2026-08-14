@@ -569,6 +569,90 @@ def score_highlight_bloom(obs) -> tuple[list[Score], list[str], str]:
     return _pack(values), leaks, note
 
 
+def _transfer_base() -> dict[str, tuple[float, float]]:
+    return {
+        "vec_telecine_softness": (0.08, 0.60),
+        "vec_analog_video_texture": (0.08, 0.58),
+        "vec_optical_softness": (0.18, 0.55),
+        "vec_vhs_bandwidth_loss": (0.08, 0.50),
+        "vec_fine_detail_rolloff": (0.20, 0.45),
+        "vec_grain_structure": (0.08, 0.45),
+        "vec_diffusion": (0.08, 0.40),
+        "vec_edge_softness": (0.16, 0.40),
+        "vec_microcontrast": (0.60, 0.40),
+        "vec_halation": (0.06, 0.35),
+        "vec_highlight_bloom": (0.08, 0.35),
+    }
+
+
+def score_telecine(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    target = {"low": 0.08, "medium": 0.36, "high": 0.68}[level]
+    values = _transfer_base()
+    values["vec_telecine_softness"] = (target, 0.72)
+    values["vec_fine_detail_rolloff"] = (0.18 + target * 0.35, 0.50)
+    values["vec_optical_softness"] = (0.16 + target * 0.18, 0.58)
+    values["vec_analog_video_texture"] = (0.08 + target * 0.12, 0.55)
+    leaks: list[str] = []
+    note = f"Intended telecine softness {level}."
+    if level == "low":
+        note += " Fine detail holds. Closest to the daylight anchor."
+    if level == "high":
+        if obs.anchor_id == "anchor_portrait":
+            values["vec_telecine_softness"] = (0.62, 0.70)
+            values["vec_optical_softness"] = (0.28, 0.62)
+            note += " Flat smear. Knit still readable. Not the optical-high melt."
+        elif obs.anchor_id == "anchor_architecture":
+            values["vec_telecine_softness"] = (0.74, 0.76)
+            values["vec_vhs_bandwidth_loss"] = (0.40, 0.55)
+            note += " Stone joints lose bandwidth. Rainbow chroma on the side walls. Best transfer tell."
+        elif obs.anchor_id == "anchor_object":
+            values["vec_telecine_softness"] = (0.42, 0.55)
+            leaks += ["high pole barely moved"]
+            note += " Teapot almost unchanged. Weak high."
+        elif obs.anchor_id == "anchor_landscape":
+            values["vec_telecine_softness"] = (0.58, 0.64)
+            note += " Grass loses a little snap. Still a photograph. No sunset."
+        elif obs.anchor_id == "anchor_character":
+            values["vec_telecine_softness"] = (0.56, 0.62)
+            note += " Stitches survive. Eyes stay glass. Mild smear only."
+    return _pack(values), leaks, note
+
+
+def score_analog_texture(obs) -> tuple[list[Score], list[str], str]:
+    level = obs.intended_level
+    target = {"low": 0.08, "medium": 0.40, "high": 0.80}[level]
+    values = _transfer_base()
+    values["vec_analog_video_texture"] = (target, 0.76)
+    values["vec_grain_structure"] = (0.10 + target * 0.22, 0.50)
+    values["vec_telecine_softness"] = (0.10 + target * 0.16, 0.55)
+    values["vec_optical_softness"] = (0.16, 0.58)
+    leaks: list[str] = []
+    note = f"Intended analog video texture {level}."
+    if level == "low":
+        note += " Clean digital field."
+    if level == "high":
+        if obs.anchor_id == "anchor_portrait":
+            values["vec_analog_video_texture"] = (0.82, 0.80)
+            values["vec_optical_softness"] = (0.18, 0.66)
+            note += " Grain on the seamless. Face and knit stay. Green scan lip on the left edge."
+        elif obs.anchor_id == "anchor_architecture":
+            values["vec_analog_video_texture"] = (0.80, 0.78)
+            note += " Grain field on the stone. Bench edges stay."
+        elif obs.anchor_id == "anchor_object":
+            values["vec_analog_video_texture"] = (0.70, 0.70)
+            note += " Grain on wall and linen. Pot stays sharp."
+        elif obs.anchor_id == "anchor_landscape":
+            values["vec_analog_video_texture"] = (0.78, 0.74)
+            leaks += ["slight warm grade shift"]
+            note += " Grain on sky and grass. Path holds. Mild grade leak."
+        elif obs.anchor_id == "anchor_character":
+            values["vec_analog_video_texture"] = (0.76, 0.72)
+            leaks += ["letterbox bars"]
+            note += " Texture lands. Added black side bars. Eyes stay glass."
+    return _pack(values), leaks, note
+
+
 def apply_scores(lib: Library) -> None:
     for obs in lib.observations.values():
         if obs.study_id in {"study_anchor_set_001", "study_lamp_anchor_set_001"}:
@@ -598,6 +682,10 @@ def apply_scores(lib: Library) -> None:
             scores, leaks, note = score_diffusion(obs)
         elif obs.study_id == "study_bokeh_softness_001":
             scores, leaks, note = score_bokeh(obs)
+        elif obs.study_id == "study_telecine_softness_001":
+            scores, leaks, note = score_telecine(obs)
+        elif obs.study_id == "study_analog_video_texture_001":
+            scores, leaks, note = score_analog_texture(obs)
         elif obs.study_id == "study_reconstruction_soft_halated_shadow_001":
             scores, leaks, note, recon, residual = score_reconstruction(obs)
             ev = ReconstructionEval(
@@ -841,6 +929,40 @@ def _close_studies(lib: Library) -> None:
             "Bokeh study only on frames that already have a clear subject/field split.",
         ]
 
+    if "study_telecine_softness_001" in lib.studies:
+        tc = lib.studies["study_telecine_softness_001"]
+        tc.status = "complete"
+        tc.decision = "provisional"
+        tc.decision_reason = (
+            "High is flatter than optical-softness high. Portrait knit survives. "
+            "Architecture shows the best transfer tell: lost stone bandwidth plus side-wall chroma smear. "
+            "Object high barely moved. Distinct enough from optical melt and from analog texture."
+        )
+        tc.entanglement_notes = [
+            "Object high is a weak step.",
+            "Some optical-softness rise rides along, but far below the optical-high melt.",
+        ]
+        tc.next_experiments = [
+            "Sequential reconstruction using vectors that earned a coefficient.",
+        ]
+
+    if "study_analog_video_texture_001" in lib.studies:
+        av = lib.studies["study_analog_video_texture_001"]
+        av.status = "complete"
+        av.decision = "provisional"
+        av.decision_reason = (
+            "High lays a scan-like grain field while subject edges stay. "
+            "Portrait and gallery isolate it. Fox high added letterbox bars. "
+            "Not a lens melt and not a bare telecine smear."
+        )
+        av.entanglement_notes = [
+            "Character high invented letterbox bars.",
+            "Landscape high warmed the grade a little.",
+        ]
+        av.next_experiments = [
+            "VHS bandwidth loss versus this texture if a tape-only look is needed.",
+        ]
+
     anchors = lib.studies["study_anchor_set_001"]
     anchors.status = "complete"
     anchors.decision = "locked"
@@ -1025,4 +1147,44 @@ def _update_vectors(lib: Library) -> None:
         }
         hb.open_questions = [
             "How much bar bloom is actually atmospheric haze?",
+        ]
+
+    if "vec_telecine_softness" in lib.vectors:
+        tc = lib.vectors["vec_telecine_softness"]
+        tc.status = "provisional"
+        tc.confidence = 0.56
+        tc.validation = {
+            "isolatable": "partial",
+            "transferable": True,
+            "legible": True,
+            "describable": True,
+            "non_redundant": "distinct_from_optical_melt",
+            "directional": True,
+            "useful": True,
+            "n_subjects": 5,
+            "n_levels": 3,
+            "clean_study": "study_telecine_softness_001",
+        }
+        tc.open_questions = [
+            "Can object high be raised without becoming optical melt?",
+            "How much of the gallery chroma fringe is VHS bandwidth rather than telecine?",
+        ]
+
+    if "vec_analog_video_texture" in lib.vectors:
+        av = lib.vectors["vec_analog_video_texture"]
+        av.status = "provisional"
+        av.confidence = 0.63
+        av.validation = {
+            "isolatable": "partial",
+            "transferable": True,
+            "legible": True,
+            "describable": True,
+            "non_redundant": True,
+            "directional": True,
+            "useful": True,
+            "n_subjects": 5,
+            "n_levels": 3,
+        }
+        av.open_questions = [
+            "Can texture land on the fox without a letterbox?",
         ]

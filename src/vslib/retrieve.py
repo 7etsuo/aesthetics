@@ -111,8 +111,15 @@ def next_experiments(lib: Library, limit: int = 8) -> list[dict]:
                 "priority": "seed",
                 "vector_id": vec.id,
             })
-    # Discrimination pairs that are still untested
-    if "vec_optical_softness" in lib.vectors and "vec_telecine_softness" in lib.vectors:
+    telecine_done = (
+        "study_telecine_softness_001" in lib.studies
+        and lib.studies["study_telecine_softness_001"].status == "complete"
+    )
+    if (
+        "vec_optical_softness" in lib.vectors
+        and "vec_telecine_softness" in lib.vectors
+        and not telecine_done
+    ):
         suggestions.insert(0, {
             "from_study": None,
             "proposal": "Discrimination study: optical softness vs telecine softness on the same anchors.",

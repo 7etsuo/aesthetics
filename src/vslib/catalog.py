@@ -22,6 +22,14 @@ HOLD_CONSTANT = [
     "source image when editing",
 ]
 
+DAYLIGHT_ANCHOR_IDS = [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait",
+]
+
 
 def families() -> list[Family]:
     rows = [
@@ -468,7 +476,21 @@ def vector_records() -> list[dict]:
            "Raising it should read as tape or tube texture, not as film grain.",
            "clean digital field", "heavy analog video texture",
            aliases=["VHS texture", "tape texture", "tube texture"],
-           nearby=["vhs_bandwidth_loss", "crt_bloom_feel", "grain_structure"]),
+           nearby=["vhs_bandwidth_loss", "crt_bloom_feel", "grain_structure", "telecine_softness"],
+           not_same={
+               "grain_structure": "Film grain clumps. Analog video texture is scan-like and often chroma-noisy.",
+               "telecine_softness": "Telecine is bandwidth smear. This is a texture field, not a softness.",
+               "vhs_bandwidth_loss": "Bandwidth loss smears chroma and luma. Texture is the crawl and scan grain.",
+           },
+           effects=["scan-like luma grain", "chroma crawl on edges", "mild banding"],
+           phrases={
+               "low": "clean digital field, no scan texture, no chroma crawl, no tape grain",
+               "medium": "mild analog video texture, faint scan-like grain, slight chroma crawl, keep subject edges",
+               "high": "heavy analog video texture, visible scan-like luma grain, chroma crawl, mild banding, keep subject edges, no extra lens melt",
+           },
+           scoring="0.00 clean digital, 0.50 mild crawl, 1.00 heavy tape/tube texture.",
+           questions=["Can texture land without also smearing bandwidth or adding a CRT bezel?"],
+           confidence=0.28),
 
         # --- capture / transfer (many are systems) ---
         _v("photochemical_feel", "photochemical feel", "capture_and_transfer",
@@ -483,8 +505,21 @@ def vector_records() -> list[dict]:
            "no transfer smear", "heavy telecine smear",
            aliases=["old-tv softness", "film-to-tape softness", "telecine smear"],
            nearby=["optical_softness", "vhs_bandwidth_loss", "fine_detail_rolloff", "analog_video_texture"],
-           not_same={"optical_softness": "Optical softness is lens-like. Telecine softness is flatter and more electronic."},
-           questions=["Needs a controlled study against optical softness and VHS bandwidth loss."]),
+           not_same={
+               "optical_softness": "Optical softness is lens-like melt of pores and highlight cores. Telecine is flatter, more electronic smear.",
+               "analog_video_texture": "Texture is scan grain and chroma crawl. Telecine is bandwidth loss without a required texture field.",
+               "vhs_bandwidth_loss": "VHS loss is consumer-tape chroma collapse. Telecine is a film-to-tape transfer smear.",
+           },
+           effects=["fine detail smears flat", "edges lose bandwidth not bite",
+                    "mild chroma smear", "image reads transferred, not lens-diffused"],
+           phrases={
+               "low": "full transfer bandwidth, no film-to-tape smear, fine detail intact, no chroma smear",
+               "medium": "mild film-to-tape transfer smear, slightly reduced fine detail, slight chroma softness",
+               "high": "heavy telecine transfer smear, flat electronic softness, fine detail lost to bandwidth, mild chroma smear across edges, still a photograph",
+           },
+           scoring="0.00 full bandwidth, 0.50 mild transfer smear, 1.00 heavy flat telecine smear.",
+           questions=["Can transfer smear stay distinct from optical melt and from analog video texture?"],
+           confidence=0.28),
         _v("optical_print_softness", "optical-print softness", "capture_and_transfer",
            "Softness and contrast from an optical print generation, denser and more photographic than telecine smear.",
            "Should thicken the print, not add scanlines.",
@@ -1095,6 +1130,17 @@ def extra_hold_for(vector_id: str) -> str:
             "Do not paint bokeh disks onto in-focus surfaces, do not melt the whole frame, "
             "do not glow the eyes, do not change lighting, do not change time of day, "
             "and do not restyle into a genre."
+        ),
+        "vec_telecine_softness": (
+            "Change only transfer-path smear. Do not add scanlines, tracking bars, a CRT bezel, "
+            "or a television set. Do not add film grain. Do not melt like a portrait lens. "
+            "Do not add a diffusion veil. Do not change lighting, time of day, hue, or restyle into a decade or genre."
+        ),
+        "vec_analog_video_texture": (
+            "Change only analog video texture. Do not add extra optical softness or diffusion. "
+            "Do not add a CRT bezel, letterbox, or tracking-error bars. "
+            "Do not change lighting, time of day, or restyle into a decade or genre. "
+            "Do not add photochemical grain clumps."
         ),
     }
     return holds.get(vector_id, "Do not change any other visual dimension.")

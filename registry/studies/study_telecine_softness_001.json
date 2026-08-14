@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_telecine_softness",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "High is flatter than optical-softness high. Portrait knit survives. Architecture shows the best transfer tell: lost stone bandwidth plus side-wall chroma smear. Object high barely moved. Distinct enough from optical melt and from analog texture.",
+  "entanglement_notes": [
+    "Object high is a weak step.",
+    "Some optical-softness rise rides along, but far below the optical-high melt."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_telecine_softness_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "Sequential reconstruction using vectors that earned a coefficient."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0181",
+    "obs_0182",
+    "obs_0183",
+    "obs_0184",
+    "obs_0185",
+    "obs_0191",
+    "obs_0192",
+    "obs_0193",
+    "obs_0194",
+    "obs_0195",
+    "obs_0201",
+    "obs_0202",
+    "obs_0203",
+    "obs_0204",
+    "obs_0205"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of telecine softness"
+}

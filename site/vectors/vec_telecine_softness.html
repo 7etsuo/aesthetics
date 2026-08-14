@@ -63,25 +63,30 @@
 </dialog>
 
 <main id="main" tabindex="-1"><div class="sheet">
-<h1 class="page">telecine softness</h1>
+<div class="mast"><img src="../artifacts/studies/study_telecine_softness_001/anchor_architecture_high.jpg" alt=""><div class="shade"></div><div class="in"><p class="kicker">v<sub>telecine_softness</sub> · high</p><h1 class="page">telecine softness</h1></div></div>
 <div class="meta">
-  <span class="chip candidate">candidate</span>
+  <span class="chip provisional">provisional</span>
   <span class="chip mono">vec_telecine_softness</span>
-  <span class="chip">conf 0.22</span>
+  <span class="chip">conf 0.56</span>
   <span class="chip"><a href="../families/fam_capture_and_transfer.html">capture and transfer</a></span>
 </div>
 <p class="lede">A flat, slightly smeared softness associated with film-to-video transfer, often with reduced fine detail and mild chroma smear.</p>
 <p class="eq-live"><span class="w">no transfer smear</span> → <span class="v">heavy telecine smear</span></p>
 <div class="grid-2">
-  <div class="card"><h3>What it changes</h3><p>Increasing telecine softness should look like transfer bandwidth loss, not like a portrait diffusion filter.</p><ul><li>not yet observed</li></ul></div>
+  <div class="card"><h3>What it changes</h3><p>Increasing telecine softness should look like transfer bandwidth loss, not like a portrait diffusion filter.</p><ul><li>fine detail smears flat</li><li>edges lose bandwidth not bite</li><li>mild chroma smear</li><li>image reads transferred, not lens-diffused</li></ul></div>
   <div class="card"><h3>Aliases</h3><p>old-tv softness, film-to-tape softness, telecine smear</p></div>
 </div>
 <h2>Controlled examples</h2>
-<p>No controlled examples yet.</p>
+<div>
+<div class='anchor-row'><div></div><div class='caption'>low</div><div class='caption'>medium</div><div class='caption'>high</div></div>
+<div class='anchor-row'><div class='an'>architecture or interior</div><div class='thumb'><a href='../observations/obs_0201.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_architecture_low.jpg' alt='architecture or interior, low telecine softness'></a></div><div class='thumb'><a href='../observations/obs_0191.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_architecture_medium.jpg' alt='architecture or interior, medium telecine softness'></a></div><div class='thumb'><a href='../observations/obs_0181.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_architecture_high.jpg' alt='architecture or interior, high telecine softness'></a></div></div>
+<div class='anchor-row'><div class='an'>landscape</div><div class='thumb'><a href='../observations/obs_0203.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_landscape_low.jpg' alt='landscape, low telecine softness'></a></div><div class='thumb'><a href='../observations/obs_0193.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_landscape_medium.jpg' alt='landscape, medium telecine softness'></a></div><div class='thumb'><a href='../observations/obs_0183.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_landscape_high.jpg' alt='landscape, high telecine softness'></a></div></div>
+<div class='anchor-row'><div class='an'>ordinary physical object</div><div class='thumb'><a href='../observations/obs_0204.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_object_low.jpg' alt='ordinary physical object, low telecine softness'></a></div><div class='thumb'><a href='../observations/obs_0194.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_object_medium.jpg' alt='ordinary physical object, medium telecine softness'></a></div><div class='thumb'><a href='../observations/obs_0184.html'><img src='../artifacts/studies/study_telecine_softness_001/anchor_object_high.jpg' alt='ordinary physical object, high telecine softness'></a></div></div>
+</div>
 <h2>Nearby</h2><ul><li><a href='vec_optical_softness.html'>optical softness</a></li><li><a href='vec_vhs_bandwidth_loss.html'>VHS bandwidth loss</a></li><li><a href='vec_fine_detail_rolloff.html'>fine-detail roll-off</a></li><li><a href='vec_analog_video_texture.html'>analog video texture</a></li></ul>
-<h2>Commonly confused with</h2><ul><li><a href='vec_optical_softness.html'>vec_optical_softness</a>: Optical softness is lens-like. Telecine softness is flatter and more electronic.</li></ul>
-<h2>Studies</h2><ul><li>none</li></ul>
-<h2>Open questions</h2><ul><li>Needs a controlled study against optical softness and VHS bandwidth loss.</li></ul>
+<h2>Commonly confused with</h2><ul><li><a href='vec_analog_video_texture.html'>vec_analog_video_texture</a>: Texture is scan grain and chroma crawl. Telecine is bandwidth loss without a required texture field.</li><li><a href='vec_optical_softness.html'>vec_optical_softness</a>: Optical softness is lens-like melt of pores and highlight cores. Telecine is flatter, more electronic smear.</li><li><a href='vec_vhs_bandwidth_loss.html'>vec_vhs_bandwidth_loss</a>: VHS loss is consumer-tape chroma collapse. Telecine is a film-to-tape transfer smear.</li></ul>
+<h2>Studies</h2><ul><li><a href='../studies/study_telecine_softness_001.html'>study_telecine_softness_001</a></li></ul>
+<h2>Open questions</h2><ul><li>Can object high be raised without becoming optical melt?</li><li>How much of the gallery chroma fringe is VHS bandwidth rather than telecine?</li></ul>
 </div></main>
 
 <footer class="site-footer">

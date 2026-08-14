@@ -5,7 +5,7 @@
     "tube texture"
   ],
   "canonical_name": "analog video texture",
-  "confidence": 0.22,
+  "confidence": 0.63,
   "definition": "The specific instability of analog video: chroma crawl, luma grain, mild banding, scan-like texture.",
   "family_id": "fam_texture_and_noise",
   "high_pole": "heavy analog video texture",
@@ -14,18 +14,61 @@
   "nearby_ids": [
     "vec_vhs_bandwidth_loss",
     "vec_crt_bloom_feel",
-    "vec_grain_structure"
+    "vec_grain_structure",
+    "vec_telecine_softness"
   ],
-  "not_the_same_as": {},
+  "not_the_same_as": {
+    "vec_grain_structure": "Film grain clumps. Analog video texture is scan-like and often chroma-noisy.",
+    "vec_telecine_softness": "Telecine is bandwidth smear. This is a texture field, not a softness.",
+    "vec_vhs_bandwidth_loss": "Bandwidth loss smears chroma and luma. Texture is the crawl and scan grain."
+  },
   "notes": "",
-  "observable_effects": [],
-  "observation_ids": [],
-  "open_questions": [],
+  "observable_effects": [
+    "scan-like luma grain",
+    "chroma crawl on edges",
+    "mild banding"
+  ],
+  "observation_ids": [
+    "obs_0186",
+    "obs_0187",
+    "obs_0188",
+    "obs_0189",
+    "obs_0190",
+    "obs_0196",
+    "obs_0197",
+    "obs_0198",
+    "obs_0199",
+    "obs_0200",
+    "obs_0206",
+    "obs_0207",
+    "obs_0208",
+    "obs_0209",
+    "obs_0210"
+  ],
+  "open_questions": [
+    "Can texture land on the fox without a letterbox?"
+  ],
   "polarity": "unipolar",
-  "prompt_phrases": {},
-  "scoring_guidance": "",
-  "status": "candidate",
-  "study_ids": [],
+  "prompt_phrases": {
+    "high": "heavy analog video texture, visible scan-like luma grain, chroma crawl, mild banding, keep subject edges, no extra lens melt",
+    "low": "clean digital field, no scan texture, no chroma crawl, no tape grain",
+    "medium": "mild analog video texture, faint scan-like grain, slight chroma crawl, keep subject edges"
+  },
+  "scoring_guidance": "0.00 clean digital, 0.50 mild crawl, 1.00 heavy tape/tube texture.",
+  "status": "provisional",
+  "study_ids": [
+    "study_analog_video_texture_001"
+  ],
   "testable_claim": "Raising it should read as tape or tube texture, not as film grain.",
-  "validation": {}
+  "validation": {
+    "describable": true,
+    "directional": true,
+    "isolatable": "partial",
+    "legible": true,
+    "n_levels": 3,
+    "n_subjects": 5,
+    "non_redundant": true,
+    "transferable": true,
+    "useful": true
+  }
 }

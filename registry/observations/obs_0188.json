@@ -1,0 +1,102 @@
+{
+  "anchor_id": "anchor_landscape",
+  "aspect_ratio": "1:1",
+  "date": "2026-08-14",
+  "id": "obs_0188",
+  "image_path": "artifacts/studies/study_analog_video_texture_001/anchor_landscape_high.jpg",
+  "intended_level": "high",
+  "intended_vector_id": "vec_analog_video_texture",
+  "model": "grok-imagine",
+  "notes": "Intended analog video texture high. Grain on sky and grass. Path holds. Mild grade leak.",
+  "prompt": "Preserve the same subject, identity, pose, framing, crop, camera position, and key-light direction. Do not change wardrobe, props, or scene content. Do not restyle the picture into a period look, a movie still, or a genre.  Change only analog video texture. Set analog video texture to: heavy analog video texture, visible scan-like luma grain, chroma crawl, mild banding, keep subject edges, no extra lens melt. Change only analog video texture. Do not add extra optical softness or diffusion. Do not add a CRT bezel, letterbox, or tracking-error bars. Do not change lighting, time of day, or restyle into a decade or genre. Do not add photochemical grain clumps.",
+  "scores": [
+    {
+      "confidence": 0.55,
+      "method": "agent_visual",
+      "score": 0.23,
+      "vector_id": "vec_telecine_softness"
+    },
+    {
+      "confidence": 0.74,
+      "method": "agent_visual",
+      "score": 0.78,
+      "vector_id": "vec_analog_video_texture"
+    },
+    {
+      "confidence": 0.58,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_optical_softness"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_vhs_bandwidth_loss"
+    },
+    {
+      "confidence": 0.45,
+      "method": "agent_visual",
+      "score": 0.2,
+      "vector_id": "vec_fine_detail_rolloff"
+    },
+    {
+      "confidence": 0.5,
+      "method": "agent_visual",
+      "score": 0.28,
+      "vector_id": "vec_grain_structure"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_diffusion"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.16,
+      "vector_id": "vec_edge_softness"
+    },
+    {
+      "confidence": 0.4,
+      "method": "agent_visual",
+      "score": 0.6,
+      "vector_id": "vec_microcontrast"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.06,
+      "vector_id": "vec_halation"
+    },
+    {
+      "confidence": 0.35,
+      "method": "agent_visual",
+      "score": 0.08,
+      "vector_id": "vec_highlight_bloom"
+    }
+  ],
+  "seed": null,
+  "settings": {
+    "hold_constant": [
+      "subject identity",
+      "pose and blocking",
+      "framing and crop",
+      "camera height and distance",
+      "key light direction",
+      "scene content",
+      "source image when editing",
+      "Change only analog video texture. Do not add extra optical softness or diffusion. Do not add a CRT bezel, letterbox, or tracking-error bars. Do not change lighting, time of day, or restyle into a decade or genre. Do not add photochemical grain clumps."
+    ],
+    "job_id": "job_study_analog_video_texture_001_landscape_high",
+    "seed_control": "unavailable",
+    "tool": "image_edit"
+  },
+  "source_image": "artifacts/anchors/anchor_landscape.jpg",
+  "source_type": "generated",
+  "study_id": "study_analog_video_texture_001",
+  "unintended_changes": [
+    "slight warm grade shift"
+  ]
+}

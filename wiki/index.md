@@ -33,7 +33,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [CRT bloom feel](vectors/vec_crt_bloom_feel.md) (vec_crt_bloom_feel, conf 0.22)
 - `candidate` [VHS bandwidth loss](vectors/vec_vhs_bandwidth_loss.md) (vec_vhs_bandwidth_loss, conf 0.22)
 - `candidate` [acutance](vectors/vec_acutance.md) (vec_acutance, conf 0.22)
-- `candidate` [analog video texture](vectors/vec_analog_video_texture.md) (vec_analog_video_texture, conf 0.22)
+- `provisional` [analog video texture](vectors/vec_analog_video_texture.md) (vec_analog_video_texture, conf 0.63)
 - `candidate` [animatronic feel](vectors/vec_animatronic_feel.md) (vec_animatronic_feel, conf 0.22)
 - `candidate` [atmospheric haze response](vectors/vec_atmospheric_haze_response.md) (vec_atmospheric_haze_response, conf 0.22)
 - `provisional` [black level](vectors/vec_black_level.md) (vec_black_level, conf 0.60)
@@ -109,7 +109,7 @@ These are not assumed to be a mathematically orthogonal basis.
 - `candidate` [stylized degradation](vectors/vec_stylized_degradation.md) (vec_stylized_degradation, conf 0.22)
 - `candidate` [subject scale](vectors/vec_subject_scale.md) (vec_subject_scale, conf 0.22)
 - `candidate` [subsurface feel](vectors/vec_subsurface_feel.md) (vec_subsurface_feel, conf 0.22)
-- `candidate` [telecine softness](vectors/vec_telecine_softness.md) (vec_telecine_softness, conf 0.22)
+- `provisional` [telecine softness](vectors/vec_telecine_softness.md) (vec_telecine_softness, conf 0.56)
 - `candidate` [temperature](vectors/vec_temperature.md) (vec_temperature, conf 0.22)
 - `candidate` [temporal smear](vectors/vec_temporal_smear.md) (vec_temporal_smear, conf 0.22)
 - `candidate` [texture resolution](vectors/vec_texture_resolution.md) (vec_texture_resolution, conf 0.22)
@@ -131,6 +131,7 @@ These are not assumed to be a mathematically orthogonal basis.
 
 ## Studies
 
+- `complete` [Controlled variation of analog video texture](studies/study_analog_video_texture_001.md) (study_analog_video_texture_001)
 - `complete` [Locked anchor set](studies/study_anchor_set_001.md) (study_anchor_set_001)
 - `complete` [Controlled variation of black level](studies/study_black_level_001.md) (study_black_level_001)
 - `complete` [Controlled variation of bokeh softness](studies/study_bokeh_softness_001.md) (study_bokeh_softness_001)
@@ -145,11 +146,12 @@ These are not assumed to be a mathematically orthogonal basis.
 - `complete` [Linear reconstruction of aes_soft_halated_shadow](studies/study_reconstruction_soft_halated_shadow_001.md) (study_reconstruction_soft_halated_shadow_001)
 - `complete` [Controlled variation of shadow density](studies/study_shadow_density_001.md) (study_shadow_density_001)
 - `complete` [Controlled variation of shadow density](studies/study_shadow_density_002.md) (study_shadow_density_002)
+- `complete` [Controlled variation of telecine softness](studies/study_telecine_softness_001.md) (study_telecine_softness_001)
 
 ## Counts
 
 - vectors: 88
-- observations: 180
-- studies: 14
+- observations: 210
+- studies: 16
 - aesthetics: 7
 - aliases: 36

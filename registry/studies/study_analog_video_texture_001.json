@@ -1,0 +1,56 @@
+{
+  "anchor_ids": [
+    "anchor_architecture",
+    "anchor_character",
+    "anchor_landscape",
+    "anchor_object",
+    "anchor_portrait"
+  ],
+  "candidate_vector_id": "vec_analog_video_texture",
+  "date": "2026-08-14",
+  "decision": "provisional",
+  "decision_reason": "High lays a scan-like grain field while subject edges stay. Portrait and gallery isolate it. Fox high added letterbox bars. Not a lens melt and not a bare telecine smear.",
+  "entanglement_notes": [
+    "Character high invented letterbox bars.",
+    "Landscape high warmed the grade a little."
+  ],
+  "hold_constant": [
+    "subject identity",
+    "pose and blocking",
+    "framing and crop",
+    "camera height and distance",
+    "key light direction",
+    "scene content",
+    "source image when editing"
+  ],
+  "id": "study_analog_video_texture_001",
+  "levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "next_experiments": [
+    "VHS bandwidth loss versus this texture if a tape-only look is needed."
+  ],
+  "notes": "",
+  "observation_ids": [
+    "obs_0186",
+    "obs_0187",
+    "obs_0188",
+    "obs_0189",
+    "obs_0190",
+    "obs_0196",
+    "obs_0197",
+    "obs_0198",
+    "obs_0199",
+    "obs_0200",
+    "obs_0206",
+    "obs_0207",
+    "obs_0208",
+    "obs_0209",
+    "obs_0210"
+  ],
+  "protocol": "Hold subject via locked anchor images. image_edit each anchor to low, medium, and high of one candidate. Do not change other dimensions on purpose.",
+  "status": "complete",
+  "title": "Controlled variation of analog video texture"
+}
