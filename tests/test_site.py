@@ -1,9 +1,18 @@
+import json
 from pathlib import Path
 
+import pytest
 from PIL import Image
 
 from vslib.build import default_root
-from vslib.site import SITE_ORIGIN, _page
+from vslib.site import SITE_ORIGIN, _page, generate_site
+from vslib.store import Library
+
+
+def _inline_chamber_payload(html: str) -> dict:
+    marker = '<script type="application/json" id="chamber-data">'
+    encoded = html.split(marker, 1)[1].split("</script>", 1)[0]
+    return json.loads(encoded)
 
 
 def test_page_shell_has_social_metadata_and_semantics(tmp_path: Path):
@@ -29,6 +38,22 @@ def test_page_shell_has_social_metadata_and_semantics(tmp_path: Path):
     assert '<meta name="twitter:card" content="summary_large_image">' in html
     assert '<meta property="og:image:width" content="1200">' in html
     assert '<meta property="og:image:height" content="630">' in html
+
+
+def test_site_build_requires_the_chamber_runtime(tmp_path: Path):
+    assets = tmp_path / "assets"
+    assets.mkdir()
+    for name in ("app.css", "home.css", "app.js"):
+        (assets / name).write_text("", encoding="utf-8")
+
+    existing_site = tmp_path / "site"
+    existing_site.mkdir()
+    sentinel = existing_site / "keep-on-validation-error.txt"
+    sentinel.write_text("preserve the last good build", encoding="utf-8")
+    library = Library(tmp_path).load()
+    with pytest.raises(FileNotFoundError, match="assets/chamber.js"):
+        generate_site(library)
+    assert sentinel.read_text(encoding="utf-8") == "preserve the last good build"
 
 
 def test_nested_page_canonical_keeps_html_suffix_and_escapes_metadata(tmp_path: Path):
@@ -79,17 +104,35 @@ def test_social_card_is_share_card_size():
 def test_homepage_uses_nonhuman_evidence_and_real_discrete_states():
     html = (default_root() / "site" / "index.html").read_text(encoding="utf-8")
 
-    assert "Hold the room" in html
-    assert "Move the light" in html
+    assert "One direction" in html
+    assert "More than one change" in html
     assert "obs_0157" in html
     assert "obs_0158" in html
     assert "obs_0159" in html
-    assert 'type="radio"' in html
-    assert "Register 3 outputs" in html
-    assert "0 interpolated frames" in html
-    assert "Association geometry" in html
-    assert "anchor_portrait" not in html
-    assert "anchor_character" not in html
+    assert 'data-chamber-state="low"' in html
+    assert "Three outputs · zero interpolation" in html
+    assert "Nothing moves alone" in html
+    assert 'data-chamber-canvas' in html
+    assert 'data-sound-toggle' in html
+    assert '<script type="module" src="assets/chamber.js"></script>' in html
+    chamber = _inline_chamber_payload(html)
+    field_anchors = {
+        observation["anchor_id"]
+        for observation in chamber["field"]["observations"]
+    }
+    assert field_anchors == {
+        "anchor_architecture",
+        "anchor_object",
+        "anchor_landscape",
+        "anchor_lamp_architecture",
+    }
+    response_anchors = {
+        anchor_id
+        for study in chamber["analysis"]["responses"]["studies"]
+        for anchor_id in study["paired_anchor_ids"]
+    }
+    assert "anchor_portrait" in response_anchors
+    assert "anchor_character" in response_anchors
     assert "<canvas" not in html
     assert "prompt builder" not in html.lower()
 
@@ -97,6 +140,9 @@ def test_homepage_uses_nonhuman_evidence_and_real_discrete_states():
 def test_explorer_and_presentation_assets_are_generated():
     root = default_root() / "site" / "assets"
     assert (root / "atlas-explorer.json").exists()
+    assert (root / "atlas-chamber.json").exists()
+    assert (root / "chamber.js").exists()
+    assert (root / "chamber-audio.js").exists()
     for observation_id in ("obs_0157", "obs_0158", "obs_0159", "obs_0174"):
         assert (root / "studies" / f"{observation_id}-640.webp").exists()
         assert (root / "studies" / f"{observation_id}-1024.webp").exists()
@@ -104,14 +150,15 @@ def test_explorer_and_presentation_assets_are_generated():
 
 def test_homepage_distinguishes_total_observations_from_correlation_cohort():
     html = (default_root() / "site" / "index.html").read_text(encoding="utf-8")
-    assert "210</dt><dd>registry observations" in html
-    assert "100</dt><dd>complete-score cohort" in html
-    assert "11</dt><dd>controlled axes" in html
+    assert "210 observations" in html
+    assert "11 controlled axes" in html
+    assert "Scored observation-space · n=100" in html
     assert "not Grok latent space" in html
 
 
-def test_homepage_correlation_table_is_complete_for_default_axis():
+def test_homepage_keeps_precise_correlation_semantics_in_the_dom():
     html = (default_root() / "site" / "index.html").read_text(encoding="utf-8")
-    table = html.split('<table data-correlation-table>', 1)[1].split("</table>", 1)[0]
-    body = table.split("<tbody>", 1)[1].split("</tbody>", 1)[0]
-    assert body.count("<tr>") == 11
+    assert "Pearson correlation becomes literal angle" in html
+    assert "θ = arccos(r)" in html
+    assert "not causality" in html
+    assert "Inspect the complete matrices" in html
