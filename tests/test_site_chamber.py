@@ -69,27 +69,57 @@ def test_contract_is_deterministic_and_home_embeds_the_same_payload(
     assert json.loads(embedded) == payload
 
 
+def test_home_v4_separates_the_world_finale_from_footer_utility(
+    library: Library,
+):
+    html = _home(library)
+
+    assert 'data-world="observatory"' in html
+    assert 'data-world-entry' in html
+    assert 'data-world-viewport' in html
+    assert html.count('type="button" data-enter disabled aria-disabled="true">') == 1
+
+    finale_start = html.index('data-world-finale')
+    finale_end = html.index('</section>', finale_start)
+    finale = html[finale_start:finale_end]
+    assert "The experiment<br>continues." in finale
+    assert 'data-world-portal-link' in finale
+    assert 'id="atlas-search"' not in finale
+    assert 'class="archive-secondary"' not in finale
+    assert 'class="chamber-credits"' not in finale
+
+    footer_start = html.index('data-world-footer')
+    footer = html[footer_start:]
+    assert footer_start > finale_end
+    assert 'id="atlas-search"' in footer
+    assert 'class="archive-secondary"' in footer
+    assert 'class="chamber-credits"' in footer
+    assert 'class="chamber-colophon"' in footer
+    assert 'data-world-plates="reconstruction"' in html
+    assert 'data-world-control="correlation-axis"' in html
+
+
 def test_fixed_hero_resolves_to_exact_canonical_scores(payload: dict):
     hero = payload["hero"]
     assert hero == {
-        "study_id": "study_halation_002",
-        "vector_id": "vec_halation",
-        "anchor_id": "anchor_lamp_landscape",
+        "study_id": "study_diffusion_001",
+        "vector_id": "vec_diffusion",
+        "anchor_id": "anchor_architecture",
         "levels": [
-            {"requested_level": "low", "observation_id": "obs_0160"},
-            {"requested_level": "medium", "observation_id": "obs_0161"},
-            {"requested_level": "high", "observation_id": "obs_0162"},
+            {"requested_level": "low", "observation_id": "obs_0077"},
+            {"requested_level": "medium", "observation_id": "obs_0078"},
+            {"requested_level": "high", "observation_id": "obs_0079"},
         ],
     }
 
     observations = _observations(payload)
     assert [
-        _scores(observations[level["observation_id"]])["vec_halation"][0]
+        _scores(observations[level["observation_id"]])["vec_diffusion"][0]
         for level in hero["levels"]
-    ] == [0.08, 0.4, 0.84]
+    ] == [0.08, 0.42, 0.88]
     assert all(
         observations[level["observation_id"]]["image_path"].endswith(
-            f"anchor_lamp_landscape_{level['requested_level']}.jpg"
+            f"anchor_architecture_{level['requested_level']}.jpg"
         )
         for level in hero["levels"]
     )
@@ -154,14 +184,67 @@ def test_reconstruction_is_an_explicit_manual_hypothesis(payload: dict):
     assert reconstruction["human_rated"] is False
     assert reconstruction["n_human_ratings"] == 0
     assert [weight["weight"] for weight in reconstruction["weights"]] == [0.78, 0.7, 0.58]
+    assert [weight["name"] for weight in reconstruction["weights"]] == [
+        "optical softness",
+        "shadow density",
+        "halation",
+    ]
     assert [plate["observation_id"] for plate in reconstruction["selected_plates"]] == [
         "obs_0052",
         "obs_0055",
     ]
+    assert [plate["anchor_name"] for plate in reconstruction["selected_plates"]] == [
+        "ordinary physical object",
+        "landscape",
+    ]
     assert [plate["score"] for plate in reconstruction["selected_plates"]] == [0.52, 0.54]
+    assert reconstruction["residual_counts"] == [
+        {
+            "vector_id": "vec_highlight_bloom",
+            "name": "highlight bloom",
+            "count": 5,
+            "n": 5,
+        },
+        {
+            "vector_id": "vec_halation",
+            "name": "halation",
+            "count": 1,
+            "n": 5,
+        },
+        {
+            "vector_id": "vec_optical_softness",
+            "name": "optical softness",
+            "count": 1,
+            "n": 5,
+        },
+        {
+            "vector_id": "vec_shadow_density",
+            "name": "shadow density",
+            "count": 1,
+            "n": 5,
+        },
+    ]
     assert all(
         plate["observation_id"] in _observations(payload)
         for plate in reconstruction["selected_plates"]
+    )
+
+
+def test_reconstruction_aggregate_is_scoped_to_its_declared_study(library: Library):
+    expanded = copy.deepcopy(library)
+    outside = copy.deepcopy(next(iter(expanded.reconstructions.values())))
+    outside.id = "recon_outside_declared_study"
+    outside.observation_id = "obs_0077"
+    outside.reconstruction_score = 0.99
+    outside.residual_vectors = ["vec_diffusion"]
+    expanded.reconstructions[outside.id] = outside
+
+    reconstruction = build_chamber_payload(expanded)["reconstruction"]
+
+    assert reconstruction["n_evaluations"] == 5
+    assert all(
+        residual["vector_id"] != "vec_diffusion"
+        for residual in reconstruction["residual_counts"]
     )
 
 
@@ -266,6 +349,6 @@ def test_correlation_metadata_declares_complete_column_cohort(payload: dict):
 
 def test_contract_rejects_a_mislabeled_fixed_hero(library: Library):
     broken = copy.deepcopy(library)
-    broken.observations["obs_0161"].intended_level = "high"
+    broken.observations["obs_0078"].intended_level = "high"
     with pytest.raises(ValueError, match="hero observations must be ordered"):
         build_chamber_payload(broken)

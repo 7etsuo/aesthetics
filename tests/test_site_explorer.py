@@ -11,29 +11,29 @@ def payload() -> dict:
     return build_explorer_payload(library)
 
 
-def test_explorer_contract_and_fixed_lamp_landscape_hero(payload: dict):
+def test_explorer_contract_and_fixed_architecture_hero(payload: dict):
     assert payload["schema"] == "visual-basis-atlas/explorer-v1"
     assert payload["model_label"] == "Grok Imagine"
     assert payload["score_method"] == "agent_visual"
     assert payload["observed_at"] == "2026-08-14"
 
     hero = payload["hero"]
-    assert hero["study_id"] == "study_halation_002"
-    assert hero["vector_id"] == "vec_halation"
-    assert hero["anchor_id"] == "anchor_lamp_landscape"
+    assert hero["study_id"] == "study_diffusion_001"
+    assert hero["vector_id"] == "vec_diffusion"
+    assert hero["anchor_id"] == "anchor_architecture"
     assert [level["observation_id"] for level in hero["levels"]] == [
-        "obs_0160",
-        "obs_0161",
-        "obs_0162",
+        "obs_0077",
+        "obs_0078",
+        "obs_0079",
     ]
     assert [level["requested_level"] for level in hero["levels"]] == ["low", "medium", "high"]
-    assert all(level["anchor_id"] == "anchor_lamp_landscape" for level in hero["levels"])
+    assert all(level["anchor_id"] == "anchor_architecture" for level in hero["levels"])
 
-    halation_scores = [
-        next(score["value"] for score in level["scores"] if score["vector_id"] == "vec_halation")
+    diffusion_scores = [
+        next(score["value"] for score in level["scores"] if score["vector_id"] == "vec_diffusion")
         for level in hero["levels"]
     ]
-    assert halation_scores == [0.08, 0.4, 0.84]
+    assert diffusion_scores == [0.08, 0.42, 0.88]
 
 
 def test_all_controlled_studies_have_paired_response_deltas(payload: dict):
@@ -52,7 +52,13 @@ def test_all_controlled_studies_have_paired_response_deltas(payload: dict):
         "vec_analog_video_texture",
     }
     assert all(response["n_pairs"] == 5 for response in responses.values())
-    assert all(len(response["architecture_levels"]) == 3 for response in responses.values())
+    assert all(
+        len(response["architecture_levels"]) == 3
+        for vector_id, response in responses.items()
+        if vector_id not in {"vec_halation", "vec_highlight_bloom"}
+    )
+    assert responses["vec_halation"]["architecture_levels"] == []
+    assert responses["vec_highlight_bloom"]["architecture_levels"] == []
 
     diffusion = {
         component["vector_id"]: component

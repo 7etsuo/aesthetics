@@ -8,7 +8,7 @@ as zero.
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 from vslib.models import Observation, Study
@@ -49,6 +49,7 @@ TRIPLET_ANCHOR_IDS = ("anchor_architecture", "anchor_lamp_architecture")
 
 COMPARISON_OBSERVATION_IDS = ("obs_0162", "obs_0177")
 COMPARISON_VECTOR_IDS = ("vec_halation", "vec_highlight_bloom")
+COMPARISON_ANCHOR_ID = "anchor_lamp_landscape"
 
 
 def build_chamber_payload(lib: Library) -> dict[str, Any]:
@@ -233,15 +234,15 @@ def _comparison_payload(lib: Library) -> dict[str, Any]:
         for observation_id in COMPARISON_OBSERVATION_IDS
     ]
     for observation, vector_id in zip(observations, COMPARISON_VECTOR_IDS):
-        if observation.anchor_id != HERO_ANCHOR_ID:
-            raise ValueError(f"comparison observations must use {HERO_ANCHOR_ID}")
+        if observation.anchor_id != COMPARISON_ANCHOR_ID:
+            raise ValueError(f"comparison observations must use {COMPARISON_ANCHOR_ID}")
         if observation.intended_level != "high":
             raise ValueError("comparison observations must both request high")
         if observation.intended_vector_id != vector_id:
             raise ValueError(f"{observation.id} must request {vector_id}")
 
     return {
-        "anchor_id": HERO_ANCHOR_ID,
+        "anchor_id": COMPARISON_ANCHOR_ID,
         "requested_level": "high",
         "items": [
             {"vector_id": vector_id, "observation_id": observation_id}
@@ -278,15 +279,22 @@ def _observation_payload(lib: Library, observation: Observation) -> dict[str, An
 def _reconstruction_payload(lib: Library) -> dict[str, Any]:
     study = lib.studies[RECONSTRUCTION_STUDY_ID]
     aesthetic = lib.aesthetics[RECONSTRUCTION_AESTHETIC_ID]
+    study_observation_ids = set(study.observation_ids)
     evaluations = [
         evaluation
         for evaluation in lib.reconstructions.values()
         if evaluation.target_aesthetic_id == aesthetic.id
+        and evaluation.observation_id in study_observation_ids
     ]
     evaluation_by_observation = {
         evaluation.observation_id: evaluation
         for evaluation in evaluations
     }
+    residual_counts = Counter(
+        vector_id
+        for evaluation in evaluations
+        for vector_id in evaluation.residual_vectors
+    )
     observation_by_anchor = {
         lib.observations[observation_id].anchor_id: lib.observations[observation_id]
         for observation_id in study.observation_ids
@@ -301,6 +309,7 @@ def _reconstruction_payload(lib: Library) -> dict[str, Any]:
         selected_plates.append(
             {
                 "anchor_id": anchor_id,
+                "anchor_name": lib.anchors[anchor_id].name,
                 "observation_id": observation.id,
                 "score": evaluation.reconstruction_score,
             }
@@ -323,6 +332,7 @@ def _reconstruction_payload(lib: Library) -> dict[str, Any]:
         "weights": [
             {
                 "vector_id": weight.vector_id,
+                "name": lib.vectors[weight.vector_id].canonical_name,
                 "weight": weight.weight,
                 "source": weight.source,
                 "confidence": weight.confidence,
@@ -331,6 +341,18 @@ def _reconstruction_payload(lib: Library) -> dict[str, Any]:
             for weight in aesthetic.weights
         ],
         "selected_plates": selected_plates,
+        "residual_counts": [
+            {
+                "vector_id": vector_id,
+                "name": lib.vectors[vector_id].canonical_name,
+                "count": count,
+                "n": len(evaluations),
+            }
+            for vector_id, count in sorted(
+                residual_counts.items(),
+                key=lambda item: (-item[1], item[0]),
+            )
+        ],
     }
 
 
@@ -416,6 +438,7 @@ def _referenced_vector_ids(
     }
     vector_ids.update(study["vector_id"] for study in studies)
     vector_ids.update(weight["vector_id"] for weight in reconstruction["weights"])
+    vector_ids.update(item["vector_id"] for item in reconstruction["residual_counts"])
     vector_ids.update(correlations["dimension_ids"])
     for response in responses["studies"]:
         vector_ids.add(response["vector_id"])
