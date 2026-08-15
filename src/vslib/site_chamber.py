@@ -12,6 +12,7 @@ from collections import defaultdict
 from typing import Any
 
 from vslib.models import Observation, Study
+from vslib.site_media import evidence_atlas_manifest
 from vslib.site_explorer import (
     CONTROLLED_STUDY_IDS,
     CORRELATION_STUDY_IDS,
@@ -34,18 +35,19 @@ from vslib.store import Library
 
 CHAMBER_SCHEMA = "visual-basis-atlas/chamber-v1"
 
-# These are the only anchors approved for the Chamber field.  In particular,
-# the lamp-character and lamp-portrait sets are not admitted merely because
-# they belong to the same studies as the lamp-architecture observations.
+# These are the only anchors approved for the Chamber field. Portrait and
+# character sets are deliberately excluded, including their lamp variants.
 FIELD_ANCHOR_IDS = (
     "anchor_architecture",
     "anchor_object",
     "anchor_landscape",
     "anchor_lamp_architecture",
+    "anchor_lamp_object",
+    "anchor_lamp_landscape",
 )
 TRIPLET_ANCHOR_IDS = ("anchor_architecture", "anchor_lamp_architecture")
 
-COMPARISON_OBSERVATION_IDS = ("obs_0159", "obs_0174")
+COMPARISON_OBSERVATION_IDS = ("obs_0162", "obs_0177")
 COMPARISON_VECTOR_IDS = ("vec_halation", "vec_highlight_bloom")
 
 
@@ -116,6 +118,9 @@ def build_chamber_payload(lib: Library) -> dict[str, Any]:
             "anchor_ids": list(FIELD_ANCHOR_IDS),
             "observation_count": len(observations),
             "score_tuple": ["vector_id", "value", "confidence"],
+            "atlas": evidence_atlas_manifest(
+                observation.id for observation in observations
+            ),
             "observations": [
                 _observation_payload(lib, observation)
                 for observation in observations

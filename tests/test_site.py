@@ -34,7 +34,7 @@ def test_page_shell_has_social_metadata_and_semantics(tmp_path: Path):
     assert '<main id="main"' in html
     assert 'class="skip-link"' in html
     assert '<link rel="canonical" href="https://atlas.agenc.ag/">' in html
-    assert '<meta property="og:image" content="https://atlas.agenc.ag/assets/social-card-v3.jpg">' in html
+    assert '<meta property="og:image" content="https://atlas.agenc.ag/assets/social-card-v4.jpg">' in html
     assert '<meta name="twitter:card" content="summary_large_image">' in html
     assert '<meta property="og:image:width" content="1200">' in html
     assert '<meta property="og:image:height" content="630">' in html
@@ -94,7 +94,7 @@ def test_generated_pages_have_unique_absolute_canonicals():
 
 
 def test_social_card_is_share_card_size():
-    card = default_root() / "assets" / "social-card-v3.jpg"
+    card = default_root() / "assets" / "social-card-v4.jpg"
     assert card.exists()
     with Image.open(card) as image:
         assert image.size == (1200, 630)
@@ -106,9 +106,9 @@ def test_homepage_uses_nonhuman_evidence_and_real_discrete_states():
 
     assert "One direction" in html
     assert "More than one change" in html
-    assert "obs_0157" in html
-    assert "obs_0158" in html
-    assert "obs_0159" in html
+    assert "obs_0160" in html
+    assert "obs_0161" in html
+    assert "obs_0162" in html
     assert 'data-chamber-state="low"' in html
     assert "Three outputs · zero interpolation" in html
     assert "Nothing moves alone" in html
@@ -125,6 +125,8 @@ def test_homepage_uses_nonhuman_evidence_and_real_discrete_states():
         "anchor_object",
         "anchor_landscape",
         "anchor_lamp_architecture",
+        "anchor_lamp_object",
+        "anchor_lamp_landscape",
     }
     response_anchors = {
         anchor_id
@@ -143,7 +145,9 @@ def test_explorer_and_presentation_assets_are_generated():
     assert (root / "atlas-chamber.json").exists()
     assert (root / "chamber.js").exists()
     assert (root / "chamber-audio.js").exists()
-    for observation_id in ("obs_0157", "obs_0158", "obs_0159", "obs_0174"):
+    assert (root / "evidence-atlas-2048.webp").exists()
+    assert (root / "evidence-atlas-1024.webp").exists()
+    for observation_id in ("obs_0160", "obs_0161", "obs_0162", "obs_0177"):
         assert (root / "studies" / f"{observation_id}-640.webp").exists()
         assert (root / "studies" / f"{observation_id}-1024.webp").exists()
 

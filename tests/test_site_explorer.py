@@ -11,7 +11,7 @@ def payload() -> dict:
     return build_explorer_payload(library)
 
 
-def test_explorer_contract_and_fixed_lamp_architecture_hero(payload: dict):
+def test_explorer_contract_and_fixed_lamp_landscape_hero(payload: dict):
     assert payload["schema"] == "visual-basis-atlas/explorer-v1"
     assert payload["model_label"] == "Grok Imagine"
     assert payload["score_method"] == "agent_visual"
@@ -20,20 +20,20 @@ def test_explorer_contract_and_fixed_lamp_architecture_hero(payload: dict):
     hero = payload["hero"]
     assert hero["study_id"] == "study_halation_002"
     assert hero["vector_id"] == "vec_halation"
-    assert hero["anchor_id"] == "anchor_lamp_architecture"
+    assert hero["anchor_id"] == "anchor_lamp_landscape"
     assert [level["observation_id"] for level in hero["levels"]] == [
-        "obs_0157",
-        "obs_0158",
-        "obs_0159",
+        "obs_0160",
+        "obs_0161",
+        "obs_0162",
     ]
     assert [level["requested_level"] for level in hero["levels"]] == ["low", "medium", "high"]
-    assert all(level["anchor_id"] == "anchor_lamp_architecture" for level in hero["levels"])
+    assert all(level["anchor_id"] == "anchor_lamp_landscape" for level in hero["levels"])
 
     halation_scores = [
         next(score["value"] for score in level["scores"] if score["vector_id"] == "vec_halation")
         for level in hero["levels"]
     ]
-    assert halation_scores == [0.08, 0.4, 0.8]
+    assert halation_scores == [0.08, 0.4, 0.84]
 
 
 def test_all_controlled_studies_have_paired_response_deltas(payload: dict):

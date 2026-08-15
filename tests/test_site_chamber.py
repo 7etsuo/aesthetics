@@ -74,11 +74,11 @@ def test_fixed_hero_resolves_to_exact_canonical_scores(payload: dict):
     assert hero == {
         "study_id": "study_halation_002",
         "vector_id": "vec_halation",
-        "anchor_id": "anchor_lamp_architecture",
+        "anchor_id": "anchor_lamp_landscape",
         "levels": [
-            {"requested_level": "low", "observation_id": "obs_0157"},
-            {"requested_level": "medium", "observation_id": "obs_0158"},
-            {"requested_level": "high", "observation_id": "obs_0159"},
+            {"requested_level": "low", "observation_id": "obs_0160"},
+            {"requested_level": "medium", "observation_id": "obs_0161"},
+            {"requested_level": "high", "observation_id": "obs_0162"},
         ],
     }
 
@@ -86,10 +86,10 @@ def test_fixed_hero_resolves_to_exact_canonical_scores(payload: dict):
     assert [
         _scores(observations[level["observation_id"]])["vec_halation"][0]
         for level in hero["levels"]
-    ] == [0.08, 0.4, 0.8]
+    ] == [0.08, 0.4, 0.84]
     assert all(
         observations[level["observation_id"]]["image_path"].endswith(
-            f"anchor_lamp_architecture_{level['requested_level']}.jpg"
+            f"anchor_lamp_landscape_{level['requested_level']}.jpg"
         )
         for level in hero["levels"]
     )
@@ -124,11 +124,11 @@ def test_every_controlled_study_has_one_architecture_triplet(payload: dict):
 def test_halation_and_bloom_comparison_is_same_scene_and_level(payload: dict):
     comparison = payload["comparison"]
     assert comparison == {
-        "anchor_id": "anchor_lamp_architecture",
+        "anchor_id": "anchor_lamp_landscape",
         "requested_level": "high",
         "items": [
-            {"vector_id": "vec_halation", "observation_id": "obs_0159"},
-            {"vector_id": "vec_highlight_bloom", "observation_id": "obs_0174"},
+            {"vector_id": "vec_halation", "observation_id": "obs_0162"},
+            {"vector_id": "vec_highlight_bloom", "observation_id": "obs_0177"},
         ],
     }
     assert tuple(item["observation_id"] for item in comparison["items"]) == (
@@ -136,12 +136,12 @@ def test_halation_and_bloom_comparison_is_same_scene_and_level(payload: dict):
     )
 
     observations = _observations(payload)
-    halation_scores = _scores(observations["obs_0159"])
-    bloom_scores = _scores(observations["obs_0174"])
-    assert halation_scores["vec_halation"][0] == 0.8
-    assert halation_scores["vec_highlight_bloom"][0] == 0.3
-    assert bloom_scores["vec_halation"][0] == 0.2
-    assert bloom_scores["vec_highlight_bloom"][0] == 0.8
+    halation_scores = _scores(observations["obs_0162"])
+    bloom_scores = _scores(observations["obs_0177"])
+    assert halation_scores["vec_halation"][0] == 0.84
+    assert halation_scores["vec_highlight_bloom"][0] == 0.36
+    assert bloom_scores["vec_halation"][0] == 0.22
+    assert bloom_scores["vec_highlight_bloom"][0] == 0.84
 
 
 def test_reconstruction_is_an_explicit_manual_hypothesis(payload: dict):
@@ -174,7 +174,7 @@ def test_field_is_exact_canonical_nonhuman_subset(payload: dict, library: Librar
     observations = _observations(payload)
 
     assert payload["field"]["anchor_ids"] == list(FIELD_ANCHOR_IDS)
-    assert payload["field"]["observation_count"] == len(expected) == 112
+    assert payload["field"]["observation_count"] == len(expected) == 126
     assert set(observations) == expected
     assert {row["anchor_id"] for row in observations.values()} == set(FIELD_ANCHOR_IDS)
     assert {
@@ -202,12 +202,28 @@ def test_field_is_exact_canonical_nonhuman_subset(payload: dict, library: Librar
 
 
 def test_missing_scores_are_absent_not_zero_filled(payload: dict):
-    observation = _observations(payload)["obs_0157"]
+    observation = _observations(payload)["obs_0160"]
     scores = _scores(observation)
     assert "vec_bokeh_softness" not in scores
     assert len(observation["scores"]) == 9
     assert all(value is not None for _, value, _ in observation["scores"])
     assert all(confidence is not None for _, _, confidence in observation["scores"])
+
+
+def test_field_atlas_manifest_is_complete_and_stable(payload: dict):
+    field = payload["field"]
+    atlas = field["atlas"]
+    observation_ids = sorted(row["id"] for row in field["observations"])
+
+    assert atlas["desktop_path"] == "assets/evidence-atlas-2048.webp"
+    assert atlas["mobile_path"] == "assets/evidence-atlas-1024.webp"
+    assert atlas["columns"] == 12
+    assert atlas["rows"] == 11
+    assert atlas["entries"] == {
+        observation_id: index
+        for index, observation_id in enumerate(observation_ids)
+    }
+    assert len(atlas["entries"]) == field["observation_count"] == 126
 
 
 def test_response_metadata_preserves_pair_support(payload: dict):
@@ -250,6 +266,6 @@ def test_correlation_metadata_declares_complete_column_cohort(payload: dict):
 
 def test_contract_rejects_a_mislabeled_fixed_hero(library: Library):
     broken = copy.deepcopy(library)
-    broken.observations["obs_0158"].intended_level = "high"
+    broken.observations["obs_0161"].intended_level = "high"
     with pytest.raises(ValueError, match="hero observations must be ordered"):
         build_chamber_payload(broken)

@@ -44,8 +44,8 @@ CORRELATION_STUDY_IDS = (
 )
 HERO_STUDY_ID = "study_halation_002"
 HERO_VECTOR_ID = "vec_halation"
-HERO_ANCHOR_ID = "anchor_lamp_architecture"
-HERO_OBSERVATION_IDS = ("obs_0157", "obs_0158", "obs_0159")
+HERO_ANCHOR_ID = "anchor_lamp_landscape"
+HERO_OBSERVATION_IDS = ("obs_0160", "obs_0161", "obs_0162")
 LEVEL_ORDER = ("low", "medium", "high")
 
 RECONSTRUCTION_STUDY_ID = "study_reconstruction_soft_halated_shadow_001"

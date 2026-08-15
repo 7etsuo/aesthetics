@@ -12,6 +12,7 @@ from PIL import Image
 from vslib.matrices import nearest_aesthetics
 from vslib.site_chamber import build_chamber_payload
 from vslib.site_explorer import build_explorer_payload
+from vslib.site_media import write_evidence_atlases
 from vslib.store import Library
 
 
@@ -22,11 +23,13 @@ SITE_DESCRIPTION = (
     "Controlled image studies showing how specific visual directions change Grok Imagine "
     "outputs—and which other properties move with them."
 )
-SOCIAL_IMAGE = f"{SITE_ORIGIN}/assets/social-card-v3.jpg"
-SOCIAL_IMAGE_ALT = "Visual Basis Atlas title beside a lamp-present room under observation"
+SOCIAL_IMAGE = f"{SITE_ORIGIN}/assets/social-card-v4.jpg"
+SOCIAL_IMAGE_ALT = (
+    "Visual Basis Atlas observation chamber framing a controlled night-path halation study"
+)
 
 HOME_MEDIA_IDS = (
-    "obs_0157", "obs_0158", "obs_0159", "obs_0174",
+    "obs_0160", "obs_0161", "obs_0162", "obs_0177",
     "obs_0052", "obs_0055",
 )
 
@@ -41,6 +44,10 @@ def generate_site(lib: Library) -> None:
         js_source,
         lib.root / "assets" / "chamber.js",
         lib.root / "assets" / "chamber-audio.js",
+        lib.root / "assets" / "audio" / "atlas-score.opus",
+        lib.root / "assets" / "audio" / "atlas-score.m4a",
+        lib.root / "assets" / "audio" / "atlas-room.opus",
+        lib.root / "assets" / "audio" / "atlas-room.m4a",
         lib.root / "assets" / "vendor" / "three.module.min.js",
         lib.root / "assets" / "vendor" / "three.LICENSE.txt",
     )
@@ -75,6 +82,12 @@ def generate_site(lib: Library) -> None:
         json.dumps(chamber, separators=(",", ":"), allow_nan=False), encoding="utf-8"
     )
     _write_presentation_assets(lib, site)
+    write_evidence_atlases(
+        lib,
+        site,
+        chamber["field"]["observations"],
+        chamber["field"]["atlas"],
+    )
     _page(
         site / "index.html",
         "Atlas",
@@ -231,8 +244,8 @@ def _page(
     body_class = "is-home" if hero else f"is-record page-{_esc(nav)}"
     og_type = "website" if hero else "article"
     hero_preload = (
-        '<link rel="preload" as="image" href="assets/studies/obs_0157-1024.webp" '
-        'imagesrcset="assets/studies/obs_0157-640.webp 640w, assets/studies/obs_0157-1024.webp 1024w" '
+        '<link rel="preload" as="image" href="assets/studies/obs_0160-1024.webp" '
+        'imagesrcset="assets/studies/obs_0160-640.webp 640w, assets/studies/obs_0160-1024.webp 1024w" '
         'imagesizes="(max-width: 767px) 100vw, 58vw">'
         if hero else ""
     )
@@ -252,6 +265,20 @@ def _page(
             "description": page_description,
         }
         structured_data = f'<script type="application/ld+json">{json.dumps(data)}</script>'
+    shell_header = "" if hero else f"""
+<header class="site-header">
+  <nav class="site-nav float" aria-label="Primary navigation">
+    <a class="mark" href="{prefix}index.html" aria-label="Visual Basis Atlas — Home"{home_current}>
+      <span class="mark-index" aria-hidden="true">VBA/01</span>
+      <span class="mark-name">Visual Basis Atlas</span>
+    </a>
+    <div class="nav-links">{_nav(nav, prefix)}</div>
+    <a class="search-trigger" href="{prefix}index.html#atlas-search" data-search-open>Search <kbd>/</kbd></a>
+  </nav>
+</header>
+"""
+    shell_search = "" if hero else _search_dialog(prefix)
+    shell_footer = "" if hero else _site_footer(prefix)
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -285,19 +312,10 @@ def _page(
 </head>
 <body class="{body_class}" data-prefix="{prefix}">
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header">
-  <nav class="site-nav float" aria-label="Primary navigation">
-    <a class="mark" href="{prefix}index.html" aria-label="Visual Basis Atlas — Home"{home_current}>
-      <span class="mark-index" aria-hidden="true">VBA/01</span>
-      <span class="mark-name">Visual Basis Atlas</span>
-    </a>
-    <div class="nav-links">{_nav(nav, prefix)}</div>
-    <a class="search-trigger" href="{prefix}index.html#atlas-search" data-search-open>Search <kbd>/</kbd></a>
-  </nav>
-</header>
-{_search_dialog(prefix)}
+{shell_header}
+{shell_search}
 <main id="main" tabindex="-1">{wrap_open}{body}{wrap_close}</main>
-{_site_footer(prefix)}
+{shell_footer}
 <script src="{prefix}assets/app.js"></script>{home_script}
 </body>
 </html>
@@ -423,7 +441,7 @@ def _home(
     chamber_payload: dict | None = None,
     explorer_payload: dict | None = None,
 ) -> str:
-    """Render the semantic layer for the audiovisual Observation Chamber."""
+    """Render the semantic and fallback edition of the Observation Chamber."""
     payload = (
         explorer_payload
         if explorer_payload is not None
@@ -434,45 +452,42 @@ def _home(
         if chamber_payload is not None
         else build_chamber_payload(lib)
     )
-    hero = payload["hero"]
-    levels = {item["requested_level"]: item for item in hero["levels"]}
-    field_observations = {
-        observation["id"]: observation
-        for observation in chamber["field"]["observations"]
+
+    hero_ids = {
+        item["requested_level"]: item["observation_id"]
+        for item in chamber["hero"]["levels"]
+    }
+    comparison_by_vector = {
+        item["vector_id"]: item["observation_id"]
+        for item in chamber["comparison"]["items"]
+    }
+    comparison_ids = {
+        "halation": comparison_by_vector["vec_halation"],
+        "bloom": comparison_by_vector["vec_highlight_bloom"],
     }
 
-    def level_score(level_name: str, vector_id: str) -> float | None:
-        for score in levels[level_name]["scores"]:
-            if score["vector_id"] == vector_id:
-                return float(score["value"])
+    def observed_score(observation_id: str, vector_id: str) -> float | None:
+        for score in lib.observations[observation_id].scores:
+            if score.method == "agent_visual" and score.vector_id == vector_id:
+                return float(score.score)
         return None
 
-    def chamber_score(observation_id: str, vector_id: str) -> float | None:
-        observation = field_observations.get(observation_id)
-        if observation is None:
-            return None
-        for scored_vector_id, value, _confidence in observation["scores"]:
-            if scored_vector_id == vector_id:
-                return float(value)
-        return None
-
-    level_names = {
+    state_names = {
         "low": "Restrained",
-        "medium": "Visible",
+        "medium": "Present",
         "high": "Pronounced",
     }
     hero_layers = []
     state_controls = []
     for level_name in ("low", "medium", "high"):
-        item = levels[level_name]
-        observation_id = item["observation_id"]
+        observation_id = hero_ids[level_name]
         active = level_name == "low"
         hero_layers.append(
             _home_media(
                 lib,
                 observation_id,
                 alt=(
-                    f"Locked lamp-present room, {level_name} requested halation state"
+                    "Night path and coastal lamp in the restrained halation state"
                     if active else ""
                 ),
                 class_name=f'chamber-fallback-layer{" is-active" if active else ""}',
@@ -486,37 +501,50 @@ def _home(
                 ),
             )
         )
-        observed = level_score(level_name, "vec_halation")
-        observed_label = "—" if observed is None else f"{observed:.2f}"
+        score = observed_score(observation_id, "vec_halation")
         state_controls.append(
             f'<button type="button" data-chamber-state="{level_name}" '
-            f'data-observation-id="{observation_id}" aria-pressed="{str(active).lower()}" '
+            f'data-observation-id="{observation_id}" '
+            f'aria-pressed="{str(active).lower()}" '
             f'class="{"is-active" if active else ""}">'
-            f'<span>{_esc(level_names[level_name])}</span>'
-            f'<small>{_esc(observation_id)} · observed {observed_label}</small></button>'
+            f'<span>{_esc(state_names[level_name])}</span>'
+            f'<small>{_esc(observation_id.removeprefix("obs_"))} · {_score_text(score)}</small>'
+            f'</button>'
         )
 
     response = next(
         item for item in payload["responses"] if item["vector_id"] == "vec_halation"
     )
     response_rows = []
-    for item in response["mean_response_delta"][:7]:
+    for item in response["mean_response_delta"][:5]:
         value = float(item["value"])
         response_rows.append(
             f'<li data-sign="{"negative" if value < 0 else "positive"}" '
             f'style="--response:{min(1.0, abs(value)):.4f}">'
-            f'<span>{_esc(item["name"])}</span><i aria-hidden="true"></i>'
-            f'<strong>{value:+.3f}</strong></li>'
+            f'<span>{_esc(item["name"])}</span>'
+            f'<i aria-hidden="true"></i><strong>{value:+.2f}</strong></li>'
         )
 
-    correlations = _correlation_rows(payload, "vec_optical_softness", limit=6)
-    correlation_rows = []
+    correlations = _correlation_rows(payload, "vec_optical_softness", limit=5)
+    angle_rows = []
     for item in correlations:
         value = float(item["r"])
-        correlation_rows.append(
-            f'<li data-sign="{"negative" if value < 0 else "positive"}">'
-            f'<span>{_esc(item["name"])}</span><strong>r {value:+.3f}</strong>'
-            f'<small>θ {degrees(acos(max(-1.0, min(1.0, value)))):.1f}°</small></li>'
+        angle = degrees(acos(max(-1.0, min(1.0, value))))
+        angle_rows.append(
+            f'<li style="--angle:{angle:.1f}deg" data-sign="{"negative" if value < 0 else "positive"}">'
+            f'<i aria-hidden="true"></i><span>{_esc(item["name"])}</span>'
+            f'<strong>{value:+.2f}</strong></li>'
+        )
+    correlation_n = correlations[0]["n"] if correlations else 0
+
+    axis_ids = ("vec_optical_softness", "vec_halation", "vec_shadow_density")
+    axis_controls = []
+    for index, vector_id in enumerate(axis_ids):
+        active = index == 0
+        axis_controls.append(
+            f'<button type="button" data-chamber-axis="{vector_id}" '
+            f'aria-pressed="{str(active).lower()}" class="{"is-active" if active else ""}">'
+            f'{_esc(lib.vectors[vector_id].canonical_name)}</button>'
         )
 
     reconstruction = payload["reconstruction"]
@@ -533,157 +561,219 @@ def _home(
         reconstruction_labels.append(f"{value} {vector_name.lower()}")
     reconstruction_equation = " + ".join(reconstruction_terms)
     reconstruction_aria = " plus ".join(reconstruction_labels)
-    recon_by_anchor = {
+
+    reconstruction_by_anchor = {
         item["anchor_id"]: item for item in reconstruction["selected_plates"]
     }
-    recon_media = []
+    reconstruction_media = []
     for anchor_id in ("anchor_object", "anchor_landscape"):
-        item = recon_by_anchor[anchor_id]
-        recon_media.append(
+        item = reconstruction_by_anchor[anchor_id]
+        reconstruction_media.append(
             f'<a href="observations/{item["observation_id"]}.html">'
             f'{_home_media(lib, item["observation_id"], alt=f"{item["anchor_name"]} reconstruction result")}'
-            f'<span>{_esc(item["anchor_name"])} · score {item["score"]:.2f}</span></a>'
+            f'<span>{_esc(item["anchor_name"])} <small>{item["score"]:.2f}</small></span></a>'
         )
 
-    residual = ", ".join(
+    residual = " · ".join(
         f'{item["name"]} {item["count"]}/{item["n"]}'
         for item in reconstruction["residual_counts"][:3]
     )
     chamber_json = json.dumps(
         chamber, separators=(",", ":"), allow_nan=False
     ).replace("</", "<\\/")
-    low_halation = level_score("low", "vec_halation")
-    correlation_n = correlations[0]["n"] if correlations else 0
-    comparison_by_vector = {
-        item["vector_id"]: item["observation_id"]
-        for item in chamber["comparison"]["items"]
-    }
-    halation_observation_id = comparison_by_vector["vec_halation"]
-    bloom_observation_id = comparison_by_vector["vec_highlight_bloom"]
-    halation_halation = chamber_score(halation_observation_id, "vec_halation")
-    halation_bloom = chamber_score(halation_observation_id, "vec_highlight_bloom")
-    bloom_halation = chamber_score(bloom_observation_id, "vec_halation")
-    bloom_bloom = chamber_score(bloom_observation_id, "vec_highlight_bloom")
+    halation_halation = observed_score(comparison_ids["halation"], "vec_halation")
+    halation_bloom = observed_score(comparison_ids["halation"], "vec_highlight_bloom")
+    bloom_halation = observed_score(comparison_ids["bloom"], "vec_halation")
+    bloom_bloom = observed_score(comparison_ids["bloom"], "vec_highlight_bloom")
 
     return f"""
 <div class="observation-chamber" data-chamber data-prefix="">
   <script type="application/json" id="chamber-data">{chamber_json}</script>
 
-  <div class="chamber-viewport" data-chamber-canvas aria-hidden="true">
+  <header class="chamber-masthead">
+    <a class="chamber-mark" href="index.html" aria-label="Visual Basis Atlas home">
+      <span aria-hidden="true">VBA / 01</span>
+      <b>Visual Basis Atlas</b>
+    </a>
+    <nav aria-label="Chamber navigation">
+      <a href="#chamber-archive">Index</a>
+    </nav>
+  </header>
+
+  <div class="chamber-entry" data-chamber-entry data-entry-state="open">
+    <div class="entry-calibration" aria-hidden="true">
+      <i></i><i></i><i></i><i></i>
+      <span>01</span>
+    </div>
+    <div class="entry-copy" role="dialog" aria-modal="true" aria-labelledby="chamber-entry-title" aria-describedby="chamber-entry-note">
+      <p class="entry-overline">Visual Basis Atlas · Observation chamber</p>
+      <h2 id="chamber-entry-title">Calibrate your view.</h2>
+      <p id="chamber-entry-note">A scroll-driven study of one scene, held still while the requested light changes.</p>
+      <div class="entry-actions">
+        <button type="button" data-enter-sound>
+          <span>Enter with sound</span><small>Recommended</small>
+        </button>
+        <button type="button" data-enter-silent>
+          <span>Continue silently</span><small>Sound remains optional</small>
+        </button>
+      </div>
+    </div>
+    <p class="entry-system">Grok Imagine · exact outputs · no interpolation</p>
+  </div>
+
+  <div class="chamber-viewport" data-chamber-canvas>
     <div class="chamber-fallback" data-chamber-fallback>
       {"".join(hero_layers)}
     </div>
-    <div class="chamber-aperture" aria-hidden="true"></div>
-    <div class="chamber-noise" aria-hidden="true"></div>
+    <div class="chamber-optics" aria-hidden="true">
+      <i></i><i></i><i></i><i></i>
+    </div>
+    <div class="chamber-grain" aria-hidden="true"></div>
   </div>
 
-  <div class="chamber-hud" aria-label="Active observation">
-    <p class="chamber-location"><span data-chamber-scene-label>Origin</span><b data-chamber-scene-count>01 / 06</b></p>
-    <p class="chamber-reading"><span data-chamber-observation>{levels["low"]["observation_id"]}</span><b data-chamber-level>low</b><em data-chamber-score>{_score_text(low_halation)}</em></p>
-    <button class="sound-toggle" type="button" data-sound-toggle aria-pressed="false">
-      <span class="sound-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+  <aside class="chamber-hud" aria-label="Active observation">
+    <p class="hud-scene">
+      <span data-chamber-scene-count>01 / 06</span>
+      <b data-chamber-scene-label>Origin</b>
+    </p>
+    <p class="hud-reading">
+      <span data-chamber-observation>{hero_ids["low"]}</span>
+      <b data-chamber-level>low</b>
+      <em data-chamber-score>{_score_text(observed_score(hero_ids["low"], "vec_halation"))}</em>
+    </p>
+    <button class="sound-toggle" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound control">
+      <span class="sound-glyph" aria-hidden="true"><i></i><i></i><i></i></span>
       <span data-sound-label>Enable sound</span>
     </button>
-  </div>
+  </aside>
 
   <div class="chamber-status sr-only" data-chamber-status role="status" aria-live="polite"></div>
 
   <article class="chamber-sequence">
     <section class="chamber-scene scene-origin" data-chamber-scene="origin" aria-labelledby="chamber-origin-title">
-      <div class="scene-copy origin-copy">
-        <p class="scene-kicker">Visual Basis Atlas · Grok Imagine under observation</p>
+      <div class="origin-thesis">
+        <p class="scene-kicker">Controlled image studies for Grok Imagine</p>
         <h1 id="chamber-origin-title">One direction.<br><em>More than one change.</em></h1>
-        <p>Hold the scene. Change one requested visual property. Observe everything that answers with it.</p>
+        <p>Hold the scene. Change one requested property. Observe everything that answers with it.</p>
       </div>
-
-      <div class="state-console" aria-label="Three actual halation outputs">
-        <div class="console-heading"><span>Requested halation</span><b>Three outputs · zero interpolation</b></div>
-        <div class="state-controls">{"".join(state_controls)}</div>
-        <p>Scores are post-hoc agent-visual observations, not Grok controls.</p>
-      </div>
-
-      <p class="scroll-instruction"><span aria-hidden="true">↓</span> Travel through the evidence</p>
+      <fieldset class="specimen-switch">
+        <legend>Requested halation <span>three recorded outputs</span></legend>
+        <div>{"".join(state_controls)}</div>
+        <p>Three outputs · zero interpolation.</p>
+      </fieldset>
+      <p class="scroll-cue"><span>Scroll to observe</span><i aria-hidden="true"></i></p>
     </section>
 
     <section class="chamber-scene scene-response" data-chamber-scene="response" aria-labelledby="chamber-response-title">
-      <div class="scene-copy response-copy">
-        <p class="scene-kicker">Paired response · five locked scenes</p>
+      <div class="scene-caption">
+        <p class="scene-kicker">01 / Coupled response</p>
         <h2 id="chamber-response-title">The request leaves a wake.</h2>
-        <p>Mean high-minus-low movement across the same five anchors. Missing scores are omitted, never replaced with zero.</p>
+        <p>Nothing moves alone. Across locked scenes, the intended change arrives with other visible movement.</p>
       </div>
-      <div class="response-register">
-        <div class="response-register-head"><span>Δx̄ after requesting halation</span><b>n={response["n_pairs"]}</b></div>
+      <figure class="response-key">
+        <figcaption><span>Mean high − low</span><b>n={response["n_pairs"]}</b></figcaption>
         <ol>{"".join(response_rows)}</ol>
-        <p>Agent-visual scoring · association with the request, not proof of causality.</p>
-      </div>
+        <p>Paired agent-visual observations. Missing scores are omitted.</p>
+      </figure>
     </section>
 
     <section class="chamber-scene scene-discriminate" data-chamber-scene="discriminate" aria-labelledby="chamber-discriminate-title">
-      <div class="scene-copy discriminate-copy">
-        <p class="scene-kicker">Same room · two directions</p>
-        <h2 id="chamber-discriminate-title">Similar light.<br>Different event.</h2>
-        <p>Halation carries a colored edge leak. Highlight bloom spreads pale luminance. Select either recorded high state.</p>
+      <div class="scene-caption">
+        <p class="scene-kicker">02 / Discrimination</p>
+        <h2 id="chamber-discriminate-title">Similar light. Different event.</h2>
+        <p>Halation leaks color at the edge. Bloom spreads pale luminance.</p>
       </div>
-      <div class="comparison-console" aria-label="Choose an observed high-state output">
-        <button type="button" data-chamber-compare="halation" aria-pressed="true" class="is-active"><span>Halation</span><small>{_esc(halation_observation_id)} · h {_score_text(halation_halation)} / b {_score_text(halation_bloom)}</small></button>
-        <button type="button" data-chamber-compare="bloom" aria-pressed="false"><span>Highlight bloom</span><small>{_esc(bloom_observation_id)} · b {_score_text(bloom_bloom)} / h {_score_text(bloom_halation)}</small></button>
-      </div>
-      <div class="comparison-fallback" data-chamber-comparison-fallback>
-        {_home_media(lib, halation_observation_id, alt="High requested halation in the locked lamp-present room")}
-        {_home_media(lib, bloom_observation_id, alt="High requested highlight bloom in the locked lamp-present room")}
-      </div>
+      <fieldset class="compare-switch">
+        <legend>Recorded high states</legend>
+        <button type="button" data-chamber-compare="halation" aria-pressed="true" class="is-active">
+          <span>Halation</span>
+          <small>{comparison_ids["halation"]} · h {_score_text(halation_halation)} / b {_score_text(halation_bloom)}</small>
+        </button>
+        <button type="button" data-chamber-compare="bloom" aria-pressed="false">
+          <span>Highlight bloom</span>
+          <small>{comparison_ids["bloom"]} · b {_score_text(bloom_bloom)} / h {_score_text(bloom_halation)}</small>
+        </button>
+      </fieldset>
+      <figure class="comparison-edition" data-chamber-comparison-fallback>
+        {_home_media(
+            lib,
+            comparison_ids["halation"],
+            alt="Night path with a coastal lamp showing high requested halation",
+            class_name="is-active",
+            extra='data-chamber-compare-layer="halation" data-chamber-compare="halation" aria-hidden="false"',
+        )}
+        {_home_media(
+            lib,
+            comparison_ids["bloom"],
+            alt="Night path with a coastal lamp showing high requested highlight bloom",
+            extra='data-chamber-compare-layer="bloom" data-chamber-compare="bloom" aria-hidden="false"',
+        )}
+        <figcaption>
+          <span>Halation · {_esc(comparison_ids["halation"])}</span>
+          <span>Highlight bloom · {_esc(comparison_ids["bloom"])}</span>
+        </figcaption>
+      </figure>
     </section>
 
     <section class="chamber-scene scene-association" data-chamber-scene="association" aria-labelledby="chamber-association-title">
-      <div class="scene-copy association-copy">
-        <p class="scene-kicker">Scored observation-space · n={correlation_n}</p>
-        <h2 id="chamber-association-title">Nothing moves alone.</h2>
-        <p>Pearson correlation becomes literal angle: θ = arccos(r). This is observed association—not causality and not Grok latent space.</p>
+      <div class="scene-caption">
+        <p class="scene-kicker">03 / Association geometry</p>
+        <h2 id="chamber-association-title">Association becomes angle.</h2>
+        <p>Pearson correlation becomes literal angle: θ = arccos(r). Scored observation-space · n={correlation_n} · association, not causality · not Grok latent space.</p>
       </div>
-      <div class="association-register">
-        <div class="association-equation" aria-label="r equals cosine theta">r = cos θ</div>
-        <ol>{"".join(correlation_rows)}</ol>
+      <fieldset class="axis-switch">
+        <legend>Place an axis</legend>
+        {"".join(axis_controls)}
+      </fieldset>
+      <figure class="angle-key">
+        <figcaption><span>r = cos θ</span><b>n={correlation_n}</b></figcaption>
+        <ol>{"".join(angle_rows)}</ol>
         <a href="matrices.html">Inspect the complete matrices <span aria-hidden="true">↗</span></a>
-      </div>
+      </figure>
     </section>
 
     <section class="chamber-scene scene-reconstruct" data-chamber-scene="reconstruct" aria-labelledby="chamber-reconstruct-title">
-      <div class="scene-copy reconstruct-copy">
-        <p class="scene-kicker">Manual first-order reconstruction</p>
-        <h2 id="chamber-reconstruct-title">The coordinate explains some of the picture.</h2>
+      <div class="scene-caption">
+        <p class="scene-kicker">04 / Reconstruction</p>
+        <h2 id="chamber-reconstruct-title">A coordinate explains only part of the picture.</h2>
         <p class="reconstruction-equation" aria-label="Estimated aesthetic equals {_esc(reconstruction_aria)}">â = {reconstruction_equation}</p>
-        <p>Those weights organize a hypothesis. They are not fitted coefficients or hidden model settings.</p>
+        <p>Manual first-order hypothesis. Not fitted coefficients or hidden model settings.</p>
       </div>
-      <div class="reconstruction-fallback">{"".join(recon_media)}</div>
-      <aside class="residual-note">
-        <span>a = â + r</span><h3>What escaped.</h3><p>{_esc(residual)}. Recorded flags, not a pixel-error map.</p>
+      <figure class="reconstruction-edition">
+        {"".join(reconstruction_media)}
+      </figure>
+      <aside class="residual-caption">
+        <span>a = â + r</span>
+        <h3>What escaped</h3>
+        <p>{_esc(residual)} · recorded flags, not a pixel-error map.</p>
       </aside>
     </section>
 
-    <section class="chamber-scene scene-archive" data-chamber-scene="archive" id="atlas-search" aria-labelledby="chamber-archive-title">
-      <div class="scene-copy archive-copy">
-        <p class="scene-kicker">The working atlas</p>
-        <h2 id="chamber-archive-title">Evidence, still in motion.</h2>
-        <p>{chamber["field"]["observation_count"]} non-human observations form this chamber. The complete registry contains {payload["stats"]["observations"]} observations across {payload["stats"]["controlled_vector_studies"]} controlled axes.</p>
+    <section class="chamber-scene scene-archive" data-chamber-scene="archive" id="chamber-archive" aria-labelledby="chamber-archive-title">
+      <div class="scene-caption archive-caption">
+        <p class="scene-kicker">05 / The working atlas</p>
+        <h2 id="chamber-archive-title">Enter the evidence.</h2>
+        <p>{chamber["field"]["observation_count"]} observations are suspended here. {payload["stats"]["observations"]} observations are documented in the complete registry.</p>
       </div>
-      <nav class="archive-gates" aria-label="Enter the atlas">
-        <a href="vectors.html"><span>Vectors</span><b>{payload["stats"]["vectors"]} records</b></a>
-        <a href="studies.html"><span>Studies</span><b>{payload["stats"]["studies"]} protocols</b></a>
-        <a href="matrices.html"><span>Matrices</span><b>{correlation_n}-output cohort</b></a>
-        <a href="aesthetics.html"><span>Coordinates</span><b>working hypotheses</b></a>
+      <nav class="aperture-index" aria-label="Enter the atlas">
+        <a href="vectors.html"><span>Vectors</span><b>{payload["stats"]["vectors"]}</b></a>
+        <a href="studies.html"><span>Studies</span><b>{payload["stats"]["studies"]}</b></a>
+        <a href="matrices.html"><span>Matrices</span><b>{correlation_n}</b></a>
+        <a href="aesthetics.html"><span>Coordinates</span><b>Σ</b></a>
       </nav>
-      <form class="archive-search-form search-form" role="search" data-atlas-search data-prefix="">
+      <form class="aperture-search search-form" id="atlas-search" role="search" data-atlas-search data-prefix="">
         <label for="atlas-search-q">Search the research index</label>
-        <div class="search-input-row"><input id="atlas-search-q" name="q" type="search" placeholder="Try halation or shadow density" autocomplete="off"><button type="submit">Search</button></div>
+        <div>
+          <input id="atlas-search-q" name="q" type="search" placeholder="halation, shadow density…" autocomplete="off">
+          <button type="submit" aria-label="Search"><span aria-hidden="true">→</span></button>
+        </div>
         <div class="search-results" data-search-results role="status" aria-live="polite"></div>
       </form>
-      <p class="archive-colophon">{chamber["field"]["observation_count"]} displayed / {payload["stats"]["observations"]} registry observations · Grok Imagine outputs · agent-visual scoring · no affiliation with xAI</p>
+      <p class="chamber-colophon">{chamber["field"]["observation_count"]} displayed / {payload["stats"]["observations"]} registered · 11 controlled axes · Grok Imagine outputs · agent-visual scoring · no affiliation with xAI</p>
     </section>
   </article>
 </div>
 """
-
-
 def _weight_rows(lib: Library, aesthetic_id: str, prefix: str = "") -> str:
     aesthetic = lib.aesthetics.get(aesthetic_id)
     if not aesthetic:
