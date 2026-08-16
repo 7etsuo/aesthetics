@@ -1,0 +1,19 @@
+{
+  "name": "visual-basis-atlas-web",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@11.17.0",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "build:chamber": "vite build --config vite.chamber.config.js"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "vite": "8.2.1"
+  }
+}

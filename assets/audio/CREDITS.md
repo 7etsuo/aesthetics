@@ -36,9 +36,12 @@ part of the synchronized Atlas experience, not for isolated redistribution.
 Do not register the music or any Atlas audiovisual output containing it with
 Content ID or another audio-fingerprinting ownership system.
 
-## Original Atlas sound design
+## Original Atlas interface sound design
 
-`atlas-room.opus`, `atlas-room.m4a`, the optical movement layer, and all causal
-interface cues are original deterministic synthesis for Atlas. They contain no
-third-party samples. Their reproducible source is
-`tools/generate_chamber_audio.py` and `assets/chamber-audio.js`.
+Short interface cues are dry, deterministic oscillator partials synthesized at
+runtime by `assets/chamber-audio.js`. They contain no samples and create no
+continuous ambience, room tone, movement bed, or pointer-probe sound. The
+licensed score above is the site's only continuous audio source.
+
+`tools/generate_chamber_audio.py` now builds only the two checksum-pinned music
+derivatives. Atlas does not ship a generated room stem.

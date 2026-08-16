@@ -16,10 +16,6 @@ from vslib.site_media import evidence_atlas_manifest
 from vslib.site_explorer import (
     CONTROLLED_STUDY_IDS,
     CORRELATION_STUDY_IDS,
-    HERO_ANCHOR_ID,
-    HERO_OBSERVATION_IDS,
-    HERO_STUDY_ID,
-    HERO_VECTOR_ID,
     LEVEL_ORDER,
     MODEL_LABEL,
     RECONSTRUCTION_AESTHETIC_ID,
@@ -50,6 +46,14 @@ TRIPLET_ANCHOR_IDS = ("anchor_architecture", "anchor_lamp_architecture")
 COMPARISON_OBSERVATION_IDS = ("obs_0162", "obs_0177")
 COMPARISON_VECTOR_IDS = ("vec_halation", "vec_highlight_bloom")
 COMPARISON_ANCHOR_ID = "anchor_lamp_landscape"
+
+# The cinematic Chamber opens on the most legible non-human controlled
+# triplet: one locked night path with the requested halation level changing.
+# The broader explorer keeps its own independent default study.
+HERO_STUDY_ID = "study_halation_002"
+HERO_VECTOR_ID = "vec_halation"
+HERO_ANCHOR_ID = "anchor_lamp_landscape"
+HERO_OBSERVATION_IDS = ("obs_0160", "obs_0161", "obs_0162")
 
 
 def build_chamber_payload(lib: Library) -> dict[str, Any]:

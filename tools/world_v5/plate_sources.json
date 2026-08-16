@@ -1,0 +1,104 @@
+{
+  "schema": "atlas-scene-plate-sources/v1",
+  "generator": "OpenAI image generation",
+  "sourceRootEnv": "ATLAS_PLATE_SOURCE_ROOT",
+  "order": [
+    "control",
+    "response",
+    "comparison",
+    "association",
+    "reconstruction",
+    "archive"
+  ],
+  "variants": {
+    "desktop": {
+      "control": {
+        "file": "exec-e213b5ed-7c63-4ccd-8718-c87c139164f0.png",
+        "sha256": "304a29b88df06cf36e2db787e49ec848f41b003b4034d528d5298949f8fca86e",
+        "width": 1672,
+        "height": 941,
+        "focalPoint": [0.69, 0.43]
+      },
+      "response": {
+        "file": "exec-ca6747a9-82d5-4f21-89bf-cba0b37f4dcf.png",
+        "sha256": "56e48c59fb3181586269e1b3c320088679703aa8dd8302fec7d82bb82d87657e",
+        "width": 1672,
+        "height": 941,
+        "focalPoint": [0.69, 0.42]
+      },
+      "comparison": {
+        "file": "exec-9c3c32d2-3b07-45a5-90f3-8acf5254ed49.png",
+        "sha256": "67c21293bc82333688a872bef830079e73265fdf999439af609ae6a4a6b2e37b",
+        "width": 1672,
+        "height": 941,
+        "focalPoint": [0.69, 0.42]
+      },
+      "association": {
+        "file": "exec-2da1d72e-32c2-498c-ba64-2ab9404ceffc.png",
+        "sha256": "18e287f90e94d9c823d4149aaf8798698f663fd51e83acfdaefdc5bf1cff3e47",
+        "width": 1672,
+        "height": 941,
+        "focalPoint": [0.77, 0.43]
+      },
+      "reconstruction": {
+        "file": "exec-ef0e9ebb-76be-4a4d-a377-269986fb6c80.png",
+        "sha256": "378e86e86300b176c7d5f1873c073d8936749368e7ac35707f8b6a1db44341ea",
+        "width": 1672,
+        "height": 941,
+        "focalPoint": [0.77, 0.48]
+      },
+      "archive": {
+        "file": "exec-b5706abb-1799-4fe5-ab47-dbde49d39db5.png",
+        "sha256": "51d2288b64857270850e8b026696677194248431bd92fa7b7898166912e3e0d9",
+        "width": 1672,
+        "height": 941,
+        "focalPoint": [0.83, 0.46]
+      }
+    },
+    "mobile": {
+      "control": {
+        "file": "exec-2ac9201c-50ec-4405-bc2a-44ae4107776d.png",
+        "sha256": "14952a2d381cbe5b91608e27c2a868f6e934454b61360e3276cf1b470d47137a",
+        "width": 941,
+        "height": 1672,
+        "focalPoint": [0.67, 0.35]
+      },
+      "response": {
+        "file": "exec-bf62856e-d272-4af0-88df-c14146ebc903.png",
+        "sha256": "e94466040c0205b8bb238f2491204a2c7d866cac4a3069899274e546847964c0",
+        "width": 941,
+        "height": 1672,
+        "focalPoint": [0.64, 0.38]
+      },
+      "comparison": {
+        "file": "exec-a284ca89-f676-451b-858a-daa2440bb719.png",
+        "sha256": "76151c4223debaf13ff68d38a4bf29489d1e05ee78966f4f4be921a8f7307ad8",
+        "width": 941,
+        "height": 1672,
+        "focalPoint": [0.63, 0.42]
+      },
+      "association": {
+        "file": "exec-7161e0b1-75e7-45d9-81b8-7f9d80b996e7.png",
+        "sha256": "aa8d9d9ab93f61152ea4230815e35c3305a530a10d8cecd352398397261e93fe",
+        "width": 941,
+        "height": 1672,
+        "focalPoint": [0.68, 0.38]
+      },
+      "reconstruction": {
+        "file": "exec-867d3818-5463-450b-a01f-1edecd0ab1f4.png",
+        "sha256": "8ab349e439ced22951db1d0cd8bdcbd87da57b42be135189169b784ff01bc225",
+        "width": 853,
+        "height": 1844,
+        "focalPoint": [0.68, 0.43],
+        "note": "Corrected source with exactly three reconstruction gates"
+      },
+      "archive": {
+        "file": "exec-36d675a1-4455-4960-9872-8caab78abcac.png",
+        "sha256": "45ad23a607a0bc71902f3b56b16ac3c2758fc5d9e047640b72e8348826b7a7a1",
+        "width": 853,
+        "height": 1844,
+        "focalPoint": [0.67, 0.36]
+      }
+    }
+  }
+}

@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import json
 import shutil
+from hashlib import sha256
 from math import acos, degrees
 from pathlib import Path
 
 from PIL import Image
 
 from vslib.matrices import nearest_aesthetics
+from vslib.site_chamber import HERO_OBSERVATION_IDS as CHAMBER_HERO_OBSERVATION_IDS
 from vslib.site_chamber import build_chamber_payload
 from vslib.site_explorer import build_explorer_payload
 from vslib.site_media import write_evidence_atlases
@@ -25,15 +27,36 @@ SITE_DESCRIPTION = (
 )
 SOCIAL_IMAGE = f"{SITE_ORIGIN}/assets/social-card-v5.jpg"
 SOCIAL_IMAGE_ALT = (
-    "Visual Basis Atlas social preview showing a luminous optical observatory and the line "
-    "Change one thing. Watch the image answer."
+    "Visual Basis Atlas social preview showing an illustrative coastal optical "
+    "depth field."
+)
+
+WORLD_MANIFEST = "assets/world-v5/atlas-world-v2.json"
+WORLD_BEATS = (
+    "control",
+    "response",
+    "comparison",
+    "association",
+    "reconstruction",
+    "archive",
+)
+WORLD_EVIDENCE_DISCLOSURE = (
+    "Control, Comparison, and Reconstruction use registered, ungraded evidence "
+    "derivatives. Archive is a registered atlas contact-sheet preview linking to "
+    "canonical observations. The cinematic depth field is illustrative, not a model "
+    "output."
 )
 
 HOME_MEDIA_IDS = (
-    "obs_0077", "obs_0078", "obs_0079",
-    "obs_0162", "obs_0177",
+    *CHAMBER_HERO_OBSERVATION_IDS,
+    "obs_0177",
     "obs_0052", "obs_0055",
 )
+
+
+def _scene_plate_path(viewport: str, beat: str, *, depth: bool = False) -> str:
+    suffix = "-depth" if depth else ""
+    return f"assets/world-v5/plates/{viewport}/{beat}{suffix}.webp"
 
 def generate_site(lib: Library) -> None:
     site = lib.root / "site"
@@ -48,24 +71,29 @@ def generate_site(lib: Library) -> None:
         lib.root / "assets" / "chamber-audio.js",
         lib.root / "assets" / "audio" / "signal-to-noise.opus",
         lib.root / "assets" / "audio" / "signal-to-noise.m4a",
-        lib.root / "assets" / "audio" / "atlas-room.opus",
-        lib.root / "assets" / "audio" / "atlas-room.m4a",
         lib.root / "assets" / "audio" / "CREDITS.md",
-        lib.root / "assets" / "vendor" / "three.module.min.js",
         lib.root / "assets" / "vendor" / "three.LICENSE.txt",
-        lib.root / "assets" / "art" / "optical-observatory-wide.webp",
-        lib.root / "assets" / "art" / "optical-observatory-wide-depth.webp",
-        lib.root / "assets" / "art" / "optical-observatory-mobile.webp",
-        lib.root / "assets" / "art" / "optical-observatory-mobile-depth.webp",
-        lib.root / "assets" / "art" / "optical-observatory-room-wide.webp",
-        lib.root / "assets" / "art" / "optical-observatory-room-mobile.webp",
-        lib.root / "assets" / "art" / "optical-observatory-instrument-wide.webp",
-        lib.root / "assets" / "art" / "optical-observatory-instrument-mobile.webp",
-        lib.root / "assets" / "fonts" / "instrument-sans-latin.woff2",
+        lib.root / WORLD_MANIFEST,
+        lib.root / "assets" / "fonts" / "inter-tight-latin.woff2",
         lib.root / "assets" / "fonts" / "instrument-serif-regular-latin.woff2",
-        lib.root / "assets" / "fonts" / "instrument-serif-italic-latin.woff2",
         lib.root / "assets" / "fonts" / "Instrument-OFL.txt",
+        lib.root / "assets" / "fonts" / "ibm-plex-mono-regular-latin.woff2",
+        lib.root / "assets" / "fonts" / "ibm-plex-mono-medium-latin.woff2",
         lib.root / "assets" / "social-card-v5.jpg",
+    )
+    missing_sources = [
+        source.relative_to(lib.root).as_posix()
+        for source in required_sources
+        if not source.exists()
+    ]
+    if missing_sources:
+        raise FileNotFoundError(
+            "required site sources are missing: " + ", ".join(missing_sources)
+        )
+    scene_plate_sources = _validate_world_manifest(lib.root)
+    required_sources = (
+        *required_sources,
+        *(lib.root / source for source in scene_plate_sources),
     )
     missing_sources = [
         source.relative_to(lib.root).as_posix()
@@ -133,6 +161,10 @@ def generate_site(lib: Library) -> None:
         description="Controlled image studies used to test visual basis-vector candidates.",
     )
     _page(
+        site / "observations.html", "Observations", _observation_index(lib), nav="studies",
+        description="The complete index of registered generated observations in the Visual Basis Atlas.",
+    )
+    _page(
         site / "questions.html", "Open questions", _questions(lib), nav="questions",
         description="Unresolved questions and next experiments in the visual basis atlas.",
     )
@@ -172,6 +204,198 @@ def generate_site(lib: Library) -> None:
             description=f"A {level} observation of {intended} from the Visual Basis Atlas.",
         )
     _copy_artifacts(lib, site)
+
+
+def _validate_world_manifest(root: Path) -> tuple[Path, ...]:
+    """Validate the frozen depth-parallax scene-plate package before site mutation."""
+    manifest_path = root / WORLD_MANIFEST
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("format") != "atlas-world/v2" or manifest.get("version") != 2:
+        raise ValueError("world manifest must use atlas-world/v2")
+
+    retired_keys = {
+        "archiveBindings",
+        "chapters",
+        "control",
+        "evidenceBindings",
+        "fieldStation",
+        "models",
+        "requiredNodes",
+        "variants",
+    }
+    stale_keys = sorted(retired_keys.intersection(manifest))
+    if stale_keys:
+        raise ValueError(
+            "world manifest contains retired scene fields: " + ", ".join(stale_keys)
+        )
+
+    scene_plates = manifest.get("scenePlates")
+    if not isinstance(scene_plates, dict):
+        raise ValueError("world manifest must define scenePlates")
+    if scene_plates.get("renderer") != "depth-parallax-v1":
+        raise ValueError("world manifest renderer must be depth-parallax-v1")
+    if scene_plates.get("order") != list(WORLD_BEATS):
+        raise ValueError("world manifest scene-plate order must match the six semantic beats")
+
+    expected_interaction = {
+        "firstResponseMs": 48,
+        "settleMs": 240,
+        "maxParallaxPx": {"desktop": 18, "mobile": 10},
+        "maxRelightEv": 0.6,
+        "transitionMs": 900,
+    }
+    if scene_plates.get("interaction") != expected_interaction:
+        raise ValueError("world manifest scene-plate interaction bounds are stale")
+
+    expected_depth_estimator = {
+        "model": "depth-anything/Depth-Anything-V2-Small-hf",
+        "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+        "license": "Apache-2.0",
+        "modelCard": (
+            "https://huggingface.co/depth-anything/"
+            "Depth-Anything-V2-Small-hf/tree/"
+            "5426e4f0f36572d16453bbda7a8389317b1bef99"
+        ),
+        "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+        "localFilesOnly": True,
+    }
+    if scene_plates.get("depthEstimator") != expected_depth_estimator:
+        raise ValueError("world manifest depthEstimator is stale or incomplete")
+
+    expected_depth_encoding = {
+        "kind": "relative-inverse-depth",
+        "bitDepth": 8,
+        "channels": 1,
+        "near": 255,
+        "far": 0,
+        "normalization": "per-plate-min-max",
+        "resampling": "bicubic-align-corners-false",
+        "lossless": True,
+    }
+    if scene_plates.get("depthEncoding") != expected_depth_encoding:
+        raise ValueError("world manifest depthEncoding is stale or incomplete")
+
+    expected_focal_convention = {
+        "coordinates": "normalized-[x,y]",
+        "origin": "top-left",
+        "space": "intrinsic-plate-pixels",
+    }
+    focal_convention = scene_plates.get("focalPointConvention")
+    if not isinstance(focal_convention, dict) or any(
+        focal_convention.get(key) != value
+        for key, value in expected_focal_convention.items()
+    ):
+        raise ValueError("world manifest focalPointConvention is stale or incomplete")
+
+    variants = scene_plates.get("variants")
+    if not isinstance(variants, dict) or tuple(variants) != ("desktop", "mobile"):
+        raise ValueError("world manifest must define ordered desktop and mobile scene plates")
+
+    record_keys = {"path", "sha256", "bytes", "width", "height", "mime"}
+    sources: list[Path] = []
+    for viewport, variant in variants.items():
+        if not isinstance(variant, dict) or tuple(variant) != WORLD_BEATS:
+            raise ValueError(
+                f"world manifest {viewport} scene plates must follow the six-beat order"
+            )
+        for beat, plate in variant.items():
+            if not isinstance(plate, dict) or set(plate) != {"color", "depth", "focalPoint"}:
+                raise ValueError(
+                    f"world manifest {viewport} {beat} scene plate is incomplete"
+                )
+            focal_point = plate["focalPoint"]
+            if (
+                not isinstance(focal_point, list)
+                or len(focal_point) != 2
+                or any(
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not 0 <= value <= 1
+                    for value in focal_point
+                )
+            ):
+                raise ValueError(
+                    f"world manifest {viewport} {beat} focalPoint must be normalized [x,y]"
+                )
+
+            for role in ("color", "depth"):
+                record = plate[role]
+                if not isinstance(record, dict) or set(record) != record_keys:
+                    raise ValueError(
+                        f"world manifest {viewport} {beat} {role} record is incomplete"
+                    )
+                expected_path = _scene_plate_path(
+                    viewport, beat, depth=role == "depth"
+                )
+                if record["path"] != expected_path:
+                    raise ValueError(
+                        f"world manifest {viewport} {beat} {role} path must be {expected_path}"
+                    )
+                digest = record["sha256"]
+                if (
+                    not isinstance(digest, str)
+                    or len(digest) != 64
+                    or digest != digest.lower()
+                    or any(character not in "0123456789abcdef" for character in digest)
+                ):
+                    raise ValueError(
+                        f"world manifest {viewport} {beat} {role} checksum is invalid"
+                    )
+                for dimension in ("bytes", "width", "height"):
+                    value = record[dimension]
+                    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+                        raise ValueError(
+                            f"world manifest {viewport} {beat} {role} {dimension} is invalid"
+                        )
+                if record["mime"] != "image/webp":
+                    raise ValueError(
+                        f"world manifest {viewport} {beat} {role} mime must be image/webp"
+                    )
+
+                relative = Path(record["path"])
+                asset = root / relative
+                if not asset.is_file():
+                    raise FileNotFoundError(f"world manifest asset is missing: {relative}")
+                encoded = asset.read_bytes()
+                if len(encoded) != record["bytes"]:
+                    raise ValueError(f"world manifest byte count is stale: {relative}")
+                if sha256(encoded).hexdigest() != digest:
+                    raise ValueError(f"world manifest checksum is stale: {relative}")
+                try:
+                    with Image.open(asset) as image:
+                        actual_format = image.format
+                        actual_size = image.size
+                except OSError as error:
+                    raise ValueError(
+                        f"world manifest asset is not a readable WebP: {relative}"
+                    ) from error
+                if actual_format != "WEBP" or actual_size != (
+                    record["width"],
+                    record["height"],
+                ):
+                    raise ValueError(
+                        f"world manifest dimensions or mime are stale: {relative}"
+                    )
+                sources.append(relative)
+
+            color = plate["color"]
+            depth = plate["depth"]
+            if (
+                color["width"],
+                color["height"],
+                color["mime"],
+            ) != (
+                depth["width"],
+                depth["height"],
+                depth["mime"],
+            ):
+                raise ValueError(
+                    f"world manifest {viewport} {beat} color/depth records must match"
+                )
+
+    if len(sources) != 24 or len(set(sources)) != 24:
+        raise ValueError("world manifest must reference 24 unique scene-plate assets")
+    return tuple(sources)
 
 
 def _search_index(lib: Library) -> list[dict]:
@@ -260,22 +484,19 @@ def _page(
     body_class = "is-home" if hero else f"is-record page-{_esc(nav)}"
     og_type = "website" if hero else "article"
     hero_preload = (
-        '<link rel="preload" as="image" href="assets/art/optical-observatory-room-wide.webp" '
-        'type="image/webp" media="(min-width: 768px)" fetchpriority="high" crossorigin="anonymous">'
-        '<link rel="preload" as="image" href="assets/art/optical-observatory-instrument-wide.webp" '
-        'type="image/webp" media="(min-width: 768px)" fetchpriority="high" crossorigin="anonymous">'
-        '<link rel="preload" as="image" href="assets/art/optical-observatory-room-mobile.webp" '
-        'type="image/webp" media="(max-width: 767px)" fetchpriority="high" crossorigin="anonymous">'
-        '<link rel="preload" as="image" href="assets/art/optical-observatory-instrument-mobile.webp" '
-        'type="image/webp" media="(max-width: 767px)" fetchpriority="high" crossorigin="anonymous">'
-        '<link rel="preload" as="font" href="assets/fonts/instrument-sans-latin.woff2" '
-        'type="font/woff2" crossorigin>'
+        f'<link rel="preload" as="image" href="{_scene_plate_path("desktop", "control")}" '
+        'type="image/webp" media="(min-width: 768px)" fetchpriority="high">'
+        f'<link rel="preload" as="image" href="{_scene_plate_path("mobile", "control")}" '
+        'type="image/webp" media="(max-width: 767px)" fetchpriority="high">'
+        f'<link rel="preload" as="fetch" href="{WORLD_MANIFEST}" '
+        'type="application/json" crossorigin="anonymous">'
         '<link rel="preload" as="font" href="assets/fonts/instrument-serif-regular-latin.woff2" '
         'type="font/woff2" crossorigin>'
-        '<link rel="preload" as="font" href="assets/fonts/instrument-serif-italic-latin.woff2" '
+        '<link rel="preload" as="font" href="assets/fonts/inter-tight-latin.woff2" '
+        'type="font/woff2" crossorigin>'
+        '<link rel="preload" as="font" href="assets/fonts/ibm-plex-mono-regular-latin.woff2" '
         'type="font/woff2" crossorigin>'
         '<link rel="modulepreload" href="assets/chamber.js">'
-        '<link rel="modulepreload" href="assets/vendor/three.module.min.js">'
         '<link rel="modulepreload" href="assets/chamber-audio.js">'
         if hero else ""
     )
@@ -285,14 +506,23 @@ def _page(
         if hero else ""
     )
     early_gate_script = (
-        '<script>document.documentElement.classList.add("has-js");'
+        '<script>if(location.protocol==="file:"){document.documentElement.classList.remove("has-js");}'
+        'else{document.documentElement.classList.add("has-js","is-entry-open");'
         'window.setTimeout(()=>{const root=document.querySelector("[data-chamber]");'
-        'if(!root||!root.hasAttribute("data-ready")){document.documentElement.classList.remove("has-js");'
-        'root?.removeAttribute("data-ready");}},10000);</script>'
+        'if(!root||root.dataset.ready!=="true"){const doc=document.documentElement;'
+        'doc.classList.remove("has-js","is-entry-open");document.body?.classList.remove("is-entry-open");'
+        'if(root){root.dataset.bootTimedOut="true";root.removeAttribute("data-ready");'
+        'root.__atlasDirector?.leaveSemanticEdition?.("Boot timed out");'
+        'const entry=root.querySelector("[data-chamber-entry]");'
+        'if(entry){entry.dataset.entryState="dismissed";entry.setAttribute("aria-hidden","true");'
+        'entry.setAttribute("aria-busy","false");entry.removeAttribute("aria-modal");}'
+        'root.querySelectorAll("[data-entry-inert]").forEach(node=>{node.inert=false;'
+        'node.removeAttribute("data-entry-inert");});}'
+        'document.getElementById("main")?.focus({preventScroll:true});}},10000);}</script>'
         if hero else ""
     )
-    theme_color = "#d8d4ca" if hero else "#0a0a09"
-    color_scheme = "light dark" if hero else "dark"
+    theme_color = "#DBE7E6" if hero else "#edf2f1"
+    color_scheme = "light"
     structured_data = ""
     if hero:
         data = {
@@ -307,8 +537,8 @@ def _page(
 <header class="site-header">
   <nav class="site-nav float" aria-label="Primary navigation">
     <a class="mark" href="{prefix}index.html" aria-label="Visual Basis Atlas — Home"{home_current}>
-      <span class="mark-index" aria-hidden="true">VBA/01</span>
       <span class="mark-name">Visual Basis Atlas</span>
+      <span class="mark-context">Grok Imagine / evidence atlas</span>
     </a>
     <div class="nav-links">{_nav(nav, prefix)}</div>
     <a class="search-trigger" href="{prefix}index.html#atlas-search" data-search-open>Search <kbd>/</kbd></a>
@@ -384,19 +614,16 @@ def _site_footer(prefix: str) -> str:
 <footer class="site-footer">
   <div class="site-footer-statement">
     <div class="site-footer-mark">Visual Basis Atlas</div>
-    <p>Operational dimensions for visual style. Useful, provisional, and not assumed orthogonal.</p>
+    <p>A public record of controlled Grok Imagine studies: registered output records, measured responses, and provisional visual coordinates.</p>
   </div>
-  <div class="site-footer-ledger" aria-label="Evidence summary">
-    <span><strong>Observed</strong> categorical outputs</span>
-    <span><strong>Measured</strong> paired responses</span>
-    <span><strong>Provisional</strong> operational basis</span>
-  </div>
-  <div class="site-footer-links" aria-label="Secondary navigation">
+  <nav class="site-footer-links" aria-label="Secondary navigation">
+    <a href="{prefix}vectors.html">Vectors</a>
+    <a href="{prefix}studies.html">Studies</a>
     <a href="{prefix}families.html">Families</a>
     <a href="{prefix}aliases.html">Aliases</a>
     <a href="{prefix}questions.html">Open questions</a>
-  </div>
-  <p class="site-footer-note">Research target: Grok Imagine · Scores: agent-visual · No model-native coefficients.</p>
+  </nav>
+  <p class="site-footer-note">Observed output space · agent-visual scoring · no model-native coefficients · no affiliation with xAI</p>
 </footer>
 """
 
@@ -457,7 +684,7 @@ def _home_media(
         f'{_presentation_path(observation_id, 1024)} 1024w" '
         f'sizes="(max-width: 767px) 100vw, 50vw" alt="{_esc(alt)}" '
         f'width="1024" height="1024" loading="{loading}" decoding="{decoding}" '
-        f'fetchpriority="{fetchpriority}" crossorigin="anonymous" {extra}>'
+        f'fetchpriority="{fetchpriority}" {extra}>'
     )
 
 
@@ -480,7 +707,7 @@ def _home(
     chamber_payload: dict | None = None,
     explorer_payload: dict | None = None,
 ) -> str:
-    """Render the semantic and fallback edition of the Observation Chamber."""
+    """Render the semantic and static-fallback edition of the V5 world."""
     payload = (
         explorer_payload
         if explorer_payload is not None
@@ -491,6 +718,10 @@ def _home(
         if chamber_payload is not None
         else build_chamber_payload(lib)
     )
+    world_manifest = json.loads(
+        (lib.root / WORLD_MANIFEST).read_text(encoding="utf-8")
+    )
+    scene_plate_variants = world_manifest["scenePlates"]["variants"]
 
     hero_ids = {
         item["requested_level"]: item["observation_id"]
@@ -513,42 +744,40 @@ def _home(
 
     hero_vector_id = chamber["hero"]["vector_id"]
     hero_vector_name = chamber["vectors"][hero_vector_id]["name"]
+    hero_anchor = lib.anchors[chamber["hero"]["anchor_id"]].name
     state_names = {"low": "Low", "medium": "Medium", "high": "High"}
-    hero_layers = []
     hero_static = []
     state_controls = []
     for level_name in ("low", "medium", "high"):
         observation_id = hero_ids[level_name]
-        active = level_name == "low"
-        hero_layers.append(
-            _home_media(
-                lib,
-                observation_id,
-                alt=(
-                    f"Architecture study with {level_name} requested "
-                    f"{hero_vector_name.lower()}, exact Grok Imagine output"
-                ),
-                class_name=f'chamber-fallback-layer{" is-active" if active else ""}',
-                loading="eager",
-                decoding="sync" if active else "async",
-                fetchpriority="high" if active else "low",
-                extra=(
-                    f'data-chamber-fallback-layer data-state="{level_name}" '
-                    f'data-observation-id="{observation_id}" '
-                    f'aria-hidden="{"false" if active else "true"}"'
-                ),
-            )
-        )
+        # The chamber opens at the registered medium request. Keep the semantic
+        # proof and the illustrative depth field aligned at boot.
+        active = level_name == "medium"
         score = observed_score(observation_id, hero_vector_id)
+        proof_image = _home_media(
+            lib,
+            observation_id,
+            alt=(
+                f"{hero_anchor}, {level_name} requested "
+                f"{hero_vector_name.lower()}"
+            ),
+            loading="eager",
+            extra="data-documentary-evidence",
+        )
         hero_static.append(
-            f'<a href="observations/{observation_id}.html">'
-            f'{_home_media(lib, observation_id, alt=f"Architecture study with {level_name} requested {hero_vector_name.lower()}", loading="eager")}'
+            f'<a id="control-proof-{level_name}" '
+            f'href="observations/{observation_id}.html" '
+            f'data-control-proof-state="{level_name}" data-observation-id="{observation_id}"'
+            f'{" aria-current=\"true\"" if active else ""}>'
+            f'{proof_image}'
             f'<span><b>{_esc(state_names[level_name])}</b>'
-            f'<small>{observation_id} · {_score_text(score)}</small></span></a>'
+            f'<small>Registered derivative · ungraded · {observation_id} · '
+            f'{_esc(hero_vector_name.lower())} {_score_text(score)}</small></span></a>'
         )
         state_controls.append(
             f'<button type="button" data-chamber-state="{level_name}" '
-            f'data-observation-id="{observation_id}" '
+            f'data-world-target="halation-{level_name}" '
+            f'data-observation-id="{observation_id}" aria-controls="control-proof-{level_name}" '
             f'aria-pressed="{str(active).lower()}" '
             f'class="{"is-active" if active else ""}">'
             f'<span>{_esc(state_names[level_name])}</span>'
@@ -568,7 +797,8 @@ def _home(
     for item in nonzero_responses:
         value = float(item["value"])
         response_rows.append(
-            f'<li data-sign="{"negative" if value < 0 else "positive"}" '
+            f'<li data-vector-id="{_esc(item["vector_id"])}" '
+            f'data-sign="{"negative" if value < 0 else "positive"}" '
             f'style="--response:{min(1.0, abs(value)):.4f}">'
             f'<span>{_esc(item["name"])}</span>'
             f'<i aria-hidden="true"></i>'
@@ -582,7 +812,7 @@ def _home(
         value = float(item["r"])
         angle = degrees(acos(max(-1.0, min(1.0, value))))
         angle_rows.append(
-            f'<tr style="--angle:{angle:.1f}deg" '
+            f'<tr data-vector-id="{_esc(item["id"])}" style="--angle:{angle:.1f}deg" '
             f'data-sign="{"negative" if value < 0 else "positive"}">'
             f'<th scope="row"><i aria-hidden="true"></i>{_esc(item["name"])}</th>'
             f'<td>{value:+.2f}</td><td>{angle:.0f}°</td></tr>'
@@ -599,7 +829,6 @@ def _home(
             f'{_esc(lib.vectors[vector_id].canonical_name)}</button>'
         )
 
-    reconstruction = payload["reconstruction"]
     chamber_reconstruction = chamber["reconstruction"]
     reconstruction_terms = []
     reconstruction_labels = []
@@ -617,7 +846,7 @@ def _home(
     reconstruction_aria = " plus ".join(reconstruction_labels)
 
     reconstruction_by_anchor = {
-        item["anchor_id"]: item for item in reconstruction["selected_plates"]
+        item["anchor_id"]: item for item in chamber_reconstruction["selected_plates"]
     }
     reconstruction_media = []
     for anchor_id in ("anchor_object", "anchor_landscape"):
@@ -625,14 +854,67 @@ def _home(
         reconstruction_media.append(
             f'<a href="observations/{item["observation_id"]}.html" '
             f'data-observation-id="{item["observation_id"]}">'
-            f'{_home_media(lib, item["observation_id"], alt=f"{item["anchor_name"]} reconstruction result")}'
+            f'{_home_media(lib, item["observation_id"], alt=f"{item["anchor_name"]} reconstruction result", extra="data-documentary-evidence")}'
             f'<span><b>{_esc(item["anchor_name"])}</b>'
             f'<small>{item["observation_id"]} · score {item["score"]:.2f}</small></span></a>'
         )
 
+    archive_observations = chamber["field"]["observations"]
+    if len(archive_observations) != chamber["field"]["observation_count"]:
+        raise ValueError("archive contact sheet must match the nonhuman field cohort")
+    archive_atlas = chamber["field"]["atlas"]
+    archive_atlas_spec = archive_atlas["desktop"]
+    archive_columns = archive_atlas["columns"]
+    archive_cell_size = archive_atlas_spec["cell_size"]
+    archive_gutter = archive_atlas_spec["gutter"]
+    archive_tile_size = archive_cell_size - (2 * archive_gutter)
+    archive_position_width = archive_atlas_spec["width"] - archive_tile_size
+    archive_position_height = archive_atlas_spec["height"] - archive_tile_size
+    archive_background_width = archive_atlas_spec["width"] / archive_tile_size * 100
+    archive_background_height = archive_atlas_spec["height"] / archive_tile_size * 100
+    archive_contacts = []
+    for item in archive_observations:
+        observation_id = item["id"]
+        index = archive_atlas["entries"][observation_id]
+        row, column = divmod(index, archive_columns)
+        cell_x = (
+            archive_atlas_spec["offset_x"]
+            + column * archive_cell_size
+            + archive_gutter
+        )
+        cell_y = (
+            archive_atlas_spec["offset_y"]
+            + row * archive_cell_size
+            + archive_gutter
+        )
+        position_x = cell_x / archive_position_width * 100
+        position_y = cell_y / archive_position_height * 100
+        anchor = lib.anchors.get(item["anchor_id"])
+        anchor_name = anchor.name if anchor else item["anchor_id"]
+        vector = lib.vectors.get(item["vector_id"]) if item["vector_id"] else None
+        if vector:
+            direction = f'{item["requested_level"]} requested {vector.canonical_name.lower()}'
+        elif item["requested_level"] == "baseline":
+            direction = "registered baseline"
+        else:
+            direction = f'registered {item["requested_level"]} observation'
+        alt = f"{anchor_name}, {direction}"
+        archive_contacts.append(
+            f'<li><a href="observations/{observation_id}.html" '
+            f'data-archive-preview-entry data-archive-index="{index}" '
+            f'data-observation-id="{observation_id}">'
+            f'<span class="archive-contact-crop" aria-hidden="true" '
+            f'data-archive-preview-crop '
+            f'style="--atlas-x:{position_x:.6f}%;--atlas-y:{position_y:.6f}%"></span>'
+            f'<span class="archive-contact-id" aria-hidden="true">'
+            f'{_esc(observation_id)}</span>'
+            f'<span class="sr-only">{_esc(observation_id)} · {_esc(alt)}</span>'
+            f'</a></li>'
+        )
+
     residual = " · ".join(
         f'{item["name"]} {item["count"]}/{item["n"]}'
-        for item in reconstruction["residual_counts"][:3]
+        for item in chamber_reconstruction["residual_counts"]
     )
     chamber_json = json.dumps(
         chamber, separators=(",", ":"), allow_nan=False
@@ -642,184 +924,218 @@ def _home(
     bloom_halation = observed_score(comparison_ids["bloom"], "vec_halation")
     bloom_bloom = observed_score(comparison_ids["bloom"], "vec_highlight_bloom")
 
+    def fallback_frame(beat: str, *, active: bool = False) -> str:
+        priority = "high" if active else "low"
+        loading = "eager" if active else "lazy"
+        desktop_plate = _scene_plate_path("desktop", beat)
+        mobile_plate = _scene_plate_path("mobile", beat)
+        desktop_focal = scene_plate_variants["desktop"][beat]["focalPoint"]
+        mobile_focal = scene_plate_variants["mobile"][beat]["focalPoint"]
+        focal_style = (
+            f"--plate-x:{desktop_focal[0] * 100:.3f}%;"
+            f"--plate-y:{desktop_focal[1] * 100:.3f}%;"
+            f"--plate-mobile-x:{mobile_focal[0] * 100:.3f}%;"
+            f"--plate-mobile-y:{mobile_focal[1] * 100:.3f}%"
+        )
+        return f"""
+      <picture class="world-fallback-frame{' is-active' if active else ''}"
+        data-world-fallback-frame="{beat}" aria-hidden="{'false' if active else 'true'}"
+        style="{focal_style}">
+        <source media="(max-width: 767px)" srcset="{mobile_plate}">
+        <img src="{desktop_plate}" alt="" loading="{loading}"
+          decoding="async" fetchpriority="{priority}">
+      </picture>"""
+
+    fallback_frames = "".join(
+        fallback_frame(beat, active=beat == "control") for beat in WORLD_BEATS
+    )
+
     return f"""
-<div class="observation-chamber" data-chamber data-prefix="" data-world="observatory">
+<div class="observation-chamber" data-chamber data-prefix="" data-world="coastal-optical-atlas"
+  data-world-version="5" data-world-manifest="{WORLD_MANIFEST}"
+  data-chamber-state="medium" data-selected-observation="{hero_ids['medium']}">
   <script type="application/json" id="chamber-data">{chamber_json}</script>
 
   <header class="chamber-masthead">
     <a class="chamber-mark" href="index.html" aria-label="Visual Basis Atlas home">
       <b>Visual Basis Atlas</b>
-      <span>Grok Imagine under observation</span>
+      <span>Grok Imagine / observed output space</span>
     </a>
     <button class="sound-toggle" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound control">
       <span class="sound-glyph" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span data-sound-label>Enable sound</span>
+      <span data-sound-label data-sound-disable-label="Mute music">Play music</span>
     </button>
   </header>
 
   <div class="chamber-entry" data-chamber-entry data-entry-state="open" data-world-entry role="status" aria-live="polite" aria-busy="true" aria-labelledby="chamber-entry-title" aria-describedby="chamber-entry-note">
-    <picture class="entry-environment" data-world-fallback aria-hidden="true">
-      <source media="(max-width: 767px)" srcset="assets/art/optical-observatory-mobile.webp">
-      <img src="assets/art/optical-observatory-wide.webp" alt="" width="1672" height="941" decoding="sync" fetchpriority="high">
-    </picture>
     <div class="entry-copy" data-world-copy>
-      <p class="entry-overline">Visual Basis Atlas · Grok Imagine</p>
-      <h2 id="chamber-entry-title">Change one thing.<br>Watch the image answer.</h2>
-      <p id="chamber-entry-note">A living atlas of controlled Grok Imagine studies, built to isolate visual properties—and expose what moves with them.</p>
+      <p class="entry-overline">Visual Basis Atlas <span>Grok Imagine under observation</span></p>
+      <h2 id="chamber-entry-title">The image<br>answers back.</h2>
+      <p id="chamber-entry-note">One requested variable changes. Across locked anchors, the rest of the image answers.</p>
       <div class="entry-actions">
-        <button type="button" data-enter disabled aria-disabled="true"><span data-enter-label>Preparing the atlas…</span></button>
+        <button type="button" data-enter disabled aria-disabled="true"><span data-enter-label>Preparing the observation chamber…</span></button>
       </div>
     </div>
   </div>
 
   <div class="chamber-viewport" data-chamber-canvas data-world-viewport>
-    <picture class="chamber-environment" aria-hidden="true">
-      <source media="(max-width: 767px)" srcset="assets/art/optical-observatory-mobile.webp">
-      <img src="assets/art/optical-observatory-wide.webp" alt="" width="1672" height="941" decoding="async">
-    </picture>
-    <div class="chamber-fallback" data-chamber-fallback>
-      {"".join(hero_layers)}
+    <div class="world-fallback" data-chamber-fallback data-world-fallback aria-hidden="true">
+      {fallback_frames}
+    </div>
+    <div class="world-loader" data-world-loader role="status" aria-live="polite">
+      <span data-world-loader-label>Loading the observation chamber</span>
+      <progress data-world-load-progress max="1" value="0">0%</progress>
     </div>
   </div>
 
-  <aside class="chamber-hud" data-world-hud aria-label="Active observation">
-    <p class="hud-reading">
-      <span data-chamber-observation>{hero_ids["low"]}</span>
-      <span>{_esc(hero_vector_name)} <b data-chamber-level>low</b></span>
-      <em data-chamber-score>{_score_text(observed_score(hero_ids["low"], hero_vector_id))}</em>
-    </p>
-    <p class="hud-scene">
-      <b data-chamber-scene-label>Origin</b>
-      <span data-chamber-scene-count>1 / 6</span>
-      <i aria-hidden="true"></i>
-    </p>
-  </aside>
-
   <div class="chamber-status sr-only" data-chamber-status role="status" aria-live="polite"></div>
 
-  <article class="chamber-sequence">
-    <section class="chamber-scene scene-origin" data-chamber-scene="origin" data-world-scene="origin" aria-labelledby="chamber-origin-title">
-      <div class="origin-thesis" data-world-copy>
-        <p class="scene-kicker">Controlled architecture study · requested diffusion</p>
-        <h1 id="chamber-origin-title">One direction.<br><em>More than one change.</em></h1>
-        <p>The anchor, framing, and every constraint except the requested diffusion state remain fixed.</p>
-      </div>
-      <fieldset class="specimen-switch" data-world-control="diffusion">
-        <legend>Requested {_esc(hero_vector_name)} <span>exact samples</span></legend>
-        <div>{"".join(state_controls)}</div>
-        <p>Three exact outputs. No interpolation.</p>
-      </fieldset>
-      <noscript>
-        <figure class="origin-static-edition" aria-label="Three exact requested diffusion outputs">
+  <article class="chamber-sequence" data-world-narrative>
+    <section class="world-act act-control" data-world-act="control" aria-labelledby="act-control-title">
+      <div class="world-beat beat-control" data-world-beat="control">
+        <div class="beat-copy" data-world-copy>
+          <p class="scene-kicker">I / Control</p>
+          <h1 id="act-control-title">Change one variable.</h1>
+          <p>The anchor, frame, and constraints stay fixed. Only requested {_esc(hero_vector_name.lower())} changes.</p>
+        </div>
+        <fieldset class="evidence-controls specimen-switch" data-world-control="halation">
+          <legend>Requested {_esc(hero_vector_name)} <span>registered derivatives</span></legend>
+          <div>{"".join(state_controls)}</div>
+          <p>Three discrete states. No interpolation.</p>
+        </fieldset>
+        <figure class="control-proof" data-control-proof aria-labelledby="control-proof-note">
           {"".join(hero_static)}
+          <figcaption id="control-proof-note">{WORLD_EVIDENCE_DISCLOSURE}</figcaption>
         </figure>
-      </noscript>
-      <p class="scroll-cue"><span>Scroll to enter the study</span><i aria-hidden="true"></i></p>
+        <p class="scroll-cue"><span>Move through the study</span><i aria-hidden="true"></i></p>
+      </div>
     </section>
 
-    <section class="chamber-scene scene-response" data-chamber-scene="response" data-world-scene="response" aria-labelledby="chamber-response-title">
-      <div class="scene-caption" data-world-copy>
-        <p class="scene-kicker">Paired response</p>
-        <h2 id="chamber-response-title">Ask for {_esc(hero_vector_name.lower())}.<br>{len(nonzero_responses)} properties answer.</h2>
-        <p>Across {response["n_pairs"]} locked anchors, these were the only non-zero mean shifts from low to high.</p>
+    <section class="world-act act-entanglement" data-world-act="entanglement" aria-labelledby="act-entanglement-title">
+      <div class="world-beat beat-response" data-world-beat="response">
+        <div class="beat-copy" data-world-copy>
+          <p class="scene-kicker">II / Response</p>
+          <h2 id="act-entanglement-title">The rest of the image moves.</h2>
+          <p>Request {_esc(hero_vector_name.lower())}; {len(nonzero_responses)} measured properties shift across {response["n_pairs"]} locked anchors.</p>
+        </div>
+        <details class="beat-evidence response-key" data-world-ledger="response">
+          <summary>Read the paired response</summary>
+          <p class="evidence-heading"><span>Mean high − low</span><b>{response["n_pairs"]} paired anchors</b></p>
+          <ol>{"".join(response_rows)}</ol>
+          <p class="evidence-note">Agent-visual scores. Missing scores are omitted; zero deltas are not shown.</p>
+        </details>
       </div>
-      <figure class="response-key" data-world-ledger="response">
-        <figcaption><span>Mean high − low</span><b>{response["n_pairs"]} paired anchors</b></figcaption>
-        <ol>{"".join(response_rows)}</ol>
-        <p class="evidence-note">Agent-visual scores. Missing scores are omitted; zero deltas are not shown.</p>
-      </figure>
+
+      <div class="world-beat beat-comparison" data-world-beat="comparison">
+        <div class="beat-copy" data-world-copy>
+          <p class="scene-kicker">III / Comparison</p>
+          <h2>Halation is not bloom.</h2>
+          <p>Halation carries colored edge spill; bloom spreads pale luminance. These are registered, ungraded high-state evidence derivatives from one locked night-path anchor.</p>
+        </div>
+        <fieldset class="evidence-controls compare-switch" data-world-control="comparison">
+          <legend>Recorded high outputs</legend>
+          <button type="button" data-chamber-compare="halation" data-world-target="comparison-halation" aria-pressed="true" class="is-active">
+            <span>Halation</span>
+            <small>{comparison_ids["halation"]} · h {_score_text(halation_halation)} / b {_score_text(halation_bloom)}</small>
+          </button>
+          <button type="button" data-chamber-compare="bloom" data-world-target="comparison-bloom" aria-pressed="false">
+            <span>Highlight bloom</span>
+            <small>{comparison_ids["bloom"]} · b {_score_text(bloom_bloom)} / h {_score_text(bloom_halation)}</small>
+          </button>
+        </fieldset>
+        <figure class="comparison-edition" data-documentary-proof data-chamber-comparison-fallback>
+          <a href="observations/{comparison_ids["halation"]}.html" class="is-active"
+            data-chamber-compare-layer="halation" data-chamber-compare="halation"
+            data-observation-id="{comparison_ids["halation"]}">
+            {_home_media(
+              lib,
+              comparison_ids["halation"],
+              alt="Night path with a coastal lamp showing high requested halation",
+              extra="data-documentary-evidence",
+            )}
+          </a>
+          <a href="observations/{comparison_ids["bloom"]}.html"
+            data-chamber-compare-layer="bloom" data-chamber-compare="bloom"
+            data-observation-id="{comparison_ids["bloom"]}">
+            {_home_media(
+              lib,
+              comparison_ids["bloom"],
+              alt="Night path with a coastal lamp showing high requested highlight bloom",
+              extra="data-documentary-evidence",
+            )}
+          </a>
+          <figcaption><span>Halation · {_esc(comparison_ids["halation"])} · h {_score_text(halation_halation)} / b {_score_text(halation_bloom)}</span><span>Highlight bloom · {_esc(comparison_ids["bloom"])} · b {_score_text(bloom_bloom)} / h {_score_text(bloom_halation)}</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="world-beat beat-association" data-world-beat="association">
+        <div class="beat-copy" data-world-copy>
+          <p class="scene-kicker">IV / Association</p>
+          <h2>Nothing moves alone.</h2>
+          <p>Sign sets the lateral bend. |r| sets each vein’s reach.</p>
+          <p class="evidence-note">Scored observation-space association—not causality, and not Grok latent space.</p>
+        </div>
+        <fieldset class="evidence-controls axis-switch" data-world-control="correlation-axis">
+          <legend>Correlation axis</legend>
+          {"".join(axis_controls)}
+        </fieldset>
+        <details class="beat-evidence angle-key" data-world-ledger="association">
+          <summary>Open the correlation ledger</summary>
+          <p class="evidence-heading"><span>θ = arccos(r)</span><b>n={correlation_n}</b></p>
+          <table>
+            <caption class="sr-only">Strongest recorded relationships to optical softness</caption>
+            <thead class="sr-only"><tr><th scope="col">Property</th><th scope="col">Pearson r</th><th scope="col">Angle theta</th></tr></thead>
+            <tbody>{"".join(angle_rows)}</tbody>
+          </table>
+          <a href="matrices.html">Inspect the complete matrices <span aria-hidden="true">↗</span></a>
+        </details>
+      </div>
     </section>
 
-    <section class="chamber-scene scene-discriminate" data-chamber-scene="discriminate" data-world-scene="discriminate" aria-labelledby="chamber-discriminate-title">
-      <div class="scene-caption" data-world-copy>
-        <p class="scene-kicker">Exact-output comparison</p>
-        <h2 id="chamber-discriminate-title">Halation is not bloom.</h2>
-        <p>Halation carries edge color. Bloom spreads pale luminance. Both are exact high-state outputs from the same night-path anchor.</p>
+    <section class="world-act act-residual" data-world-act="residual-atlas" aria-labelledby="act-residual-title">
+      <div class="world-beat beat-reconstruction" data-world-beat="reconstruction">
+        <div class="beat-copy" data-world-copy>
+          <p class="scene-kicker">V / Reconstruction</p>
+          <h2 id="act-residual-title">A basis is not the image.</h2>
+          <p class="reconstruction-equation" aria-label="Estimated aesthetic equals {_esc(reconstruction_aria)}"><span>â =</span>{reconstruction_equation}</p>
+          <p class="evidence-note">Manual first-order hypothesis—not fitted coefficients or hidden model settings.</p>
+        </div>
+        <figure class="reconstruction-edition" data-documentary-proof data-world-plates="reconstruction">
+          {"".join(reconstruction_media)}
+        </figure>
+        <aside class="residual-caption" data-world-residual>
+          <span>a = â + r</span>
+          <h3>The residual remains visible.</h3>
+          <p>{_esc(residual)} · recorded flags, not a pixel-error map.</p>
+        </aside>
       </div>
-      <fieldset class="compare-switch" data-world-control="comparison">
-        <legend>Recorded high outputs</legend>
-        <button type="button" data-chamber-compare="halation" aria-pressed="true" class="is-active">
-          <span>Halation</span>
-          <small>{comparison_ids["halation"]} · h {_score_text(halation_halation)} / b {_score_text(halation_bloom)}</small>
-        </button>
-        <button type="button" data-chamber-compare="bloom" aria-pressed="false">
-          <span>Highlight bloom</span>
-          <small>{comparison_ids["bloom"]} · b {_score_text(bloom_bloom)} / h {_score_text(bloom_halation)}</small>
-        </button>
-      </fieldset>
-      <figure class="comparison-edition" data-chamber-comparison-fallback>
-        {_home_media(
-            lib,
-            comparison_ids["halation"],
-            alt="Night path with a coastal lamp showing high requested halation",
-            class_name="is-active",
-            extra='data-chamber-compare-layer="halation" data-chamber-compare="halation" aria-hidden="false"',
-        )}
-        {_home_media(
-            lib,
-            comparison_ids["bloom"],
-            alt="Night path with a coastal lamp showing high requested highlight bloom",
-            extra='data-chamber-compare-layer="bloom" data-chamber-compare="bloom"',
-        )}
-        <figcaption>
-          <span>Halation · {_esc(comparison_ids["halation"])}</span>
-          <span>Highlight bloom · {_esc(comparison_ids["bloom"])}</span>
-        </figcaption>
-      </figure>
-    </section>
 
-    <section class="chamber-scene scene-association" data-chamber-scene="association" data-world-scene="association" aria-labelledby="chamber-association-title">
-      <div class="scene-caption" data-world-copy>
-        <p class="scene-kicker">Association geometry</p>
-        <h2 id="chamber-association-title">Nothing moves alone.</h2>
-        <p>Pearson r becomes a literal angle: θ = arccos(r).</p>
-        <p class="evidence-note">Scored observation-space association—not causality, and not Grok latent space.</p>
+      <div class="world-beat beat-archive" data-world-beat="archive" data-world-finale id="chamber-archive">
+        <div class="beat-copy archive-caption" data-world-copy>
+          <p class="scene-kicker">VI / Archive · {chamber["field"]["observation_count"]} nonhuman observations</p>
+          <h2 id="archive-contact-title">All {chamber["field"]["observation_count"]} records remain open.</h2>
+          <p>This registered atlas contact-sheet preview links to each canonical observation, including its prompt, intended direction, recorded scores, and study.</p>
+        </div>
+        <a class="archive-primary" data-archive-bypass data-world-portal-link
+          href="observations.html"
+          aria-label="Explore all {payload["stats"]["observations"]} observations; skip the {chamber["field"]["observation_count"]}-entry contact-sheet preview"><span>Explore all {payload["stats"]["observations"]} observations</span><i aria-hidden="true">↗</i></a>
+        <ol class="archive-contact-sheet" data-archive-preview
+          data-archive-preview-kind="registered-atlas"
+          data-archive-atlas-desktop="{_esc(archive_atlas["desktop_path"])}"
+          data-archive-atlas-mobile="{_esc(archive_atlas["mobile_path"])}"
+          style="--atlas-size-x:{archive_background_width:.6f}%;--atlas-size-y:{archive_background_height:.6f}%"
+          aria-labelledby="archive-contact-title">
+          {"".join(archive_contacts)}
+        </ol>
       </div>
-      <fieldset class="axis-switch" data-world-control="correlation-axis">
-        <legend>Correlation axis</legend>
-        {"".join(axis_controls)}
-      </fieldset>
-      <figure class="angle-key" data-world-ledger="association">
-        <figcaption><span>r = cos θ</span><b>n={correlation_n}</b></figcaption>
-        <table>
-          <caption class="sr-only">Strongest recorded relationships to optical softness</caption>
-          <thead class="sr-only"><tr><th scope="col">Property</th><th scope="col">Pearson r</th><th scope="col">Angle theta</th></tr></thead>
-          <tbody>{"".join(angle_rows)}</tbody>
-        </table>
-        <a href="matrices.html">Inspect the complete matrices <span aria-hidden="true">↗</span></a>
-      </figure>
-    </section>
-
-    <section class="chamber-scene scene-reconstruct" data-chamber-scene="reconstruct" data-world-scene="reconstruct" aria-labelledby="chamber-reconstruct-title">
-      <div class="scene-caption" data-world-copy>
-        <p class="scene-kicker">Reconstruction test</p>
-        <h2 id="chamber-reconstruct-title">A coordinate explains only part of the picture.</h2>
-        <p class="reconstruction-equation" aria-label="Estimated aesthetic equals {_esc(reconstruction_aria)}"><span>â =</span>{reconstruction_equation}</p>
-        <p class="evidence-note">Manual first-order hypothesis—not fitted coefficients or hidden model settings.</p>
-      </div>
-      <figure class="reconstruction-edition" data-world-plates="reconstruction">
-        {"".join(reconstruction_media)}
-      </figure>
-      <aside class="residual-caption" data-world-residual>
-        <span>a = â + r</span>
-        <h3>The residual remains visible.</h3>
-        <p>{_esc(residual)} · recorded flags, not a pixel-error map.</p>
-      </aside>
-    </section>
-
-    <section class="chamber-scene scene-archive" data-chamber-scene="archive" data-world-scene="archive" data-world-finale id="chamber-archive" aria-labelledby="chamber-archive-title">
-      <div class="scene-caption archive-caption" data-world-copy>
-        <h2 id="chamber-archive-title">The experiment<br>continues.</h2>
-      </div>
-      <a class="archive-primary" data-world-portal-link href="vectors.html"><span>Enter the evidence</span><i aria-hidden="true">↗</i></a>
     </section>
   </article>
 
   <footer class="chamber-footer" data-world-footer aria-labelledby="chamber-footer-title">
     <div class="chamber-footer-lead">
-      <p class="scene-kicker">The working atlas</p>
-      <h2 id="chamber-footer-title">{payload["stats"]["observations"]} controlled observations.</h2>
-      <p>Their studies, exact outputs, and provisional relationships remain open for inspection.</p>
+      <p class="scene-kicker">Visual Basis Atlas</p>
+      <h2 id="chamber-footer-title">Evidence, left open.</h2>
+      <p>{payload["stats"]["observations"]} controlled observations. Registered evidence derivatives, provisional relationships, and the studies behind them.</p>
     </div>
     <nav class="archive-secondary" aria-label="Atlas sections">
         <a href="studies.html">Studies</a>
@@ -836,13 +1152,15 @@ def _home(
     </form>
     <div class="chamber-credits">
       <p><a href="https://www.scottbuckley.com.au/library/signal-to-noise/" rel="external">'Signal to Noise' by Scott Buckley</a> - released under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license external">CC-BY 4.0</a>. <a href="https://www.scottbuckley.com.au/" rel="external">www.scottbuckley.com.au</a></p>
-      <p>Atlas adaptation: transcoded to Opus and AAC-LC; playback level and interface ducking are applied non-destructively at runtime.</p>
-      <p>Entrance artwork derived from obs_0079; presentation only, not evidence.</p>
+      <p>Atlas adaptation: transcoded to Opus and AAC-LC; playback level is applied non-destructively at runtime.</p>
+      <p>{WORLD_EVIDENCE_DISCLOSURE}</p>
     </div>
     <p class="chamber-colophon">{chamber["field"]["observation_count"]} displayed / {payload["stats"]["observations"]} registered · 11 controlled axes · Grok Imagine outputs · agent-visual scoring · no affiliation with xAI</p>
   </footer>
 </div>
 """
+
+
 def _weight_rows(lib: Library, aesthetic_id: str, prefix: str = "") -> str:
     aesthetic = lib.aesthetics.get(aesthetic_id)
     if not aesthetic:
@@ -941,6 +1259,28 @@ def _study_index(lib: Library) -> str:
             f'<span>{len(s.observation_ids)} observations</span><b>↗</b></a>'
         )
     return f"<p class='eyebrow'>Controlled evidence</p><h1 class='page'>Studies</h1><p class='lede'>Fixed anchors, categorical requests, and recorded spill into neighboring properties.</p><div class='atlas-ledger'>{''.join(rows)}</div>"
+
+
+def _observation_index(lib: Library) -> str:
+    rows = []
+    for observation in sorted(lib.observations.values(), key=lambda item: item.id):
+        anchor = lib.anchors.get(observation.anchor_id) if observation.anchor_id else None
+        vector = lib.vectors.get(observation.intended_vector_id) if observation.intended_vector_id else None
+        anchor_name = anchor.name if anchor else observation.anchor_id or "Unregistered anchor"
+        direction = vector.canonical_name if vector else observation.intended_vector_id or "Unscoped output"
+        level = observation.intended_level or "controlled"
+        rows.append(
+            f'<a class="ledger-row" href="observations/{observation.id}.html">'
+            f'<span class="status-mark observed"></span><strong>{_esc(observation.id)}</strong>'
+            f'<span>{_esc(anchor_name)}</span><span>{_esc(direction)} · {_esc(level)}</span><b>↗</b></a>'
+        )
+    return (
+        f"<p class='eyebrow'>Registered-output record / {len(rows)} observations</p>"
+        "<h1 class='page'>Observations</h1>"
+        "<p class='lede'>Every registered generated output, linked to its anchor, requested direction, "
+        "study record, and scored evidence.</p>"
+        f"<div class='atlas-ledger'>{''.join(rows)}</div>"
+    )
 
 
 def _questions(lib: Library) -> str:

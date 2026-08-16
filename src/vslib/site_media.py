@@ -20,6 +20,38 @@ ATLAS_DESKTOP_PATH = "assets/evidence-atlas-2048.webp"
 ATLAS_MOBILE_PATH = "assets/evidence-atlas-1024.webp"
 
 
+def _edge_extruded_tile(tile: Image.Image, gutter: int) -> Image.Image:
+    """Pad a tile by repeating its edge texels for mip-safe atlas filtering."""
+
+    if gutter <= 0:
+        return tile.copy()
+    width, height = tile.size
+    if width < 1 or height < 1:
+        raise ValueError("atlas tile must contain at least one pixel")
+    output = Image.new(tile.mode, (width + 2 * gutter, height + 2 * gutter))
+    nearest = Image.Resampling.NEAREST
+    output.paste(tile, (gutter, gutter))
+    output.paste(tile.crop((0, 0, width, 1)).resize((width, gutter), nearest), (gutter, 0))
+    output.paste(
+        tile.crop((0, height - 1, width, height)).resize((width, gutter), nearest),
+        (gutter, gutter + height),
+    )
+    output.paste(tile.crop((0, 0, 1, height)).resize((gutter, height), nearest), (0, gutter))
+    output.paste(
+        tile.crop((width - 1, 0, width, height)).resize((gutter, height), nearest),
+        (gutter + width, gutter),
+    )
+    corners = (
+        ((0, 0, 1, 1), (0, 0)),
+        ((width - 1, 0, width, 1), (gutter + width, 0)),
+        ((0, height - 1, 1, height), (0, gutter + height)),
+        ((width - 1, height - 1, width, height), (gutter + width, gutter + height)),
+    )
+    for crop_box, destination in corners:
+        output.paste(tile.crop(crop_box).resize((gutter, gutter), nearest), destination)
+    return output
+
+
 def evidence_atlas_manifest(observation_ids: Iterable[str]) -> dict[str, Any]:
     """Return the stable tile lookup shared by Python and the WebGL runtime."""
 
@@ -87,8 +119,8 @@ def write_evidence_atlases(
             index = manifest["entries"][observation_id]
             column = index % manifest["columns"]
             atlas_row = index // manifest["columns"]
-            left = geometry["offset_x"] + column * cell + gutter
-            top = geometry["offset_y"] + atlas_row * cell + gutter
+            left = geometry["offset_x"] + column * cell
+            top = geometry["offset_y"] + atlas_row * cell
             with Image.open(source) as original:
                 tile = ImageOps.fit(
                     original.convert("RGB"),
@@ -96,7 +128,7 @@ def write_evidence_atlases(
                     method=Image.Resampling.LANCZOS,
                     centering=(0.5, 0.5),
                 )
-            canvas.paste(tile, (left, top))
+            canvas.paste(_edge_extruded_tile(tile, gutter), (left, top))
 
         output = site / manifest[path_key]
         output.parent.mkdir(parents=True, exist_ok=True)

@@ -23,8 +23,12 @@ Governing specs: `visual_basis_vector_agent.md`, `aesthetic_synthesis_framework.
 
 ## Use
 
+Prerequisites: Python 3.11+ and Node.js `^20.19.0 || >=22.12.0` with npm `11.17.0`.
+
 ```bash
 pip install -e .
+npm ci
+npm run build:chamber
 python -m vslib build
 python -m vslib map "old-tv softness"
 python -m vslib profile aes_soft_halated_shadow

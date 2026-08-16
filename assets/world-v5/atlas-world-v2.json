@@ -1,0 +1,501 @@
+{
+  "format": "atlas-world/v2",
+  "version": 2,
+  "generator": {
+    "name": "tools/build_emulsion_world.py",
+    "version": "3.0.0",
+    "deterministic": true,
+    "dependencies": {
+      "python": "3.13.13",
+      "pillow": "12.2.0",
+      "numpy": "2.4.6",
+      "torch": "2.12.1+cu130",
+      "transformers": "4.57.3"
+    }
+  },
+  "scenePlates": {
+    "renderer": "depth-parallax-v1",
+    "order": [
+      "control",
+      "response",
+      "comparison",
+      "association",
+      "reconstruction",
+      "archive"
+    ],
+    "interaction": {
+      "firstResponseMs": 48,
+      "settleMs": 240,
+      "maxParallaxPx": {
+        "desktop": 18,
+        "mobile": 10
+      },
+      "maxRelightEv": 0.6,
+      "transitionMs": 900
+    },
+    "depthEstimator": {
+      "model": "depth-anything/Depth-Anything-V2-Small-hf",
+      "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+      "license": "Apache-2.0",
+      "modelCard": "https://huggingface.co/depth-anything/Depth-Anything-V2-Small-hf/tree/5426e4f0f36572d16453bbda7a8389317b1bef99",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "localFilesOnly": true
+    },
+    "colorEncoding": {
+      "mime": "image/webp",
+      "quality": 88,
+      "method": 6,
+      "channels": 3
+    },
+    "depthEncoding": {
+      "kind": "relative-inverse-depth",
+      "bitDepth": 8,
+      "channels": 1,
+      "near": 255,
+      "far": 0,
+      "normalization": "per-plate-min-max",
+      "resampling": "bicubic-align-corners-false",
+      "lossless": true
+    },
+    "focalPointConvention": {
+      "coordinates": "normalized-[x,y]",
+      "origin": "top-left",
+      "space": "intrinsic-plate-pixels",
+      "use": "authored-cover-alignment"
+    },
+    "loading": {
+      "poster": {
+        "desktop": "assets/world-v5/plates/desktop/control.webp",
+        "mobile": "assets/world-v5/plates/mobile/control.webp"
+      },
+      "fallback": "plate-color-no-duplicate-assets",
+      "saveData": {
+        "preload": "color-only",
+        "preloadDepth": false
+      }
+    },
+    "variants": {
+      "desktop": {
+        "control": {
+          "color": {
+            "path": "assets/world-v5/plates/desktop/control.webp",
+            "sha256": "4762abf84acfbe17ef5337da303bb130260c33b98e4b384f3c5d6342d328c663",
+            "bytes": 155608,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/desktop/control-depth.webp",
+            "sha256": "121e210cf867ea818e35724e599259241184d0015d560e044b7d7a88bc00657c",
+            "bytes": 82022,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.69,
+            0.43
+          ]
+        },
+        "response": {
+          "color": {
+            "path": "assets/world-v5/plates/desktop/response.webp",
+            "sha256": "7aab7a62611894047de3858d8166b2dd84c6ee9dc2bd5552f30239e07855eace",
+            "bytes": 152012,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/desktop/response-depth.webp",
+            "sha256": "7387a6056081d3935beec1404c0b615adffa79ef05fd03c74463c968e51c5c7d",
+            "bytes": 76264,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.69,
+            0.42
+          ]
+        },
+        "comparison": {
+          "color": {
+            "path": "assets/world-v5/plates/desktop/comparison.webp",
+            "sha256": "e4c266ec13a1dd90ac6e2a9ca6e11a3e9953c74f74d2893b664c18f13e108de0",
+            "bytes": 153280,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/desktop/comparison-depth.webp",
+            "sha256": "c45a92eed58972ea9102839d27ae2da97d4d3cf99c3e56b36a9bec2a43ba55f1",
+            "bytes": 70250,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.69,
+            0.42
+          ]
+        },
+        "association": {
+          "color": {
+            "path": "assets/world-v5/plates/desktop/association.webp",
+            "sha256": "1570b7432a06efa3e7f4eddc9446e424981a37cfda771491428209240136ba5f",
+            "bytes": 109870,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/desktop/association-depth.webp",
+            "sha256": "fd11d3b88abe7047379f88387b4156418f8d03e99bafc2d96718ed2a7a8fd407",
+            "bytes": 78886,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.77,
+            0.43
+          ]
+        },
+        "reconstruction": {
+          "color": {
+            "path": "assets/world-v5/plates/desktop/reconstruction.webp",
+            "sha256": "aed1e3b8c63b2133d134f865f626f1ab62c772faf38c8625d33eeb72ce299e2a",
+            "bytes": 165386,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/desktop/reconstruction-depth.webp",
+            "sha256": "94b9c71fd02bd6139f4b1ad2bdce5112623f20e212c0b1b210d726ac147571f6",
+            "bytes": 80264,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.77,
+            0.48
+          ]
+        },
+        "archive": {
+          "color": {
+            "path": "assets/world-v5/plates/desktop/archive.webp",
+            "sha256": "f23f26b0b39a5ab089fecdec88f7d613222ad055469bf12c362f408b167cbf63",
+            "bytes": 124784,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/desktop/archive-depth.webp",
+            "sha256": "b508d7f8ac6480d29e211a2379c478db1cc0b66c85bab06e30016a706e27eaa7",
+            "bytes": 113144,
+            "width": 1672,
+            "height": 941,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.83,
+            0.46
+          ]
+        }
+      },
+      "mobile": {
+        "control": {
+          "color": {
+            "path": "assets/world-v5/plates/mobile/control.webp",
+            "sha256": "56cc87b9927aa4d631b43b5422ecce143bc7d3809a0a896203735fff45badcf7",
+            "bytes": 191788,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/mobile/control-depth.webp",
+            "sha256": "d6e38cbc0872ab3ac838528af083ae9622a2a2c6783cfb0dc3f6e95c9e8aac83",
+            "bytes": 54220,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.67,
+            0.35
+          ]
+        },
+        "response": {
+          "color": {
+            "path": "assets/world-v5/plates/mobile/response.webp",
+            "sha256": "8c734f4ede94477f4f538f98a6a87ef34023e257c51087fe7faf0134254bcf93",
+            "bytes": 166994,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/mobile/response-depth.webp",
+            "sha256": "a4afcc9f34e030c3cec447fa10b955c293ad90d822149dbc236eefd84326fa54",
+            "bytes": 57290,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.64,
+            0.38
+          ]
+        },
+        "comparison": {
+          "color": {
+            "path": "assets/world-v5/plates/mobile/comparison.webp",
+            "sha256": "5774653433380005e41b5dd6f95ca926b4ed706575244c287c4a4b2bad02801d",
+            "bytes": 171340,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/mobile/comparison-depth.webp",
+            "sha256": "5d7be94c8dafd4ab8dd8fd25216fa63c4fa94b5c41de0fb64efa7ef1f7076d18",
+            "bytes": 53364,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.63,
+            0.42
+          ]
+        },
+        "association": {
+          "color": {
+            "path": "assets/world-v5/plates/mobile/association.webp",
+            "sha256": "d8ae237256af75e0cc675091dd58555c92846d946009930bac4dc3f69075ba8d",
+            "bytes": 154596,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/mobile/association-depth.webp",
+            "sha256": "26ed2238b75606593eb148da04761c6782c69be4333e835583b6c6bad81d7605",
+            "bytes": 70458,
+            "width": 941,
+            "height": 1672,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.68,
+            0.38
+          ]
+        },
+        "reconstruction": {
+          "color": {
+            "path": "assets/world-v5/plates/mobile/reconstruction.webp",
+            "sha256": "321e469f48b62f50aae6a7264fc1b01118a92f0570a5a0f19044eb9bda1fbf89",
+            "bytes": 221044,
+            "width": 853,
+            "height": 1844,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/mobile/reconstruction-depth.webp",
+            "sha256": "133d7e5986b6cfd8635a40163b8a61086412c99bb65b27149b0a7a2b54f863cd",
+            "bytes": 104246,
+            "width": 853,
+            "height": 1844,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.68,
+            0.43
+          ]
+        },
+        "archive": {
+          "color": {
+            "path": "assets/world-v5/plates/mobile/archive.webp",
+            "sha256": "195a2961b56c6107b86ab28acdd801dfd8e209a436b4eb807681b07d59693219",
+            "bytes": 159716,
+            "width": 853,
+            "height": 1844,
+            "mime": "image/webp"
+          },
+          "depth": {
+            "path": "assets/world-v5/plates/mobile/archive-depth.webp",
+            "sha256": "dbebf3c5da821d39567526f7891e7eb5a40b0003d6813d9a3e84ca2cfcaa34e6",
+            "bytes": 105974,
+            "width": 853,
+            "height": 1844,
+            "mime": "image/webp"
+          },
+          "focalPoint": [
+            0.67,
+            0.36
+          ]
+        }
+      }
+    },
+    "socialSource": {
+      "path": "assets/world-v5/social-source.webp",
+      "sha256": "93d5bf7fb10b9d97b50c9d328272f7bfd8cce9645af0903aeea247ee18879e7e",
+      "bytes": 83012,
+      "width": 1200,
+      "height": 630,
+      "mime": "image/webp",
+      "sourceVariant": "desktop",
+      "sourceBeat": "control",
+      "transform": "cover-crop-1200x630-lanczos-at-authored-focal-point"
+    },
+    "provenance": {
+      "generator": "OpenAI image generation",
+      "sourceRegistry": "tools/world_v5/plate_sources.json",
+      "sourceRegistrySha256": "27856e9f069df52a4346ff908db9bc901ffe9467a6911571da98629b6598a150",
+      "variants": {
+        "desktop": {
+          "control": {
+            "sourceId": "exec-e213b5ed-7c63-4ccd-8718-c87c139164f0.png",
+            "sha256": "304a29b88df06cf36e2db787e49ec848f41b003b4034d528d5298949f8fca86e",
+            "width": 1672,
+            "height": 941,
+            "focalPoint": [
+              0.69,
+              0.43
+            ]
+          },
+          "response": {
+            "sourceId": "exec-ca6747a9-82d5-4f21-89bf-cba0b37f4dcf.png",
+            "sha256": "56e48c59fb3181586269e1b3c320088679703aa8dd8302fec7d82bb82d87657e",
+            "width": 1672,
+            "height": 941,
+            "focalPoint": [
+              0.69,
+              0.42
+            ]
+          },
+          "comparison": {
+            "sourceId": "exec-9c3c32d2-3b07-45a5-90f3-8acf5254ed49.png",
+            "sha256": "67c21293bc82333688a872bef830079e73265fdf999439af609ae6a4a6b2e37b",
+            "width": 1672,
+            "height": 941,
+            "focalPoint": [
+              0.69,
+              0.42
+            ]
+          },
+          "association": {
+            "sourceId": "exec-2da1d72e-32c2-498c-ba64-2ab9404ceffc.png",
+            "sha256": "18e287f90e94d9c823d4149aaf8798698f663fd51e83acfdaefdc5bf1cff3e47",
+            "width": 1672,
+            "height": 941,
+            "focalPoint": [
+              0.77,
+              0.43
+            ]
+          },
+          "reconstruction": {
+            "sourceId": "exec-ef0e9ebb-76be-4a4d-a377-269986fb6c80.png",
+            "sha256": "378e86e86300b176c7d5f1873c073d8936749368e7ac35707f8b6a1db44341ea",
+            "width": 1672,
+            "height": 941,
+            "focalPoint": [
+              0.77,
+              0.48
+            ]
+          },
+          "archive": {
+            "sourceId": "exec-b5706abb-1799-4fe5-ab47-dbde49d39db5.png",
+            "sha256": "51d2288b64857270850e8b026696677194248431bd92fa7b7898166912e3e0d9",
+            "width": 1672,
+            "height": 941,
+            "focalPoint": [
+              0.83,
+              0.46
+            ]
+          }
+        },
+        "mobile": {
+          "control": {
+            "sourceId": "exec-2ac9201c-50ec-4405-bc2a-44ae4107776d.png",
+            "sha256": "14952a2d381cbe5b91608e27c2a868f6e934454b61360e3276cf1b470d47137a",
+            "width": 941,
+            "height": 1672,
+            "focalPoint": [
+              0.67,
+              0.35
+            ]
+          },
+          "response": {
+            "sourceId": "exec-bf62856e-d272-4af0-88df-c14146ebc903.png",
+            "sha256": "e94466040c0205b8bb238f2491204a2c7d866cac4a3069899274e546847964c0",
+            "width": 941,
+            "height": 1672,
+            "focalPoint": [
+              0.64,
+              0.38
+            ]
+          },
+          "comparison": {
+            "sourceId": "exec-a284ca89-f676-451b-858a-daa2440bb719.png",
+            "sha256": "76151c4223debaf13ff68d38a4bf29489d1e05ee78966f4f4be921a8f7307ad8",
+            "width": 941,
+            "height": 1672,
+            "focalPoint": [
+              0.63,
+              0.42
+            ]
+          },
+          "association": {
+            "sourceId": "exec-7161e0b1-75e7-45d9-81b8-7f9d80b996e7.png",
+            "sha256": "aa8d9d9ab93f61152ea4230815e35c3305a530a10d8cecd352398397261e93fe",
+            "width": 941,
+            "height": 1672,
+            "focalPoint": [
+              0.68,
+              0.38
+            ]
+          },
+          "reconstruction": {
+            "sourceId": "exec-867d3818-5463-450b-a01f-1edecd0ab1f4.png",
+            "sha256": "8ab349e439ced22951db1d0cd8bdcbd87da57b42be135189169b784ff01bc225",
+            "width": 853,
+            "height": 1844,
+            "focalPoint": [
+              0.68,
+              0.43
+            ],
+            "note": "Corrected source with exactly three reconstruction gates"
+          },
+          "archive": {
+            "sourceId": "exec-36d675a1-4455-4960-9872-8caab78abcac.png",
+            "sha256": "45ad23a607a0bc71902f3b56b16ac3c2758fc5d9e047640b72e8348826b7a7a1",
+            "width": 853,
+            "height": 1844,
+            "focalPoint": [
+              0.67,
+              0.36
+            ]
+          }
+        }
+      }
+    },
+    "budgets": {
+      "initialControlPairBytes": {
+        "desktop": 237630,
+        "mobile": 246008
+      },
+      "initialControlPairByteCeiling": 1500000,
+      "packageBytes": 2955812,
+      "packageTargetBytes": 10000000,
+      "packageByteCeiling": 12000000
+    }
+  }
+}
